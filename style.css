@@ -1,0 +1,163 @@
+@import "styles.css";
+
+
+/* SPA-Specific CSS Overrides & Customizations */
+
+/* Site Search Results Dropdown */
+.search-bar {
+  position: relative;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  display: none;
+  z-index: 1001;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-results.active {
+  display: block;
+}
+
+.search-results a {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.search-results a:last-child {
+  border-bottom: none;
+}
+
+.search-results a:hover {
+  background: #f8fafc;
+  color: var(--primary);
+}
+
+.search-results .result-title {
+  font-weight: 600;
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+
+.search-results .result-meta {
+  font-size: 0.72rem;
+  color: var(--text-body);
+  margin-top: 2px;
+}
+
+.search-results .no-results {
+  padding: 12px 16px;
+  color: var(--text-body);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* Slideshow Hero Adjustments for SPA */
+.hero-bg.slideshow img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-bg.slideshow img.active {
+  opacity: 0.45;
+}
+
+/* Faculty search visibility helper class */
+.staff-card.is-hidden {
+  display: none !important;
+}
+
+/* Profile Details Header Initials style (when no photo exists) */
+.profile-photo-initials {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--gradient-1);
+  border: 4px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+/* Smooth transition between view changes */
+#root {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .header-main {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .search-bar {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+  nav {
+    width: auto;
+  }
+}
+
+/* Spinner animation for loading states */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Status messages inside Intranet */
+.status-message {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.intranet-tab-btn {
+  transition: all 0.2s ease;
+}
+.intranet-tab-btn:hover {
+  background-color: #f8fafc;
+  color: var(--primary) !important;
+}
+
