@@ -1447,7 +1447,7 @@ function signupView() {
             <div style="margin-bottom: 16px;">
               <label for="signupEmailInput" style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 6px; letter-spacing: 0.04em;">Email Address (GIMPA)</label>
               <input type="email" id="signupEmailInput" required placeholder="e.g. jdoe@gimpa.edu.gh" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 0.92rem; outline: none; transition: var(--transition);">
-              <small style="color: var(--text-body); font-size: 0.75rem; margin-top: 4px; display: block;">Must end with @gimpa.edu.gh or @adj.gimpa.edu.gh</small>
+              <small style="color: var(--text-body); font-size: 0.75rem; margin-top: 4px; display: block;">Must end with @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh</small>
             </div>
 
             <div style="margin-bottom: 16px;">
@@ -1525,12 +1525,12 @@ async function handleSignupSubmit(event) {
   const extra_value = document.getElementById('signupExtraValue').value;
   
   // Enforce email domain constraint on frontend
-  if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh')) {
+  if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh') && !email.endsWith('@st.gimpa.edu.gh')) {
     statusMsg.className = 'status-message';
     statusMsg.style.backgroundColor = '#fef2f2';
     statusMsg.style.color = '#b91c1c';
     statusMsg.style.borderColor = '#fca5a5';
-    statusMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to register.';
+    statusMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to register.';
     statusMsg.style.display = 'block';
     return;
   }
@@ -2585,8 +2585,8 @@ document.addEventListener('submit', async function(event) {
     errorMsg.textContent = '';
     
     // Frontend domain check
-    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh')) {
-      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to log in.';
+    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh') && !email.endsWith('@st.gimpa.edu.gh')) {
+      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to log in.';
       errorMsg.style.display = 'block';
       return;
     }

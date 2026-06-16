@@ -7,12 +7,27 @@ from typing import Optional, List
 import sqlite3
 import uvicorn
 import os
-
 import string
 import random
 import smtplib
+import socket
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+socket.setdefaulttimeout(10)
+
+# Load environment variables from .env if it exists
+dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+if os.path.exists(dotenv_path):
+    with open(dotenv_path) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                parts = line.split("=", 1)
+                if len(parts) == 2:
+                    key = parts[0].strip().replace("export ", "")
+                    val = parts[1].strip().strip('"').strip("'")
+                    os.environ[key] = val
 
 from backend.database import get_db, DB_PATH
 from backend.auth import verify_password, create_access_token, decode_access_token, get_password_hash
@@ -116,10 +131,10 @@ def login(username: str = Form(...), password: str = Form(...)):
     email = username.strip().lower()
     
     # Enforce domain constraints
-    if not (email.endswith("@gimpa.edu.gh") or email.endswith("@adj.gimpa.edu.gh")):
+    if not (email.endswith("@gimpa.edu.gh") or email.endswith("@adj.gimpa.edu.gh") or email.endswith("@st.gimpa.edu.gh")):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed."
+            detail="Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed."
         )
 
     conn = sqlite3.connect(DB_PATH)
@@ -164,10 +179,10 @@ def signup(
     email_clean = email.strip().lower()
     
     # Enforce domain constraints
-    if not (email_clean.endswith("@gimpa.edu.gh") or email_clean.endswith("@adj.gimpa.edu.gh")):
+    if not (email_clean.endswith("@gimpa.edu.gh") or email_clean.endswith("@adj.gimpa.edu.gh") or email_clean.endswith("@st.gimpa.edu.gh")):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to register."
+            detail="Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to register."
         )
 
     conn = sqlite3.connect(DB_PATH)
@@ -382,11 +397,15 @@ def send_message(
     return {"status": "success", "message": "Message sent successfully."}
 
 @app.post("/api/admin/scan")
-def trigger_scanner(lecturer: dict = Depends(get_current_lecturer)):
+def trigger_scanner(lecturer_id: Optional[int] = None, lecturer: dict = Depends(get_current_lecturer)):
     if not lecturer["is_admin"]:
         raise HTTPException(status_code=403, detail="Admin permissions required to trigger crawler.")
     
-    new_found = scan_all_lecturers()
+    if lecturer_id is not None:
+        from backend.scraper import scan_single_lecturer
+        new_found = scan_single_lecturer(lecturer_id)
+    else:
+        new_found = scan_all_lecturers()
     return {"status": "success", "new_publications_found": new_found}
 
 
