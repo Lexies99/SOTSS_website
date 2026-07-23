@@ -1415,10 +1415,7 @@ function loginView() {
           <div style="margin-top: 20px; text-align: center; font-size: 0.88rem;">
             <a href="#signup" style="color: var(--accent); font-weight: 600;">Don't have an account? Sign Up &rarr;</a>
           </div>
-          
-          <div style="margin-top: 20px; text-align: center; font-size: 0.82rem; color: var(--text-body); border-top: 1px solid #f1f5f9; padding-top: 15px;">
-            Default accounts: email (e.g. <code>csshead@gimpa.edu.gh</code>, <code>gwiredu@gimpa.edu.gh</code>) with password <code>gimpa123</code>.
-          </div>
+
         </div>
       </div>
     </section>

@@ -95,7 +95,7 @@ Your login details are:
 Email: {recipient_email}
 Temporary/Default Password: {temp_password}
 
-Please log in at http://localhost:8000/#login using your email address and this temporary/default password.
+Please log in at https://libraryapp.manamatechnologies.com/#login using your email address and this temporary/default password.
 For security, please change this password in your Intranet profile page to your preferred one immediately.
 
 Best regards,

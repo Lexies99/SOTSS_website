@@ -29,20 +29,29 @@ def send_crawler_alert_email(recipient_email: str, title: str, year: str):
     SMTP_USER = os.environ.get("SMTP_USER", "")
     SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
     
-    subject = "Action Required: Verify New Publication Discovered"
+    subject = "Action Required: New Publication Found — Please Verify"
     body = f"""Dear Faculty Member,
 
-Our academic database scraper has discovered a new publication that might be yours:
+Our automated academic database scanner has discovered a new publication that may be attributed to you:
 
-Title: {title}
-Year: {year}
+  Title : {title}
+  Year  : {year}
 
-Please log in to your Lecturer Intranet Portal at http://localhost:8000/#login and navigate to the Verification Center to confirm or reject this work.
+Please log in to the GIMPA CS&IS Lecturer Intranet Portal and navigate to the
+Verification Centre to confirm or reject this publication:
 
-Once verified, the publication will automatically show up on your public profile on the department website.
+  👉 https://libraryapp.manamatechnologies.com/#intranet
+
+Once verified, the publication will automatically appear on your public
+profile on the department website.
+
+If this publication is not yours, please select "Not Mine" in the
+Verification Centre so it can be removed from your queue.
 
 Best regards,
-SOTSS Academic Publications Crawler"""
+GIMPA CS&IS Publications Crawler
+Department of Computer Science & Information Systems
+"""
 
     msg = MIMEMultipart()
     msg['From'] = SMTP_USER or "no-reply@gimpa.edu.gh"
