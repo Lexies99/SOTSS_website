@@ -395,6 +395,16 @@ def delete_my_publication(pub_id: int, lecturer: dict = Depends(get_current_lect
     conn.close()
     return {"status": "success", "message": "Publication deleted successfully."}
 
+@app.get("/api/lecturer/projects")
+def get_my_projects(lecturer: dict = Depends(get_current_lecturer)):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM projects WHERE lecturer_id = ?", (lecturer["id"],))
+    projects = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return projects
+
 @app.post("/api/lecturer/projects")
 def add_custom_project(
     title: str = Form(...),
@@ -411,6 +421,29 @@ def add_custom_project(
     conn.commit()
     conn.close()
     return {"status": "success", "message": "Project added successfully."}
+
+@app.put("/api/lecturer/projects/{proj_id}")
+def update_my_project(
+    proj_id: int,
+    title: str = Form(...),
+    description: str = Form(...),
+    url: str = Form(""),
+    lecturer: dict = Depends(get_current_lecturer)
+):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM projects WHERE id = ? AND lecturer_id = ?", (proj_id, lecturer["id"]))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Project not found or access denied")
+    cursor.execute(
+        "UPDATE projects SET title = ?, description = ?, url = ? WHERE id = ?",
+        (title, description, url, proj_id)
+    )
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Project updated successfully."}
 
 @app.delete("/api/lecturer/projects/{proj_id}")
 def delete_my_project(proj_id: int, lecturer: dict = Depends(get_current_lecturer)):

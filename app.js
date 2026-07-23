@@ -1841,27 +1841,31 @@ function renderIntranetProfile(lecturer) {
       </div>
     </div>
     
-    <div>
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px;">Active Projects</h3>
-      <div style="border: 1px solid #e2e8f0; border-radius: var(--radius-sm); overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
-          <thead>
-            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-              <th style="padding: 12px 16px; font-weight: 600; color: var(--text-body);">Project Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${(lecturer.projects || []).map(p => `
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 14px 16px; color: var(--text-dark); line-height: 1.5;">${p}</td>
-              </tr>
-            `).join('') || `
-              <tr>
-                <td style="padding: 14px 16px; color: var(--text-body); font-style: italic;">No active projects recorded.</td>
-              </tr>
-            `}
-          </tbody>
-        </table>
+    <div style="margin-bottom: 8px;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px;">🗂️ My Projects</h3>
+      <!-- Existing projects list (loaded dynamically) -->
+      <div id="myProjectsList" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+        <div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic; font-size:0.85rem;">Loading projects…</div>
+      </div>
+      <!-- Add Project Form -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px;">
+        <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary); margin-bottom:12px;">➕ Add New Project</h4>
+        <div id="addProjectStatus" style="display:none;" class="status-message"></div>
+        <form id="addProjectForm" onsubmit="window.handleAddProject(event)">
+          <div style="margin-bottom:10px;">
+            <label for="projTitleInput" style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Project Title *</label>
+            <input type="text" id="projTitleInput" required placeholder="e.g. AI-Driven Healthcare System" style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:8px 10px; font-size:0.88rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:10px;">
+            <label for="projDescInput" style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Description *</label>
+            <textarea id="projDescInput" required rows="3" placeholder="Brief description of the project..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:8px 10px; font-size:0.88rem; outline:none; resize:vertical; font-family:inherit; box-sizing:border-box;"></textarea>
+          </div>
+          <div style="margin-bottom:14px;">
+            <label for="projUrlInput" style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Project URL (optional)</label>
+            <input type="url" id="projUrlInput" placeholder="https://..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:8px 10px; font-size:0.88rem; outline:none; box-sizing:border-box;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; height:38px; font-weight:700; font-size:0.88rem;">Add Project</button>
+        </form>
       </div>
     </div>
 
@@ -1941,48 +1945,206 @@ function renderIntranetProfile(lecturer) {
   `;
 }
 
+// ─── Crawled Alerts pagination ────────────────────────────────────────────────
+window._crawledUnverified = [];
+window._crawledPage       = 0;
+const CRAWLED_PAGE_SIZE   = 5;
+
+function _renderCrawledAlertCard(pub) {
+  return `
+    <article class="pub-item" style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1;">
+          <div class="pub-meta" style="display:flex; gap:12px; margin-bottom:8px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em">
+            <span style="color:#ea580c">Crawled Alert</span>
+            <span style="color:var(--text-body)">${pub.year || 'N/A'}</span>
+          </div>
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title}</h3>
+          <div style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:4px">${pub.journal || 'Unknown Venue'}</div>
+          <div style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors}</div>
+          ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; padding:10px; border-radius:4px; margin-top:8px;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
+          ${pub.url ? `<div style="font-size:0.82rem; margin-top:8px;"><a href="${pub.url}" target="_blank" style="color:var(--accent); font-weight:600; text-decoration:underline;">Review Online →</a></div>` : ''}
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-shrink:0;">
+          <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a;">Confirm Work</button>
+          <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5;">Not Mine</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+window.renderCrawledAlertsPage = function() {
+  const list  = window._crawledUnverified;
+  const page  = window._crawledPage;
+  const total = list.length;
+  const pages = Math.ceil(total / CRAWLED_PAGE_SIZE) || 1;
+  const start = page * CRAWLED_PAGE_SIZE;
+  const slice = list.slice(start, start + CRAWLED_PAGE_SIZE);
+  const end   = Math.min(start + CRAWLED_PAGE_SIZE, total);
+
+  const container = document.getElementById('crawledAlertsList');
+  if (!container) return;
+
+  container.innerHTML = slice.length > 0
+    ? slice.map(_renderCrawledAlertCard).join('')
+    : '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic;">No items on this page.</div>';
+
+  const info = `Page ${page + 1} of ${pages} · showing ${start + 1}–${end} of ${total}`;
+  ['crawledPageInfo', 'crawledPageInfo2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = info;
+  });
+
+  document.querySelectorAll('[data-crawled-prev]').forEach(btn => {
+    btn.disabled      = page === 0;
+    btn.style.opacity = page === 0 ? '0.35' : '1';
+    btn.style.cursor  = page === 0 ? 'default' : 'pointer';
+  });
+  document.querySelectorAll('[data-crawled-next]').forEach(btn => {
+    btn.disabled      = page >= pages - 1;
+    btn.style.opacity = page >= pages - 1 ? '0.35' : '1';
+    btn.style.cursor  = page >= pages - 1 ? 'default' : 'pointer';
+  });
+};
+
+window.changeCrawledPage = function(delta) {
+  const pages = Math.ceil(window._crawledUnverified.length / CRAWLED_PAGE_SIZE) || 1;
+  const next  = window._crawledPage + delta;
+  if (next < 0 || next >= pages) return;
+  window._crawledPage = next;
+  window.renderCrawledAlertsPage();
+  const el = document.getElementById('crawledAlertsList');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 function renderIntranetVerification(publications) {
   const unverified = publications.filter(p => p.status === 'unverified');
+  const verified   = publications.filter(p => p.status === 'verified');
+
+  window._crawledUnverified = unverified;
+  window._crawledPage       = 0;
+
+  const hasPending = unverified.length > 0;
+
   return `
-    <div class="tab-header" style="margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
-      <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">Publication Verification Center</h2>
-      <p style="color: var(--text-body); font-size: 0.88rem; margin-top: 4px;">Confirm whether crawled research items are your actual publications</p>
+    <div class="tab-header" style="margin-bottom:24px; border-bottom:1px solid #e2e8f0; padding-bottom:16px;">
+      <h2 style="font-size:1.5rem; font-weight:700; color:var(--primary);">Publication Center</h2>
+      <p style="color:var(--text-body); font-size:0.88rem; margin-top:4px;">Verify crawled research, manually submit publications, and manage your academic record</p>
     </div>
-    
-    <div id="verifyStatusMessage" style="display: none;" class="status-message"></div>
-    
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-      ${unverified.length === 0 ? `
-        <div style="text-align: center; padding: 40px 20px; background: #f8fafc; border: 1px dashed #c8d8ea; border-radius: var(--radius-sm);">
-          <div style="font-size: 2rem; margin-bottom: 12px;">✅</div>
-          <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 4px;">All Publications Verified</h3>
-          <p style="color: var(--text-body); font-size: 0.88rem;">Our publication scanner has not found any new unverified research matching your name.</p>
-        </div>
-      ` : unverified.map(pub => `
-        <article class="pub-item" style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px; box-shadow:var(--shadow); display: flex; flex-direction: column; gap: 12px;">
-          <div style="display:flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
-            <div style="flex: 1;">
-              <div class="pub-meta" style="display:flex; gap:12px; margin-bottom:8px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em">
-                <span class="pub-type" style="color:#ea580c">Crawled Alert</span>
-                <span class="pub-year" style="color:var(--text-body)">${pub.year || 'N/A'}</span>
-              </div>
-              <h3 style="font-size:1.1rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title}</h3>
-              <div class="pub-journal" style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:4px">${pub.journal || 'Unknown Venue'}</div>
-              <div class="pub-authors" style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors}</div>
-              ${pub.summary ? `<div class="pub-summary" style="font-size:0.82rem; color:var(--text-body); background: #f8fafc; padding: 10px; border-radius: 4px; margin-top: 8px;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
-              ${pub.url ? `<div class="pub-url" style="font-size:0.82rem; margin-top:10px;"><a href="${pub.url}" target="_blank" style="color:var(--accent); font-weight:600; text-decoration: underline;">Review Online Publication &rarr;</a></div>` : ''}
-            </div>
-            
-            <div style="display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0;">
-              <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 600; border-radius: 4px; height: 36px; justify-content: center; background: #16a34a; border-color: #16a34a;">Confirm Work</button>
-              <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 600; border-radius: 4px; height: 36px; justify-content: center; color: #dc2626; border-color: #fca5a5;">Not Mine</button>
-            </div>
+
+    <!-- ── CRAWLED ALERTS ──────────────────────────────────────────────── -->
+    <div style="margin-bottom:32px;">
+
+      <!-- Header row -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+        <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary); margin:0; display:flex; align-items:center; gap:8px;">
+          🔍 Crawled Alerts
+          ${hasPending ? `<span style="background:#ea580c; color:#fff; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:12px;">${unverified.length} pending</span>` : ''}
+        </h3>
+        ${hasPending ? `
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span id="crawledPageInfo" style="font-size:0.82rem; color:var(--text-body); font-weight:600;"></span>
+          <button data-crawled-prev onclick="window.changeCrawledPage(-1)"
+            style="padding:5px 14px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.82rem; font-weight:600; color:var(--primary); cursor:pointer;">
+            ← Prev
+          </button>
+          <button data-crawled-next onclick="window.changeCrawledPage(1)"
+            style="padding:5px 14px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.82rem; font-weight:600; color:var(--primary); cursor:pointer;">
+            Next →
+          </button>
+        </div>` : ''}
+      </div>
+
+      <div id="verifyStatusMessage" style="display:none;" class="status-message"></div>
+
+      <!-- Cards injected by renderCrawledAlertsPage() -->
+      <div id="crawledAlertsList" style="display:flex; flex-direction:column; gap:16px;">
+        ${hasPending
+          ? '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic; font-size:0.85rem;">Loading…</div>'
+          : `<div style="text-align:center; padding:32px 20px; background:#f0fdf4; border:1px dashed #86efac; border-radius:var(--radius-sm);">
+              <div style="font-size:2rem; margin-bottom:8px;">✅</div>
+              <h3 style="font-size:1rem; font-weight:700; color:#15803d; margin-bottom:4px;">All caught up!</h3>
+              <p style="color:var(--text-body); font-size:0.85rem;">No new unverified publications found by the scanner.</p>
+             </div>`}
+      </div>
+
+      <!-- Bottom pagination bar -->
+      ${hasPending ? `
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:18px; padding-top:14px; border-top:1px solid #f1f5f9;">
+        <button data-crawled-prev onclick="window.changeCrawledPage(-1)"
+          style="padding:7px 20px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--primary); cursor:pointer;">
+          ← Previous
+        </button>
+        <span id="crawledPageInfo2" style="font-size:0.85rem; color:var(--text-body); font-weight:600;"></span>
+        <button data-crawled-next onclick="window.changeCrawledPage(1)"
+          style="padding:7px 20px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--primary); cursor:pointer;">
+          Next →
+        </button>
+      </div>` : ''}
+    </div>
+
+    <!-- ── MANUAL SUBMISSION FORM ─────────────────────────────────────── -->
+    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:24px; box-shadow:var(--shadow-sm); margin-bottom:32px;">
+      <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary); margin-bottom:4px;">➕ Submit Publication Manually</h3>
+      <p style="font-size:0.82rem; color:var(--text-body); margin-bottom:16px;">Add a publication that the scraper may have missed. It will be marked as verified immediately.</p>
+      <div id="submitPubStatus" style="display:none;" class="status-message"></div>
+      <form id="submitPublicationForm" onsubmit="window.handleSubmitPublication(event)">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+          <div style="grid-column:1/-1;">
+            <label for="pubTitleInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Publication Title *</label>
+            <input type="text" id="pubTitleInput" required placeholder="e.g. Deep Learning for Medical Image Analysis" style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; box-sizing:border-box;">
           </div>
-        </article>
-      `).join('')}
+          <div>
+            <label for="pubYearInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Year *</label>
+            <input type="text" id="pubYearInput" required placeholder="e.g. 2024" maxlength="4" style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div>
+            <label for="pubJournalInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Journal / Conference *</label>
+            <input type="text" id="pubJournalInput" required placeholder="e.g. IEEE Transactions on..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label for="pubAuthorsInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Authors *</label>
+            <input type="text" id="pubAuthorsInput" required placeholder="e.g. Engmann F., Budu J., Wiredu G." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label for="pubSummaryInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Abstract / Summary</label>
+            <textarea id="pubSummaryInput" rows="3" placeholder="Short abstract or description..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; resize:vertical; font-family:inherit; box-sizing:border-box;"></textarea>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label for="pubUrlInput" style="display:block; font-size:0.75rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">DOI / Link (optional)</label>
+            <input type="url" id="pubUrlInput" placeholder="https://doi.org/..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:9px 12px; font-size:0.9rem; outline:none; box-sizing:border-box;">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; height:42px; font-weight:700; font-size:0.95rem;">Submit Publication</button>
+      </form>
+    </div>
+
+    <!-- ── MY VERIFIED PUBLICATIONS ────────────────────────────────────── -->
+    <div>
+      <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary); margin-bottom:14px;">📄 My Verified Publications (${verified.length})</h3>
+      <div id="myPubsListContainer" style="display:flex; flex-direction:column; gap:12px;">
+        ${verified.length === 0 ? `
+          <div style="text-align:center; padding:28px; background:#f8fafc; border:1px dashed #c8d8ea; border-radius:var(--radius-sm); color:var(--text-body); font-style:italic; font-size:0.88rem;">
+            No verified publications yet. Confirm crawled alerts above or submit manually.
+          </div>
+        ` : verified.map(pub => `
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; box-shadow:var(--shadow-sm);">
+            <div style="flex:1;">
+              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:#16a34a; margin-bottom:4px;">✔ Verified &nbsp;·&nbsp; ${pub.year || 'N/A'}</div>
+              <div style="font-size:0.95rem; font-weight:700; color:var(--ink); margin-bottom:2px;">${pub.title}</div>
+              <div style="font-size:0.82rem; color:var(--primary); font-style:italic;">${pub.journal || ''}</div>
+              <div style="font-size:0.78rem; color:var(--text-body); margin-top:3px;">${pub.authors || ''}</div>
+              ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.78rem; color:var(--accent); margin-top:4px; display:inline-block;">View →</a>` : ''}
+            </div>
+            <button onclick="window.handleDeletePublication(${pub.id})" style="flex-shrink:0; background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 12px; font-size:0.78rem; font-weight:600; cursor:pointer;" title="Remove this publication">✕ Remove</button>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `;
 }
+
 
 function renderIntranetMessages(messages, lecturers) {
   const user = JSON.parse(localStorage.getItem('sotssUser') || '{}');
@@ -2393,8 +2555,6 @@ async function switchIntranetTab(tabName) {
       const res = await fetch('/api/lecturer/me', { headers });
       if (res.ok) {
         const lecturer = await res.json();
-        const localL = faculty.find(l => l.email.toLowerCase() === lecturer.email.toLowerCase());
-        lecturer.projects = localL ? localL.projects : [];
         html = renderIntranetProfile(lecturer);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load profile details. Server returned ${res.status}.</div>`;
@@ -2436,6 +2596,12 @@ async function switchIntranetTab(tabName) {
       container.style.display = 'block';
       if (tabName === 'admin') {
         window.updateAdminPubsView();
+      }
+      if (tabName === 'profile') {
+        window.loadMyProjects();
+      }
+      if (tabName === 'verification') {
+        window.renderCrawledAlertsPage();
       }
     }
   } catch (err) {
@@ -3003,6 +3169,321 @@ window.handleVerificationAction = handleVerificationAction;
 window.runAdminScan = runAdminScan;
 window.sendAdminMessage = sendAdminMessage;
 window.handleAdminScopeChange = handleAdminScopeChange;
+
+// ── PROFILE TAB: Update Profile Details ──────────────────────────────────────
+window.handleUpdateProfileSubmit = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('updateProfileStatus');
+  if (!statusMsg) return;
+  statusMsg.style.display = 'none';
+
+  const formData = new URLSearchParams();
+  formData.append('name',         document.getElementById('updateNameInput').value.trim());
+  formData.append('spec',         document.getElementById('updateSpecInput').value.trim());
+  formData.append('office',       document.getElementById('updateOfficeInput').value.trim());
+  formData.append('phone',        document.getElementById('updatePhoneInput').value.trim());
+  formData.append('extra_label',  document.getElementById('updateExtraLabel').value.trim());
+  formData.append('extra_value',  document.getElementById('updateExtraValue').value.trim());
+  formData.append('department',   document.getElementById('updateDepartmentInput').value);
+
+  try {
+    const res = await fetch('/api/lecturer/me', {
+      method: 'PUT',
+      headers: { ...getAuthHeaders(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
+    const data = await res.json();
+    statusMsg.style.display = 'block';
+    if (res.ok) {
+      statusMsg.style.cssText = 'display:block; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+      statusMsg.textContent = data.message || 'Profile updated successfully!';
+      await loadDynamicData();
+    } else {
+      statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+      statusMsg.textContent = data.detail || 'Failed to update profile.';
+    }
+  } catch (err) {
+    statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+    statusMsg.textContent = 'Connection error.';
+  }
+};
+
+// ── PROFILE TAB: Change Password ─────────────────────────────────────────────
+window.handleChangePasswordSubmit = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('changePasswordStatus');
+  if (!statusMsg) return;
+  statusMsg.style.display = 'none';
+
+  const oldPw  = document.getElementById('oldPasswordInput').value;
+  const newPw  = document.getElementById('newPasswordInput').value;
+  const confPw = document.getElementById('confirmNewPasswordInput').value;
+
+  if (newPw !== confPw) {
+    statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+    statusMsg.textContent = 'New passwords do not match.';
+    return;
+  }
+  if (newPw.length < 6) {
+    statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+    statusMsg.textContent = 'New password must be at least 6 characters.';
+    return;
+  }
+
+  const formData = new URLSearchParams();
+  formData.append('old_password', oldPw);
+  formData.append('new_password', newPw);
+
+  try {
+    const res = await fetch('/api/change-password', {
+      method: 'POST',
+      headers: { ...getAuthHeaders(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
+    const data = await res.json();
+    statusMsg.style.display = 'block';
+    if (res.ok) {
+      statusMsg.style.cssText = 'display:block; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+      statusMsg.textContent = data.message || 'Password changed successfully!';
+      document.getElementById('changePasswordForm').reset();
+    } else {
+      statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+      statusMsg.textContent = data.detail || 'Failed to change password.';
+    }
+  } catch (err) {
+    statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;';
+    statusMsg.textContent = 'Connection error.';
+  }
+};
+
+// ── PROFILE TAB: My Projects ─────────────────────────────────────────────────
+window.loadMyProjects = async function() {
+  const container = document.getElementById('myProjectsList');
+  if (!container) return;
+  container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic; font-size:0.85rem;">Loading projects…</div>';
+
+  try {
+    const res = await fetch('/api/lecturer/projects', { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error('API error');
+    const projects = await res.json();
+
+    if (projects.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-body); font-style:italic; font-size:0.85rem; background:#f8fafc; border:1px dashed #c8d8ea; border-radius:6px;">No projects added yet. Use the form below to add your first project.</div>';
+      return;
+    }
+
+    container.innerHTML = projects.map(proj => `
+      <div id="projCard_${proj.id}" style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:16px 18px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <!-- View Mode -->
+        <div id="projView_${proj.id}">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+            <div style="flex:1;">
+              <div style="font-size:1rem; font-weight:700; color:var(--ink); margin-bottom:4px;">${proj.title}</div>
+              <div style="font-size:0.85rem; color:var(--text-body); line-height:1.5; margin-bottom:6px;">${proj.description || ''}</div>
+              ${proj.url ? `<a href="${proj.url}" target="_blank" style="font-size:0.78rem; color:var(--accent); font-weight:600;">Visit Project →</a>` : ''}
+            </div>
+            <div style="display:flex; gap:6px; flex-shrink:0;">
+              <button onclick="window.handleEditProject(${proj.id})" style="background:none; border:1px solid #c8d8ea; color:var(--primary); border-radius:4px; padding:5px 10px; font-size:0.78rem; font-weight:600; cursor:pointer;">✏ Edit</button>
+              <button onclick="window.handleDeleteProject(${proj.id})" style="background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 10px; font-size:0.78rem; font-weight:600; cursor:pointer;">✕ Delete</button>
+            </div>
+          </div>
+        </div>
+        <!-- Edit Mode (hidden by default) -->
+        <div id="projEdit_${proj.id}" style="display:none;">
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Title *</label>
+            <input id="editProjTitle_${proj.id}" type="text" value="${proj.title.replace(/"/g, '&quot;')}" required style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:7px 10px; font-size:0.88rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">Description *</label>
+            <textarea id="editProjDesc_${proj.id}" rows="3" required style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:7px 10px; font-size:0.88rem; outline:none; resize:vertical; font-family:inherit; box-sizing:border-box;">${(proj.description || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:0.72rem; font-weight:600; text-transform:uppercase; color:var(--text-body); margin-bottom:4px;">URL (optional)</label>
+            <input id="editProjUrl_${proj.id}" type="url" value="${(proj.url || '').replace(/"/g, '&quot;')}" placeholder="https://..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:4px; padding:7px 10px; font-size:0.88rem; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="window.handleSaveProjectEdit(${proj.id})" class="btn btn-primary" style="flex:1; justify-content:center; height:34px; font-size:0.85rem; font-weight:700;">💾 Save Changes</button>
+            <button onclick="window.handleCancelProjectEdit(${proj.id})" class="btn btn-outline" style="justify-content:center; height:34px; font-size:0.85rem;">Cancel</button>
+          </div>
+          <div id="editProjStatus_${proj.id}" style="display:none; margin-top:8px;"></div>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = '<div style="text-align:center; padding:16px; color:#b91c1c; font-size:0.85rem;">Failed to load projects.</div>';
+  }
+};
+
+window.handleEditProject = function(id) {
+  document.getElementById(`projView_${id}`).style.display = 'none';
+  document.getElementById(`projEdit_${id}`).style.display = 'block';
+};
+
+window.handleCancelProjectEdit = function(id) {
+  document.getElementById(`projView_${id}`).style.display = 'block';
+  document.getElementById(`projEdit_${id}`).style.display = 'none';
+};
+
+window.handleSaveProjectEdit = async function(id) {
+  const statusEl = document.getElementById(`editProjStatus_${id}`);
+  const title       = document.getElementById(`editProjTitle_${id}`).value.trim();
+  const description = document.getElementById(`editProjDesc_${id}`).value.trim();
+  const url         = document.getElementById(`editProjUrl_${id}`).value.trim();
+
+  if (!title || !description) {
+    if (statusEl) { statusEl.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:8px 12px; border-radius:4px; font-size:0.82rem; font-weight:600;'; statusEl.textContent = 'Title and description are required.'; }
+    return;
+  }
+
+  const formData = new URLSearchParams();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('url', url);
+
+  try {
+    const res = await fetch(`/api/lecturer/projects/${id}`, {
+      method: 'PUT',
+      headers: { ...getAuthHeaders(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
+    if (res.ok) {
+      await window.loadMyProjects();
+    } else {
+      const err = await res.json();
+      if (statusEl) { statusEl.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:8px 12px; border-radius:4px; font-size:0.82rem; font-weight:600;'; statusEl.textContent = err.detail || 'Update failed.'; }
+    }
+  } catch (e) {
+    if (statusEl) { statusEl.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:8px 12px; border-radius:4px; font-size:0.82rem; font-weight:600;'; statusEl.textContent = 'Connection error.'; }
+  }
+};
+
+window.handleDeleteProject = async function(id) {
+  if (!confirm('Are you sure you want to delete this project? This cannot be undone.')) return;
+  try {
+    const res = await fetch(`/api/lecturer/projects/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (res.ok) {
+      await window.loadMyProjects();
+    } else {
+      const err = await res.json();
+      alert(err.detail || 'Failed to delete project.');
+    }
+  } catch (e) {
+    alert('Connection error.');
+  }
+};
+
+window.handleAddProject = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('addProjectStatus');
+  if (statusMsg) statusMsg.style.display = 'none';
+
+  const title       = document.getElementById('projTitleInput').value.trim();
+  const description = document.getElementById('projDescInput').value.trim();
+  const url         = document.getElementById('projUrlInput').value.trim();
+
+  const formData = new URLSearchParams();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('url', url);
+
+  try {
+    const res = await fetch('/api/lecturer/projects', {
+      method: 'POST',
+      headers: { ...getAuthHeaders(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = data.message || 'Project added!'; }
+      document.getElementById('addProjectForm').reset();
+      await window.loadMyProjects();
+    } else {
+      if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = data.detail || 'Failed to add project.'; }
+    }
+  } catch (e) {
+    if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = 'Connection error.'; }
+  }
+};
+
+// ── VERIFICATION TAB: Submit Publication Manually ────────────────────────────
+window.handleSubmitPublication = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('submitPubStatus');
+  if (statusMsg) statusMsg.style.display = 'none';
+
+  const title   = document.getElementById('pubTitleInput').value.trim();
+  const year    = document.getElementById('pubYearInput').value.trim();
+  const journal = document.getElementById('pubJournalInput').value.trim();
+  const authors = document.getElementById('pubAuthorsInput').value.trim();
+  const summary = document.getElementById('pubSummaryInput').value.trim();
+  const url     = document.getElementById('pubUrlInput').value.trim();
+
+  const formData = new URLSearchParams();
+  formData.append('title',   title);
+  formData.append('year',    year);
+  formData.append('journal', journal);
+  formData.append('authors', authors);
+  formData.append('summary', summary);
+  formData.append('url',     url);
+
+  try {
+    const res = await fetch('/api/lecturer/publications', {
+      method: 'POST',
+      headers: { ...getAuthHeaders(), 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+    });
+    const data = await res.json();
+    if (statusMsg) statusMsg.style.display = 'block';
+    if (res.ok) {
+      if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = data.message || 'Publication submitted successfully!'; }
+      document.getElementById('submitPublicationForm').reset();
+      // Reload the verification tab to show the new publication
+      setTimeout(async () => {
+        const resPubs = await fetch('/api/lecturer/publications', { headers: getAuthHeaders() });
+        if (resPubs.ok) {
+          const pubs = await resPubs.json();
+          const tabContent = document.getElementById('intranetTabContent');
+          if (tabContent) tabContent.innerHTML = renderIntranetVerification(pubs);
+        }
+        await loadDynamicData();
+      }, 800);
+    } else {
+      if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = data.detail || 'Failed to submit publication.'; }
+    }
+  } catch (e) {
+    if (statusMsg) { statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600;'; statusMsg.textContent = 'Connection error.'; }
+  }
+};
+
+// ── VERIFICATION TAB: Delete Publication ─────────────────────────────────────
+window.handleDeletePublication = async function(id) {
+  if (!confirm('Remove this publication from your record? This cannot be undone.')) return;
+  try {
+    const res = await fetch(`/api/lecturer/publications/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (res.ok) {
+      // Refresh the verification tab
+      const resPubs = await fetch('/api/lecturer/publications', { headers: getAuthHeaders() });
+      if (resPubs.ok) {
+        const pubs = await resPubs.json();
+        const tabContent = document.getElementById('intranetTabContent');
+        if (tabContent) tabContent.innerHTML = renderIntranetVerification(pubs);
+      }
+      await loadDynamicData();
+    } else {
+      const err = await res.json();
+      alert(err.detail || 'Failed to delete publication.');
+    }
+  } catch (e) {
+    alert('Connection error.');
+  }
+};
 
 function publicationDetail(pubId) {
   let foundPub = null;
