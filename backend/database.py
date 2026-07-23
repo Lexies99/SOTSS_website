@@ -30,7 +30,9 @@ def init_db():
         extra_label TEXT,
         extra_value TEXT,
         is_admin BOOLEAN DEFAULT 0,
-        department TEXT DEFAULT 'Computer Science & Information Systems'
+        department TEXT DEFAULT 'Computer Science & Information Systems',
+        assigned_school TEXT,
+        assigned_role TEXT
     )
     """)
 
@@ -46,6 +48,18 @@ def init_db():
         authors TEXT,
         url TEXT,
         status TEXT DEFAULT 'unverified',
+        FOREIGN KEY (lecturer_id) REFERENCES lecturers (id) ON DELETE CASCADE
+    )
+    """)
+
+    # Create Projects Table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS projects (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        lecturer_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        description TEXT,
+        url TEXT,
         FOREIGN KEY (lecturer_id) REFERENCES lecturers (id) ON DELETE CASCADE
     )
     """)

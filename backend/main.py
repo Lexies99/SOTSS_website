@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Form
+from fastapi import FastAPI, Depends, HTTPException, status, Form, BackgroundTasks
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -91,10 +91,12 @@ def send_temporary_password_email(recipient_email: str, temp_password: str):
 Welcome to the School of Technology and Social Sciences Portal.
 An account has been created for you.
 
-Your temporary password is: {temp_password}
+Your login details are:
+Email: {recipient_email}
+Temporary/Default Password: {temp_password}
 
-Please log in at http://localhost:8000/#login using your email address and this temporary password.
-For security, please change this password in your Intranet profile page immediately.
+Please log in at http://localhost:8000/#login using your email address and this temporary/default password.
+For security, please change this password in your Intranet profile page to your preferred one immediately.
 
 Best regards,
 SOTSS Administration
@@ -126,15 +128,15 @@ GIMPA"""
         print(f"SMTP Server not available. (Email was printed to stdout instead): {e}")
 
 @app.post("/api/login")
-def login(username: str = Form(...), password: str = Form(...)):
+def login(background_tasks: BackgroundTasks, username: str = Form(...), password: str = Form(...)):
     # Treat username field as the email address
     email = username.strip().lower()
     
     # Enforce domain constraints
-    if not (email.endswith("@gimpa.edu.gh") or email.endswith("@adj.gimpa.edu.gh") or email.endswith("@st.gimpa.edu.gh")):
+    if not (email.endswith("@gimpa.edu.gh") or email.endswith("@adj.gimpa.edu.gh")):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed."
+            detail="Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed."
         )
 
     conn = sqlite3.connect(DB_PATH)
@@ -152,6 +154,11 @@ def login(username: str = Form(...), password: str = Form(...)):
         )
 
     access_token = create_access_token(data={"sub": user["username"]})
+    
+    # Automatically trigger publication scan in background for this lecturer
+    # from backend.scraper import scan_single_lecturer
+    # background_tasks.add_task(scan_single_lecturer, user["id"])
+
     return {
         "access_token": access_token, 
         "token_type": "bearer",
@@ -179,10 +186,10 @@ def signup(
     email_clean = email.strip().lower()
     
     # Enforce domain constraints
-    if not (email_clean.endswith("@gimpa.edu.gh") or email_clean.endswith("@adj.gimpa.edu.gh") or email_clean.endswith("@st.gimpa.edu.gh")):
+    if not (email_clean.endswith("@gimpa.edu.gh") or email_clean.endswith("@adj.gimpa.edu.gh")):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to register."
+            detail="Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to register."
         )
 
     conn = sqlite3.connect(DB_PATH)
@@ -274,6 +281,16 @@ def get_public_lecturers():
     conn.close()
     return lecturers
 
+@app.get("/api/public/projects")
+def get_public_projects():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, lecturer_id, title, description, url FROM projects")
+    projects = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return projects
+
 @app.get("/api/lecturer/me")
 def get_me(lecturer: dict = Depends(get_current_lecturer)):
     # Remove password hash for security
@@ -344,6 +361,87 @@ def reject_pub(pub_id: int, lecturer: dict = Depends(get_current_lecturer)):
     conn.close()
     return {"status": "success", "message": "Publication rejected successfully."}
 
+@app.post("/api/lecturer/publications")
+def add_custom_publication(
+    title: str = Form(...),
+    year: str = Form(...),
+    journal: str = Form(...),
+    authors: str = Form(...),
+    summary: str = Form(""),
+    url: str = Form(""),
+    lecturer: dict = Depends(get_current_lecturer)
+):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO publications (lecturer_id, title, summary, year, journal, authors, url, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'verified')
+    """, (lecturer["id"], title, summary, year, journal, authors, url))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Publication added successfully."}
+
+@app.delete("/api/lecturer/publications/{pub_id}")
+def delete_my_publication(pub_id: int, lecturer: dict = Depends(get_current_lecturer)):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM publications WHERE id = ? AND lecturer_id = ?", (pub_id, lecturer["id"]))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Publication not found or access denied")
+    cursor.execute("DELETE FROM publications WHERE id = ?", (pub_id,))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Publication deleted successfully."}
+
+@app.post("/api/lecturer/projects")
+def add_custom_project(
+    title: str = Form(...),
+    description: str = Form(...),
+    url: str = Form(""),
+    lecturer: dict = Depends(get_current_lecturer)
+):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO projects (lecturer_id, title, description, url)
+        VALUES (?, ?, ?, ?)
+    """, (lecturer["id"], title, description, url))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Project added successfully."}
+
+@app.delete("/api/lecturer/projects/{proj_id}")
+def delete_my_project(proj_id: int, lecturer: dict = Depends(get_current_lecturer)):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM projects WHERE id = ? AND lecturer_id = ?", (proj_id, lecturer["id"]))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Project not found or access denied")
+    cursor.execute("DELETE FROM projects WHERE id = ?", (proj_id,))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Project deleted successfully."}
+
+@app.get("/api/admin/publications")
+def get_admin_publications(lecturer: dict = Depends(get_current_lecturer)):
+    if not lecturer["is_admin"]:
+        raise HTTPException(status_code=403, detail="Admin permissions required.")
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT p.*, l.name as lecturer_name, l.username as lecturer_username
+        FROM publications p 
+        JOIN lecturers l ON p.lecturer_id = l.id 
+    """)
+    pubs = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return pubs
+
 @app.get("/api/messages")
 def get_my_messages(lecturer: dict = Depends(get_current_lecturer)):
     conn = sqlite3.connect(DB_PATH)
@@ -375,18 +473,8 @@ def send_message(
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    # Only Admin can send school-wide announcements
-    if scope == "school" and not lecturer["is_admin"]:
-        conn.close()
-        raise HTTPException(status_code=403, detail="Only administrators can send school-wide announcements.")
-        
-    # Lecturers can send department announcements, but only to their own department (unless they are admin)
-    if scope == "department":
-        if not department:
-            department = lecturer["department"]
-        elif department != lecturer["department"] and not lecturer["is_admin"]:
-            conn.close()
-            raise HTTPException(status_code=403, detail="You can only send announcements to your own department.")
+    if scope == "department" and not department:
+        department = lecturer["department"]
             
     cursor.execute("""
         INSERT INTO messages (sender_id, recipient_id, title, content, scope, department)
@@ -395,6 +483,88 @@ def send_message(
     conn.commit()
     conn.close()
     return {"status": "success", "message": "Message sent successfully."}
+
+@app.post("/api/admin/assign-role")
+def assign_role(
+    lecturer_id: int = Form(...),
+    school: Optional[str] = Form(None),
+    role_type: Optional[str] = Form(None), # 'HOD', 'Dean', or None
+    lecturer: dict = Depends(get_current_lecturer)
+):
+    if lecturer["username"] != "admin":
+        raise HTTPException(status_code=403, detail="Only the system administrator can assign school roles.")
+        
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # Get lecturer name
+    cursor.execute("SELECT name FROM lecturers WHERE id = ?", (lecturer_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Lecturer not found")
+    name = row[0]
+    
+    # Determine new display role and is_admin flag
+    if role_type == "HOD":
+        new_role = "Head of Department"
+        new_is_admin = 1
+    elif role_type == "Dean":
+        new_role = "Dean"
+        new_is_admin = 1
+    else:
+        # Revert to standard title
+        if "Prof." in name:
+            new_role = "Professor"
+        elif "Dr." in name:
+            new_role = "Senior Lecturer"
+        else:
+            new_role = "Lecturer"
+        new_is_admin = 0
+        role_type = None
+        school = None
+        
+    cursor.execute("""
+        UPDATE lecturers 
+        SET assigned_school = ?, assigned_role = ?, role = ?, is_admin = ?
+        WHERE id = ?
+    """, (school, role_type, new_role, new_is_admin, lecturer_id))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": f"Successfully updated role for {name}."}
+
+@app.post("/api/admin/reset-password-email")
+def reset_password_email(
+    lecturer_id: int = Form(...),
+    lecturer: dict = Depends(get_current_lecturer)
+):
+    if lecturer["username"] != "admin":
+        raise HTTPException(status_code=403, detail="Only the system administrator can perform password resets.")
+        
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT email, name FROM lecturers WHERE id = ?", (lecturer_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Lecturer not found")
+        
+    email, name = row[0], row[1]
+    temp_pass = generate_temp_password()
+    h_password = get_password_hash(temp_pass)
+    
+    cursor.execute("UPDATE lecturers SET password_hash = ? WHERE id = ?", (h_password, lecturer_id))
+    conn.commit()
+    conn.close()
+    
+    # Send email (logged to stdout / console)
+    send_temporary_password_email(email, temp_pass)
+    
+    return {
+        "status": "success", 
+        "message": f"Temporary password sent to {name} ({email}).",
+        "default_password": temp_pass
+    }
 
 @app.post("/api/admin/scan")
 def trigger_scanner(lecturer_id: Optional[int] = None, lecturer: dict = Depends(get_current_lecturer)):
@@ -406,6 +576,12 @@ def trigger_scanner(lecturer_id: Optional[int] = None, lecturer: dict = Depends(
         new_found = scan_single_lecturer(lecturer_id)
     else:
         new_found = scan_all_lecturers()
+    return {"status": "success", "new_publications_found": new_found}
+
+@app.post("/api/lecturer/scan")
+def trigger_lecturer_scanner(lecturer: dict = Depends(get_current_lecturer)):
+    from backend.scraper import scan_single_lecturer
+    new_found = scan_single_lecturer(lecturer["id"])
     return {"status": "success", "new_publications_found": new_found}
 
 

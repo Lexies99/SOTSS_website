@@ -1,0 +1,193 @@
+Created At: 2026-07-23T17:59:04Z
+Completed At: 2026-07-23T17:59:05Z
+
+				The command completed successfully.
+				Output:
+				<truncated 1637 lines>
++          <a href="#contact" class="btn btn-dark">View Staff Directory</a>
++        </div>
++      </section>
++    `;
++  }
++  
++  return `
++    <section class="section" style="background: #f8fafc; min-height: 70vh; padding: 40px 0;">
++      <div class="container" style="max-width: 800px;">
++        <div style="margin-bottom: 24px;">
++          <a href="#profile/${foundLecturer.id}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
++            &larr; Back to ${foundLecturer.name}'s Profile
++          </a>
++        </div>
++        
++        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow);">
++          <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
++            <span style="color: var(--accent);">Research Publication</span>
++            <span style="color: var(--text-body);">${foundPub.year || 'N/A'}</span>
++          </div>
++          
++          <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; line-height: 1.35;">${foundPub.title}</h2>
++          
++          <div style="margin-bottom: 24px; font-size: 0.95rem; color: var(--text-dark);">
++            <div style="margin-bottom: 6px;"><strong>Authors:</strong> ${foundPub.authors}</div>
++            <div style="font-style: italic; color: var(--primary);"><strong>Published in:</strong> ${foundPub.journal || 'Unknown Journal/Venue'}</div>
++          </div>
++          
++          <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 30px;">
++            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px;">Abstract / Summary</h3>
++            <p style="color: var(--text-body); line-height: 1.7; font-size: 0.95rem; text-align: justify;">${foundPub.summary || 'No abstract or summary is available for this publication.'}</p>
++          </div>
++          
++          ${foundPub.url ? `
++            <div style="text-align: center;">
++              <a href="${foundPub.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 600; padding: 0 24px;">
++                View Original Document &nearr;
++              </a>
++            </div>
++          ` : ''}
++        </article>
++      </div>
++    </section>
++  `;
++}
++
++function projectDetail(projId) {
++  let foundProj = null;
++  let foundLecturer = null;
++  
++  for (const l of faculty) {
++    const p = l.projects.find(x => x.id === projId);
++    if (p) {
++      foundProj = p;
++      foundLecturer = l;
++      break;
++    }
++  }
++  
++  if (!foundProj || !foundLecturer) {
++    return `
++      <section class="section">
++        <div class="container" style="text-align: center; padding: 40px 0;">
++          <h3>Project Not Found</h3>
++          <p style="color: var(--text-body); margin: 12px 0 20px;">The requested research project could not be found.</p>
++          <a href="#contact" class="btn btn-dark">View Staff Directory</a>
++        </div>
++      </section>
++    `;
++  }
++  
++  return `
++    <section class="section" style="background: #f8fafc; min-height: 70vh; padding: 40px 0;">
++      <div class="container" style="max-width: 800px;">
++        <div style="margin-bottom: 24px;">
++          <a href="#profile/${foundLecturer.id}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
++            &larr; Back to ${foundLecturer.name}'s Profile
++          </a>
++        </div>
++        
++        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow);">
++          <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
++            <span style="color: var(--accent);">Research Project</span>
++          </div>
++          
++          <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; line-height: 1.35;">${foundProj.title}</h2>
++          
++          <div style="margin-bottom: 20px; font-size: 0.95rem; color: var(--text-dark);">
++            <div><strong>Lead Researcher:</strong> ${foundLecturer.name} (${foundLecturer.role})</div>
++          </div>
++          
++          <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 30px;">
++            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px;">Project Description</h3>
++            <p style="color: var(--text-body); line-height: 1.7; font-size: 0.95rem; text-align: justify;">${foundProj.description || 'No description is available for this project.'}</p>
++          </div>
++          
++          ${foundProj.url ? `
++            <div style="text-align: center;">
++              <a href="${foundProj.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 600; padding: 0 24px;">
++                Visit Project Website &nearr;
++              </a>
++            </div>
++          ` : ''}
++        </article>
++      </div>
++    </section>
++  `;
++}
++
++// Router Action
++function render() {
++  const r = getRoute();
++  
++  // Intercept logout route
++  if (r === 'logout') {
++    localStorage.removeItem('sotssToken');
++    localStorage.removeItem('sotssUser');
++    location.hash = '#home';
++    return;
++  }
++  
++  let viewHTML = '';
++  let activeTab = '';
++
++  if (r === 'home') {
++    viewHTML = home();
++    activeTab = 'home';
++  } else if (r === 'introduction') {
++    viewHTML = introduction();
++    activeTab = 'introduction';
++  } else if (r === 'research') {
++    viewHTML = research();
++    activeTab = 'research';
++  } else if (r === 'contact') {
++    viewHTML = contact();
++    activeTab = 'contact';
++  } else if (r === 'cooperation') {
++    viewHTML = cooperation();
++    activeTab = 'cooperation';
++  } else if (r === 'news') {
++    viewHTML = newsList();
++    activeTab = 'news';
++  } else if (r === 'login') {
++    if (localStorage.getItem('sotssToken')) {
++      location.hash = '#intranet';
++      return;
++    }
++    viewHTML = loginView();
+     activeTab = '';
+   } else if (r === 'signup') {
+     if (localStorage.getItem('sotssToken')) {
+@@ -2533,6 +3629,12 @@ function render() {
+   } else if (r.startsWith('profile/')) {
+     viewHTML = profile(r.split('/')[1]);
+     activeTab = 'profile';
++  } else if (r.startsWith('publication/')) {
++    viewHTML = publicationDetail(parseInt(r.split('/')[1]));
++    activeTab = '';
++  } else if (r.startsWith('project/')) {
++    viewHTML = projectDetail(parseInt(r.split('/')[1]));
++    activeTab = '';
+   } else if (r.startsWith('news-')) {
+     viewHTML = newsDetail(r);
+     activeTab = 'news';
+@@ -2585,8 +3687,8 @@ document.addEventListener('submit', async function(event) {
+     errorMsg.textContent = '';
+     
+     // Frontend domain check
+-    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh') && !email.endsWith('@st.gimpa.edu.gh')) {
+-      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to log in.';
++    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh')) {
++      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to log in.';
+       errorMsg.style.display = 'block';
+       return;
+     }
+@@ -2606,6 +3708,10 @@ document.addEventListener('submit', async function(event) {
+         const data = await res.json();
+         localStorage.setItem('sotssToken', data.access_token);
+         localStorage.setItem('sotssUser', JSON.stringify(data.user));
++        if (!data.user.is_admin) {
++          window.triggerAutoScan = true;
++          window.activeIntranetTab = 'verification';
++        }
+         location.hash = '#intranet';
+       } else {
+         const err = await res.json();
+

@@ -876,7 +876,7 @@ function contact() {
             <h3><img class="inline-icon" src="assets/icons/icon-time.svg" alt="Open hours">Open Hours</h3>
             <p>Monday – Saturday</p>
             <p>8:30 AM – 6:00 PM GMT</p>
-            <p style="margin-top:8px"><a href="https://gimpa.edu.gh/" class="btn btn-dark" style="padding:8px 20px;font-size:0.82rem">Visit GIMPA Website →</a></p>
+            <p style="margin-top:8px"><a href="https://gimpa.edu.gh/" target="_blank" style="display:inline-block; padding:8px 20px; font-size:0.82rem; font-weight:700; background:var(--primary); color:#ffffff !important; border-radius:6px; text-decoration:none; letter-spacing:0.01em; transition:opacity 0.2s;">Visit GIMPA Website →</a></p>
           </div>
         </div>
       </div>
@@ -1987,111 +1987,273 @@ function renderIntranetVerification(publications) {
   `;
 }
 
-function renderIntranetMessages(messages) {
+function renderIntranetMessages(messages, lecturers) {
+  const user = JSON.parse(localStorage.getItem('sotssUser') || '{}');
+  const otherLecturers = lecturers.filter(l => l.id !== user.id && l.username !== user.username);
+
   return `
     <div class="tab-header" style="margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
       <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">Intranet Inbox &amp; Messages</h2>
-      <p style="color: var(--text-body); font-size: 0.88rem; margin-top: 4px;">View administrative updates and private communications</p>
+      <p style="color: var(--text-body); font-size: 0.88rem; margin-top: 4px;">View administrative updates, announcements, and send communications</p>
     </div>
     
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      ${messages.length === 0 ? `
-        <div style="text-align: center; padding: 40px; color: var(--text-body); font-style: italic;">
-          No messages received yet.
-        </div>
-      ` : messages.map(msg => {
-        const isAnnouncement = msg.recipient_id === null;
-        const msgDate = new Date(msg.timestamp).toLocaleString();
-        
-        return `
-          <div style="background: ${isAnnouncement ? '#f0fdf4' : '#fff'}; border: 1px solid ${isAnnouncement ? '#bbf7d0' : '#e2e8f0'}; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm); border-left: 4px solid ${isAnnouncement ? '#22c55e' : 'var(--primary)'};">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-              <span class="badge" style="background: ${isAnnouncement ? '#dcfce7' : '#e2e8f0'}; color: ${isAnnouncement ? '#15803d' : 'var(--primary)'}; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
-                ${isAnnouncement ? 'Global Announcement' : 'Direct Message'}
-              </span>
-              <span style="font-size: 0.75rem; color: var(--text-body);">${msgDate}</span>
-            </div>
-            <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">${msg.title}</h3>
-            <div style="font-size: 0.88rem; color: var(--text-dark); margin-bottom: 10px; line-height: 1.5; white-space: pre-wrap;">${msg.content}</div>
-            <div style="font-size: 0.78rem; color: var(--text-body);"><strong>From:</strong> ${msg.sender_name}</div>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-}
-
-function renderIntranetAdmin(lecturers) {
-  return `
-    <div class="tab-header" style="margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
-      <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">Intranet Administration Panel</h2>
-      <p style="color: var(--text-body); font-size: 0.88rem; margin-top: 4px;">Broadcast announcements, send messages, and scan research databases</p>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
-      <!-- Scan Section -->
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 24px;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-          Research Crawler Scanner
-        </h3>
-        <p style="font-size: 0.88rem; color: var(--text-body); margin-bottom: 16px; line-height: 1.5;">
-          Trigger an on-demand scan of the <strong>Semantic Scholar</strong> academic database for all department faculty members. Newly discovered publications will appear in their respective Verification Centers.
-        </p>
-        
-        <div id="scanStatusMessage" style="display: none;" class="status-message"></div>
-        
-        <button id="triggerScanBtn" onclick="window.runAdminScan()" class="btn btn-dark" style="width: 100%; justify-content: center; height: 44px; font-weight: 600;">
-          Start Publication Scan
-        </button>
-      </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; align-items: start; margin-bottom: 30px;">
       
-      <!-- Send Message Section -->
+      <!-- Compose Message Form -->
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 24px; box-shadow: var(--shadow-sm);">
         <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px;">
-          Broadcast / Send Message
+          Compose Message / Announcement
         </h3>
         
-        <div id="adminMessageStatus" style="display: none;" class="status-message"></div>
+        <div id="userMessageStatus" style="display: none;" class="status-message"></div>
         
-        <form id="adminSendMessageForm" onsubmit="window.sendAdminMessage(event)">
+        <form id="userSendMessageForm" onsubmit="window.sendUserMessage(event)">
           <div style="margin-bottom: 12px;">
-            <label for="adminScopeSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Scope</label>
-            <select id="adminScopeSelect" onchange="window.handleAdminScopeChange(this.value)" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
+            <label for="userScopeSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Scope</label>
+            <select id="userScopeSelect" onchange="window.handleUserScopeChange(this.value)" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
               <option value="school">School-wide Announcement</option>
               <option value="department">Department-only Announcement</option>
               <option value="direct">Direct Message</option>
             </select>
           </div>
 
-          <div id="adminDepartmentContainer" style="display: none; margin-bottom: 12px;">
-            <label for="adminDepartmentSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Target Department</label>
-            <select id="adminDepartmentSelect" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
+          <div id="userDepartmentContainer" style="display: none; margin-bottom: 12px;">
+            <label for="userDepartmentSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Target Department</label>
+            <select id="userDepartmentSelect" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
               <option value="Computer Science & Information Systems">Computer Science & Information Systems</option>
               <option value="Management Information Systems">Management Information Systems</option>
             </select>
           </div>
           
-          <div id="adminRecipientContainer" style="display: none; margin-bottom: 12px;">
-            <label for="adminRecipientSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Recipient Faculty</label>
-            <select id="adminRecipientSelect" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
-              ${lecturers.map(l => `
-                <option value="${l.id}">${l.name} (${l.role})</option>
+          <div id="userRecipientContainer" style="display: none; margin-bottom: 12px;">
+            <label for="userRecipientSelect" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Recipient Faculty</label>
+            <select id="userRecipientSelect" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
+              ${otherLecturers.map(l => `
+                <option value="${l.id}">${l.name} (${l.role || 'Lecturer'})</option>
               `).join('')}
             </select>
           </div>
           
           <div style="margin-bottom: 12px;">
-            <label for="adminMessageTitle" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Title</label>
-            <input type="text" id="adminMessageTitle" required placeholder="e.g. Annual Report Submission" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
+            <label for="userMessageTitle" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Title</label>
+            <input type="text" id="userMessageTitle" required placeholder="e.g. Question about collaboration" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none;">
           </div>
           
           <div style="margin-bottom: 16px;">
-            <label for="adminMessageContent" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Content</label>
-            <textarea id="adminMessageContent" required rows="4" placeholder="Enter message text here..." style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none; resize: vertical; font-family: inherit;"></textarea>
+            <label for="userMessageContent" style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Message Content</label>
+            <textarea id="userMessageContent" required rows="4" placeholder="Enter message text here..." style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 8px 10px; font-size: 0.88rem; outline: none; resize: vertical; font-family: inherit;"></textarea>
           </div>
           
           <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 40px; font-weight: 600;">Send Message</button>
         </form>
+      </div>
+
+      <!-- Messages List -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 4px;">
+          Message Inbox
+        </h3>
+        ${messages.length === 0 ? `
+          <div style="text-align: center; padding: 40px; color: var(--text-body); font-style: italic; background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm);">
+            No messages received yet.
+          </div>
+        ` : messages.map(msg => {
+          const isAnnouncement = msg.recipient_id === null;
+          const msgDate = new Date(msg.timestamp).toLocaleString();
+          
+          return `
+            <div style="background: ${isAnnouncement ? '#f0fdf4' : '#fff'}; border: 1px solid ${isAnnouncement ? '#bbf7d0' : '#e2e8f0'}; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm); border-left: 4px solid ${isAnnouncement ? '#22c55e' : 'var(--primary)'};">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                <span class="badge" style="background: ${isAnnouncement ? '#dcfce7' : '#e2e8f0'}; color: ${isAnnouncement ? '#15803d' : 'var(--primary)'}; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                  ${isAnnouncement ? 'Global Announcement' : 'Direct Message'}
+                </span>
+                <span style="font-size: 0.75rem; color: var(--text-body);">${msgDate}</span>
+              </div>
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">${msg.title}</h3>
+              <div style="font-size: 0.88rem; color: var(--text-dark); margin-bottom: 10px; line-height: 1.5; white-space: pre-wrap;">${msg.content}</div>
+              <div style="font-size: 0.78rem; color: var(--text-body);"><strong>From:</strong> ${msg.sender_name}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+    </div>
+  `;
+}
+
+function renderIntranetAdmin(lecturers, publications) {
+  const user = JSON.parse(localStorage.getItem('sotssUser') || '{}');
+  const isAdminUser = user.username === 'admin';
+  
+  // Calculate stats
+  const totalArticles = publications.length;
+  const currentYear = new Date().getFullYear().toString();
+  const publishedThisYear = publications.filter(p => p.year === currentYear).length;
+  const verifiedPubs = publications.filter(p => p.status === 'verified').length;
+  const pendingPubs = publications.filter(p => p.status === 'unverified').length;
+
+  return `
+    <div class="tab-header" style="margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">Intranet Administration Panel</h2>
+      <p style="color: var(--text-body); font-size: 0.88rem; margin-top: 4px;">Monitor publications, assign school roles, and run database scans</p>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+      
+      <!-- Stats Cards Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-body); text-transform: uppercase; margin-bottom: 6px;">Total Articles</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">${totalArticles}</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-body); text-transform: uppercase; margin-bottom: 6px;">Published in ${currentYear}</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">${publishedThisYear}</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-body); text-transform: uppercase; margin-bottom: 6px;">Verified Publications</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #16a34a;">${verifiedPubs}</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; text-align: center; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-body); text-transform: uppercase; margin-bottom: 6px;">Pending Verification</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c;">${pendingPubs}</div>
+        </div>
+      </div>
+      
+      <!-- Split Layout: Left Controls, Right Table -->
+      <div style="display: grid; grid-template-columns: ${isAdminUser ? '1fr 2fr' : '1fr'}; gap: 30px; align-items: start;">
+        
+        <!-- Left Panel: Scans and Admin Role/Reset controls (Only for tech admin if assigned) -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          
+          <!-- Scan Section -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">Research Crawler Scanner</h3>
+            <p style="font-size: 0.82rem; color: var(--text-body); margin-bottom: 12px; line-height: 1.4;">
+              Trigger an on-demand scan of the <strong>Semantic Scholar</strong> academic database for all department faculty members.
+            </p>
+            
+            <div id="scanStatusMessage" style="display: none;" class="status-message"></div>
+            
+            <button id="triggerScanBtn" onclick="window.runAdminScan()" class="btn btn-dark" style="width: 100%; justify-content: center; height: 38px; font-size: 0.88rem; font-weight: 600;">
+              Start Publication Scan
+            </button>
+          </div>
+          
+          ${isAdminUser ? `
+            <!-- Role Assignment Panel -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm);">
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 10px;">Assign School Role</h3>
+              <div id="roleAssignStatus" style="display: none;" class="status-message"></div>
+              <form id="roleAssignForm" onsubmit="window.submitRoleAssignment(event)">
+                <div style="margin-bottom: 12px;">
+                  <label for="assignLecturerSelect" style="display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Faculty Member</label>
+                  <select id="assignLecturerSelect" required style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.85rem; outline: none;">
+                    ${lecturers.filter(l => l.username !== 'admin').map(l => `
+                      <option value="${l.id}">${l.name} (${l.role || 'Lecturer'})</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <label for="assignSchoolSelect" style="display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">School / Department</label>
+                  <select id="assignSchoolSelect" required style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.85rem; outline: none;">
+                    <option value="School of Technology">School of Technology</option>
+                    <option value="Business School">Business School</option>
+                    <option value="School of Public Service & Governance">School of Public Service & Governance</option>
+                    <option value="Law School">Law School</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label for="assignRoleTypeSelect" style="display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Role Title</label>
+                  <select id="assignRoleTypeSelect" required style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.85rem; outline: none;">
+                    <option value="HOD">Head of Department (HOD)</option>
+                    <option value="Dean">Dean</option>
+                    <option value="None">None (Revert to Lecturer)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 36px; font-size: 0.85rem; font-weight: 600;">Assign Role</button>
+              </form>
+            </div>
+            
+            <!-- Password Reset Panel -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm);">
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 10px;">Send Reset Password</h3>
+              <div id="passwordResetStatus" style="display: none;" class="status-message"></div>
+              <form id="passwordResetForm" onsubmit="window.submitPasswordResetEmail(event)">
+                <div style="margin-bottom: 16px;">
+                  <label for="resetLecturerSelect" style="display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Faculty Member</label>
+                  <select id="resetLecturerSelect" required style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.85rem; outline: none;">
+                    ${lecturers.filter(l => l.username !== 'admin').map(l => `
+                      <option value="${l.id}">${l.name} (${l.email})</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-dark" style="width: 100%; justify-content: center; height: 36px; font-size: 0.85rem; font-weight: 600;">Send Reset Link</button>
+              </form>
+            </div>
+          ` : ''}
+        </div>
+        
+        <!-- Right Panel: Scanned Publications Catalog -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 24px; box-shadow: var(--shadow-sm);">
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+            Scanned Publications Database
+            <button onclick="window.downloadAdminPubsCSV()" class="btn btn-outline" style="height: 32px; font-size: 0.8rem; padding: 0 12px; font-weight: 600; border-color: var(--primary); color: var(--primary); background: #f0f6ff;">
+              ⬇ Download CSV
+            </button>
+          </h3>
+          
+          <!-- Filters Section -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+            <div>
+              <label for="filterLecturer" style="display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Filter by Lecturer</label>
+              <select id="filterLecturer" onchange="window.updateAdminPubsView()" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.82rem; outline: none;">
+                <option value="all">All Lecturers</option>
+                ${lecturers.filter(l => l.username !== 'admin').map(l => `
+                  <option value="${l.id}">${l.name}</option>
+                `).join('')}
+              </select>
+            </div>
+            
+            <div>
+              <label for="filterDateStart" style="display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Start Date</label>
+              <input type="date" id="filterDateStart" onchange="window.updateAdminPubsView()" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 5px 8px; font-size: 0.82rem; outline: none;">
+            </div>
+            
+            <div>
+              <label for="filterDateEnd" style="display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">End Date</label>
+              <input type="date" id="filterDateEnd" onchange="window.updateAdminPubsView()" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 5px 8px; font-size: 0.82rem; outline: none;">
+            </div>
+            
+            <div>
+              <label for="filterStatus" style="display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-body); margin-bottom: 4px;">Verification Status</label>
+              <select id="filterStatus" onchange="window.updateAdminPubsView()" style="width: 100%; border: 1px solid #c8d8ea; background: #fff; border-radius: 4px; padding: 6px 8px; font-size: 0.82rem; outline: none;">
+                <option value="all">All Statuses</option>
+                <option value="verified">Verified</option>
+                <option value="unverified">Unverified</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Table Container -->
+          <div style="overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+              <thead>
+                <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+                  <th style="padding: 10px 12px; font-weight: 700; color: var(--primary);">Lecturer</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: var(--primary);">Title</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: var(--primary);">Year</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: var(--primary);">Journal/Venue</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: var(--primary);">Status</th>
+                </tr>
+              </thead>
+              <tbody id="adminPubsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   `;
@@ -2250,17 +2412,22 @@ async function switchIntranetTab(tabName) {
       }
     } else if (tabName === 'messages') {
       const res = await fetch('/api/messages', { headers });
-      if (res.ok) {
+      const resLecturers = await fetch('/api/public/lecturers');
+      if (res.ok && resLecturers.ok) {
         const messages = await res.json();
-        html = renderIntranetMessages(messages);
+        const lecturers = await resLecturers.json();
+        html = renderIntranetMessages(messages, lecturers);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load intranet inbox. Server returned ${res.status}.</div>`;
       }
     } else if (tabName === 'admin') {
       const res = await fetch('/api/public/lecturers');
-      if (res.ok) {
+      const resPubs = await fetch('/api/admin/publications', { headers });
+      if (res.ok && resPubs.ok) {
         const lecturers = await res.json();
-        html = renderIntranetAdmin(lecturers);
+        const publications = await resPubs.json();
+        window.allAdminPubs = publications;
+        html = renderIntranetAdmin(lecturers, publications);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load admin panel details. Server returned ${res.status}.</div>`;
       }
@@ -2270,6 +2437,9 @@ async function switchIntranetTab(tabName) {
       container.innerHTML = html;
       spinner.style.display = 'none';
       container.style.display = 'block';
+      if (tabName === 'admin') {
+        window.updateAdminPubsView();
+      }
     }
   } catch (err) {
     console.error(err);
@@ -2280,6 +2450,78 @@ async function switchIntranetTab(tabName) {
     }
   }
 }
+
+window.updateAdminPubsView = function() {
+  const allPubs = window.allAdminPubs || [];
+  const lecturerFilter = document.getElementById('filterLecturer');
+  const startFilter = document.getElementById('filterDateStart');
+  const endFilter = document.getElementById('filterDateEnd');
+  const statusFilter = document.getElementById('filterStatus');
+  const tbody = document.getElementById('adminPubsTableBody');
+  if (!tbody) return;
+
+  const lecturerId = lecturerFilter ? lecturerFilter.value : 'all';
+  const startDate = startFilter ? startFilter.value : '';
+  const endDate = endFilter ? endFilter.value : '';
+  const status = statusFilter ? statusFilter.value : 'all';
+
+  let filtered = allPubs.filter(pub => {
+    if (lecturerId !== 'all' && String(pub.lecturer_id) !== String(lecturerId)) return false;
+    if (startDate && pub.year && String(pub.year) < startDate.substring(0, 4)) return false;
+    if (endDate && pub.year && String(pub.year) > endDate.substring(0, 4)) return false;
+    if (status !== 'all' && pub.status !== status) return false;
+    return true;
+  });
+
+  window._filteredAdminPubs = filtered;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:#94a3b8; font-style:italic;">No publications match the selected filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(pub => {
+    const statusBadge = pub.status === 'verified'
+      ? `<span style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:0.04em;">Verified</span>`
+      : `<span style="background:#fef9c3; color:#b45309; font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:0.04em;">Pending</span>`;
+    const lecturerName = pub.lecturer_name || (window.allAdminPubs && (() => { const l = (window._allLecturers||[]).find(x => x.id === pub.lecturer_id); return l ? l.name : '—'; })()) || '—';
+    return `<tr style="border-bottom:1px solid #f1f5f9; transition:background 0.15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''"> 
+      <td style="padding:10px 12px; font-weight:600; color:#1e293b;">${pub.lecturer_name || lecturerName}</td>
+      <td style="padding:10px 12px; color:#334155; max-width:280px;">${pub.title || '—'}</td>
+      <td style="padding:10px 12px; color:#64748b;">${pub.year || '—'}</td>
+      <td style="padding:10px 12px; color:#64748b; font-style:italic;">${pub.journal || '—'}</td>
+      <td style="padding:10px 12px;">${statusBadge}</td>
+    </tr>`;
+  }).join('');
+};
+
+window.downloadAdminPubsCSV = function() {
+  const pubs = window._filteredAdminPubs || window.allAdminPubs || [];
+  if (pubs.length === 0) {
+    alert('No publications to export.');
+    return;
+  }
+  const headers = ['Lecturer', 'Title', 'Year', 'Journal/Venue', 'Authors', 'Status', 'URL'];
+  const rows = pubs.map(p => [
+    (p.lecturer_name || '').replace(/,/g, ';'),
+    (p.title || '').replace(/,/g, ';'),
+    p.year || '',
+    (p.journal || '').replace(/,/g, ';'),
+    (p.authors || '').replace(/,/g, ';'),
+    p.status || '',
+    p.url || ''
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'GIMPA_Publications_Export.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
 
 async function handleVerificationAction(id, action) {
   const statusMsg = document.getElementById('verifyStatusMessage');
@@ -2469,12 +2711,429 @@ async function sendAdminMessage(event) {
   }
 }
 
+window.handleUserScopeChange = function(val) {
+  const deptContainer = document.getElementById('userDepartmentContainer');
+  const recipientContainer = document.getElementById('userRecipientContainer');
+  if (deptContainer && recipientContainer) {
+    deptContainer.style.display = val === 'department' ? 'block' : 'none';
+    recipientContainer.style.display = val === 'direct' ? 'block' : 'none';
+  }
+};
+
+window.sendUserMessage = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('userMessageStatus');
+  const scopeSelect = document.getElementById('userScopeSelect');
+  const departmentSelect = document.getElementById('userDepartmentSelect');
+  const recipientSelect = document.getElementById('userRecipientSelect');
+  const titleInput = document.getElementById('userMessageTitle');
+  const contentInput = document.getElementById('userMessageContent');
+  
+  if (!statusMsg || !scopeSelect || !titleInput || !contentInput) return;
+  
+  statusMsg.style.display = 'none';
+  
+  const scope = scopeSelect.value;
+  const title = titleInput.value;
+  const content = contentInput.value;
+  
+  try {
+    const formData = new URLSearchParams();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('scope', scope);
+    
+    if (scope === 'department' && departmentSelect) {
+      formData.append('department', departmentSelect.value);
+    } else if (scope === 'direct' && recipientSelect) {
+      formData.append('recipient_id', recipientSelect.value);
+    }
+    
+    const res = await fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formData
+    });
+    
+    if (res.ok) {
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#dcfce7';
+      statusMsg.style.color = '#15803d';
+      statusMsg.style.borderColor = '#bbf7d0';
+      statusMsg.textContent = 'Message sent successfully!';
+      
+      titleInput.value = '';
+      contentInput.value = '';
+      
+      setTimeout(() => switchIntranetTab('messages'), 1500);
+    } else {
+      const err = await res.json();
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#fef2f2';
+      statusMsg.style.color = '#b91c1c';
+      statusMsg.style.borderColor = '#fca5a5';
+      statusMsg.textContent = err.detail || 'Failed to send message.';
+    }
+  } catch (err) {
+    console.error(err);
+    statusMsg.className = 'status-message';
+    statusMsg.style.display = 'block';
+    statusMsg.style.backgroundColor = '#fef2f2';
+    statusMsg.style.color = '#b91c1c';
+    statusMsg.style.borderColor = '#fca5a5';
+    statusMsg.textContent = 'Connection error.';
+  }
+};
+
+window.submitRoleAssignment = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('roleAssignStatus');
+  const lecturerSelect = document.getElementById('assignLecturerSelect');
+  const schoolSelect = document.getElementById('assignSchoolSelect');
+  const roleTypeSelect = document.getElementById('assignRoleTypeSelect');
+  
+  if (!statusMsg || !lecturerSelect || !schoolSelect || !roleTypeSelect) return;
+  statusMsg.style.display = 'none';
+  
+  try {
+    const formData = new URLSearchParams();
+    formData.append('lecturer_id', lecturerSelect.value);
+    formData.append('school', schoolSelect.value);
+    formData.append('role_type', roleTypeSelect.value);
+    
+    const res = await fetch('/api/admin/assign-role', {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formData
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#dcfce7';
+      statusMsg.style.color = '#15803d';
+      statusMsg.style.borderColor = '#bbf7d0';
+      statusMsg.textContent = data.message || 'Role assigned successfully!';
+      setTimeout(() => switchIntranetTab('admin'), 1500);
+    } else {
+      const err = await res.json();
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#fef2f2';
+      statusMsg.style.color = '#b91c1c';
+      statusMsg.style.borderColor = '#fca5a5';
+      statusMsg.textContent = err.detail || 'Failed to assign role.';
+    }
+  } catch (err) {
+    console.error(err);
+    statusMsg.className = 'status-message';
+    statusMsg.style.display = 'block';
+    statusMsg.style.backgroundColor = '#fef2f2';
+    statusMsg.style.color = '#b91c1c';
+    statusMsg.style.borderColor = '#fca5a5';
+    statusMsg.textContent = 'Connection error.';
+  }
+};
+
+window.submitPasswordResetEmail = async function(event) {
+  event.preventDefault();
+  const statusMsg = document.getElementById('passwordResetStatus');
+  const lecturerSelect = document.getElementById('resetLecturerSelect');
+  
+  if (!statusMsg || !lecturerSelect) return;
+  statusMsg.style.display = 'none';
+  
+  try {
+    const formData = new URLSearchParams();
+    formData.append('lecturer_id', lecturerSelect.value);
+    
+    const res = await fetch('/api/admin/reset-password-email', {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formData
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#dcfce7';
+      statusMsg.style.color = '#15803d';
+      statusMsg.style.borderColor = '#bbf7d0';
+      statusMsg.innerHTML = `
+        <strong>Success!</strong> ${data.message}<br>
+        <div style="margin-top: 6px; padding: 6px; background: #fff; border: 1px solid #bbf7d0; border-radius: 4px; font-family: monospace; font-size: 0.95rem; text-align: center;">
+          Default Password: <strong>${data.default_password}</strong>
+        </div>
+      `;
+    } else {
+      const err = await res.json();
+      statusMsg.className = 'status-message';
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#fef2f2';
+      statusMsg.style.color = '#b91c1c';
+      statusMsg.style.borderColor = '#fca5a5';
+      statusMsg.textContent = err.detail || 'Failed to send reset email.';
+    }
+  } catch (err) {
+    console.error(err);
+    statusMsg.className = 'status-message';
+    statusMsg.style.display = 'block';
+    statusMsg.style.backgroundColor = '#fef2f2';
+    statusMsg.style.color = '#b91c1c';
+    statusMsg.style.borderColor = '#fca5a5';
+    statusMsg.textContent = 'Connection error.';
+  }
+};
+
+window.allAdminPubs = [];
+window.updateAdminPubsView = function() {
+  const tableBody = document.getElementById('adminPubsTableBody');
+  if (!tableBody) return;
+  
+  const lecturerFilter = document.getElementById('filterLecturer').value;
+  const startDateVal = document.getElementById('filterDateStart').value;
+  const endDateVal = document.getElementById('filterDateEnd').value;
+  const statusFilter = document.getElementById('filterStatus').value;
+  
+  const startYear = startDateVal ? new Date(startDateVal).getFullYear() : null;
+  const endYear = endDateVal ? new Date(endDateVal).getFullYear() : null;
+  
+  const filtered = window.allAdminPubs.filter(pub => {
+    if (lecturerFilter !== 'all' && pub.lecturer_id.toString() !== lecturerFilter) return false;
+    if (statusFilter !== 'all' && pub.status !== statusFilter) return false;
+    if (pub.year) {
+      const pubYear = parseInt(pub.year);
+      if (startYear && pubYear < startYear) return false;
+      if (endYear && pubYear > endYear) return false;
+    } else if (startYear || endYear) {
+      return false;
+    }
+    return true;
+  });
+  
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="5" style="padding: 24px; text-align: center; color: var(--text-body); font-style: italic;">
+          No matching publications found.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  
+  tableBody.innerHTML = filtered.map(pub => {
+    const isVerified = pub.status === 'verified';
+    return `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 10px 12px; font-weight: 600; color: var(--ink); white-space: nowrap;">${pub.lecturer_name}</td>
+        <td style="padding: 10px 12px; color: var(--text-dark);">${pub.title}</td>
+        <td style="padding: 10px 12px; color: var(--text-body);">${pub.year || 'N/A'}</td>
+        <td style="padding: 10px 12px; color: var(--text-body); font-style: italic;">${pub.journal || 'Unknown'}</td>
+        <td style="padding: 10px 12px; white-space: nowrap;">
+          <span style="background: ${isVerified ? '#dcfce7' : '#ffedd5'}; color: ${isVerified ? '#15803d' : '#ea580c'}; font-size: 0.72rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">
+            ${pub.status}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+};
+
+window.downloadAdminPubsCSV = function() {
+  const lecturerFilter = document.getElementById('filterLecturer').value;
+  const startDateVal = document.getElementById('filterDateStart').value;
+  const endDateVal = document.getElementById('filterDateEnd').value;
+  const statusFilter = document.getElementById('filterStatus').value;
+  
+  const startYear = startDateVal ? new Date(startDateVal).getFullYear() : null;
+  const endYear = endDateVal ? new Date(endDateVal).getFullYear() : null;
+  
+  const filtered = window.allAdminPubs.filter(pub => {
+    if (lecturerFilter !== 'all' && pub.lecturer_id.toString() !== lecturerFilter) return false;
+    if (statusFilter !== 'all' && pub.status !== statusFilter) return false;
+    if (pub.year) {
+      const pubYear = parseInt(pub.year);
+      if (startYear && pubYear < startYear) return false;
+      if (endYear && pubYear > endYear) return false;
+    } else if (startYear || endYear) {
+      return false;
+    }
+    return true;
+  });
+  
+  if (filtered.length === 0) {
+    alert("No publications match the current filters to download.");
+    return;
+  }
+  
+  const headers = ['Lecturer', 'Title', 'Year', 'Journal/Venue', 'Status'];
+  const rows = filtered.map(pub => [
+    `"${pub.lecturer_name.replace(/"/g, '""')}"`,
+    `"${pub.title.replace(/"/g, '""')}"`,
+    `"${(pub.year || '').replace(/"/g, '""')}"`,
+    `"${(pub.journal || '').replace(/"/g, '""')}"`,
+    `"${pub.status.replace(/"/g, '""')}"`
+  ]);
+  
+  const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "publications_report.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 // Make intranet helper functions globally accessible
 window.switchIntranetTab = switchIntranetTab;
 window.handleVerificationAction = handleVerificationAction;
 window.runAdminScan = runAdminScan;
 window.sendAdminMessage = sendAdminMessage;
 window.handleAdminScopeChange = handleAdminScopeChange;
+
+function publicationDetail(pubId) {
+  let foundPub = null;
+  let foundLecturer = null;
+  
+  for (const l of faculty) {
+    const p = l.pubs.find(x => x.id === pubId);
+    if (p) {
+      foundPub = p;
+      foundLecturer = l;
+      break;
+    }
+  }
+  
+  if (!foundPub || !foundLecturer) {
+    return `
+      <section class="section">
+        <div class="container" style="text-align: center; padding: 40px 0;">
+          <h3>Publication Not Found</h3>
+          <p style="color: var(--text-body); margin: 12px 0 20px;">The requested research publication could not be found.</p>
+          <a href="#contact" class="btn btn-dark">View Staff Directory</a>
+        </div>
+      </section>
+    `;
+  }
+  
+  return `
+    <section class="section" style="background: #f8fafc; min-height: 70vh; padding: 40px 0;">
+      <div class="container" style="max-width: 800px;">
+        <div style="margin-bottom: 24px;">
+          <a href="#profile/${foundLecturer.id}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
+            &larr; Back to ${foundLecturer.name}'s Profile
+          </a>
+        </div>
+        
+        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow);">
+          <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+            <span style="color: var(--accent);">Research Publication</span>
+            <span style="color: var(--text-body);">${foundPub.year || 'N/A'}</span>
+          </div>
+          
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; line-height: 1.35;">${foundPub.title}</h2>
+          
+          <div style="margin-bottom: 24px; font-size: 0.95rem; color: var(--text-dark);">
+            <div style="margin-bottom: 6px;"><strong>Authors:</strong> ${foundPub.authors}</div>
+            <div style="font-style: italic; color: var(--primary);"><strong>Published in:</strong> ${foundPub.journal || 'Unknown Journal/Venue'}</div>
+          </div>
+          
+          <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 30px;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px;">Abstract / Summary</h3>
+            <p style="color: var(--text-body); line-height: 1.7; font-size: 0.95rem; text-align: justify;">${foundPub.summary || 'No abstract or summary is available for this publication.'}</p>
+          </div>
+          
+          ${foundPub.url ? `
+            <div style="text-align: center;">
+              <a href="${foundPub.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 600; padding: 0 24px;">
+                View Original Document &nearr;
+              </a>
+            </div>
+          ` : ''}
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function projectDetail(projId) {
+  let foundProj = null;
+  let foundLecturer = null;
+  
+  for (const l of faculty) {
+    const p = l.projects.find(x => x.id === projId);
+    if (p) {
+      foundProj = p;
+      foundLecturer = l;
+      break;
+    }
+  }
+  
+  if (!foundProj || !foundLecturer) {
+    return `
+      <section class="section">
+        <div class="container" style="text-align: center; padding: 40px 0;">
+          <h3>Project Not Found</h3>
+          <p style="color: var(--text-body); margin: 12px 0 20px;">The requested research project could not be found.</p>
+          <a href="#contact" class="btn btn-dark">View Staff Directory</a>
+        </div>
+      </section>
+    `;
+  }
+  
+  return `
+    <section class="section" style="background: #f8fafc; min-height: 70vh; padding: 40px 0;">
+      <div class="container" style="max-width: 800px;">
+        <div style="margin-bottom: 24px;">
+          <a href="#profile/${foundLecturer.id}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
+            &larr; Back to ${foundLecturer.name}'s Profile
+          </a>
+        </div>
+        
+        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow);">
+          <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+            <span style="color: var(--accent);">Research Project</span>
+          </div>
+          
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; line-height: 1.35;">${foundProj.title}</h2>
+          
+          <div style="margin-bottom: 20px; font-size: 0.95rem; color: var(--text-dark);">
+            <div><strong>Lead Researcher:</strong> ${foundLecturer.name} (${foundLecturer.role})</div>
+          </div>
+          
+          <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 30px;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 12px;">Project Description</h3>
+            <p style="color: var(--text-body); line-height: 1.7; font-size: 0.95rem; text-align: justify;">${foundProj.description || 'No description is available for this project.'}</p>
+          </div>
+          
+          ${foundProj.url ? `
+            <div style="text-align: center;">
+              <a href="${foundProj.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 600; padding: 0 24px;">
+                Visit Project Website &nearr;
+              </a>
+            </div>
+          ` : ''}
+        </article>
+      </div>
+    </section>
+  `;
+}
 
 // Router Action
 function render() {
@@ -2533,6 +3192,12 @@ function render() {
   } else if (r.startsWith('profile/')) {
     viewHTML = profile(r.split('/')[1]);
     activeTab = 'profile';
+  } else if (r.startsWith('publication/')) {
+    viewHTML = publicationDetail(parseInt(r.split('/')[1]));
+    activeTab = '';
+  } else if (r.startsWith('project/')) {
+    viewHTML = projectDetail(parseInt(r.split('/')[1]));
+    activeTab = '';
   } else if (r.startsWith('news-')) {
     viewHTML = newsDetail(r);
     activeTab = 'news';
@@ -2585,8 +3250,8 @@ document.addEventListener('submit', async function(event) {
     errorMsg.textContent = '';
     
     // Frontend domain check
-    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh') && !email.endsWith('@st.gimpa.edu.gh')) {
-      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh, @adj.gimpa.edu.gh, or @st.gimpa.edu.gh are allowed to log in.';
+    if (!email.endsWith('@gimpa.edu.gh') && !email.endsWith('@adj.gimpa.edu.gh')) {
+      errorMsg.textContent = 'Only GIMPA email addresses ending in @gimpa.edu.gh or @adj.gimpa.edu.gh are allowed to log in.';
       errorMsg.style.display = 'block';
       return;
     }
@@ -2606,6 +3271,10 @@ document.addEventListener('submit', async function(event) {
         const data = await res.json();
         localStorage.setItem('sotssToken', data.access_token);
         localStorage.setItem('sotssUser', JSON.stringify(data.user));
+        if (!data.user.is_admin) {
+          window.triggerAutoScan = true;
+          window.activeIntranetTab = 'verification';
+        }
         location.hash = '#intranet';
       } else {
         const err = await res.json();

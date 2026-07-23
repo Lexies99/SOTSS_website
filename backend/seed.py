@@ -20,77 +20,84 @@ def seed_data():
 
     # 1. Seed Lecturers
     lecturers_data = [
-        # (id, username, password, name, role, email, spec, office, phone, extra_label, extra_value, is_admin, department)
+        # (id, username, password, name, role, email, spec, office, phone, extra_label, extra_value, is_admin, department, assigned_school, assigned_role)
         (
             1, "csshead", "gimpa123", "Dr. Felicia N. A. Engmann", "Head of Department",
-            "csshead@gimpa.edu.gh", "Data Science, AI, Curriculum Leadership",
+            "fapboadu@gimpa.edu.gh", "Data Science, AI, Curriculum Leadership",
             "Department Office, SOT Main Block", "+233 (0) 332095432", None, None, 1,
-            "Computer Science & Information Systems"
+            "Computer Science & Information Systems", "School of Technology (SOT)", "HOD"
         ),
         (
             2, "josbudu", "gimpa123", "Dr. Joseph Budu", "Senior Lecturer",
             "josbudu@gimpa.edu.gh", "Digital Forensics, Cybersecurity, Data Protection",
             "SOT Block B, Room 2.11", "+233 (0) 501620138", None, None, 0,
-            "Computer Science & Information Systems"
+            "Computer Science & Information Systems", None, None
         ),
         (
             3, "gwiredu", "gimpa123", "Prof. Gamel O. Wiredu", "Professor",
             "gwiredu@gimpa.edu.gh", "Information Systems, Digital Transformation, MIS",
             "SOT Block A, Room 1.04", None, "Programme Role", "Coordinator, PhD Information Systems", 0,
-            "Management Information Systems"
+            "Management Information Systems", None, None
         ),
         (
-            4, "eadabor", "gimpa123", "Prof. Emmanuel S. Adabor", "Professor",
+            4, "eadabor", "gimpa123", "Prof. Emmanuel S. Adabor", "Dean",
             "eadabor@gimpa.edu.gh", "Industrial Analytics, Optimization, Operations Research",
-            "SOT Annex, Room 3.06", "+233 (0) 302908076", None, None, 0,
-            "Computer Science & Information Systems"
+            "SOT Annex, Room 3.06", "+233 (0) 302908076", None, None, 1,
+            "Computer Science & Information Systems", "School of Technology (SOT)", "Dean"
         ),
         (
             5, "nassyne", "gimpa123", "Dr. Nana Assyne", "Lecturer",
             "nassyne@gimpa.edu.gh", "Software Engineering, HCI, Web Systems",
             "SOT Block C, Room 1.15", "+233 302-401681-3", None, None, 0,
-            "Computer Science & Information Systems"
+            "Computer Science & Information Systems", None, None
         ),
         (
             6, "eboasiako", "gimpa123", "Dr. Emmanuel Antwi-Boasiako", "Lecturer",
             "eboasiako@gimpa.edu.gh", "Cyber Policy, Digital Identity, Security Governance",
             "SOT Block C, Room 2.03", "+233 (0) 501620138", None, None, 0,
-            "Management Information Systems"
+            "Management Information Systems", None, None
+        ),
+        (
+            7, "eadaku", "gimpa123", "Prof. Ebenezer Adaku", "Deputy Rector, GIMPA",
+            "eadaku@gimpa.edu.gh", "Operations & Project Management, Higher Education Leadership",
+            "Rectorate, GIMPA Main Campus", None, None, None, 0,
+            "Management Information Systems", None, None
+        ),
+        (
+            8, "admin", "gimpa123", "System Administrator", "System Administrator",
+            "admin@gimpa.edu.gh", "Role Management & System Settings",
+            "ICT Directorate, GIMPA Main Campus", "+233 (0) 302 401681", None, None, 1,
+            "ICT Directorate", "GIMPA", "Admin"
         )
     ]
 
     for item in lecturers_data:
         h_password = get_password_hash(item[2])
         cursor.execute("""
-            INSERT INTO lecturers (id, username, password_hash, name, role, email, spec, office, phone, extra_label, extra_value, is_admin, department)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (item[0], item[1], h_password, item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12]))
+            INSERT INTO lecturers (id, username, password_hash, name, role, email, spec, office, phone, extra_label, extra_value, is_admin, department, assigned_school, assigned_role)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (item[0], item[1], h_password, item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[13], item[14]))
 
     # 2. Seed Verified Publications
     publications_data = [
-        # Felicia Engmann (ID: 1)
-        (1, "Learning analytics for retention prediction in emerging universities", "This paper addresses learning analytics and student retention indicators in African tertiary systems.", "2025", "Education and Information Technologies", "Engmann, F.; Budu, J.", ""),
-        (1, "Ethical AI integration for tertiary-level computing programmes", "A study exploring framework criteria for ethical artificial intelligence systems coursework integration.", "2024", "Journal of Responsible AI in Education", "Engmann, F.; Wiredu, G.", ""),
-        
-        # Joseph Budu (ID: 2)
-        (2, "Digital evidence governance for public sector institutions in West Africa", "An examination of governance frameworks surrounding legal and procedural digital evidence in Ghana.", "2025", "African Journal of Information Assurance", "Budu, J.; Antwi-Boasiako, E.; Wiredu, G.", ""),
-        (2, "Readiness model for computer forensics education and practice in Ghana", "A structure evaluation model detailing capabilities requirements for computing courses.", "2024", "International Journal of Cyber Resilience", "Budu, J.; Engmann, F.", ""),
-        
-        # Gamel Wiredu (ID: 3)
-        (3, "Institutional pathways for digital transformation in sub-Saharan Africa", "Assessing maturity levels of digital system architectures across governmental registries in Africa.", "2026", "Journal of Information Systems in Developing Regions", "Wiredu, G.; Adabor, E.", ""),
-        (3, "Management information systems capability and service quality outcomes", "Analyses parameters that evaluate enterprise capability results against user outcomes.", "2024", "International MIS Review", "Wiredu, G.; Assyne, N.", ""),
-        
-        # Emmanuel Adabor (ID: 4)
-        (4, "Optimization heuristics for resilient public sector logistics", "Algorithmic route modeling heuristics designed to handle supply chain disruptions.", "2025", "Journal of Applied Operations Analytics", "Adabor, E.; Wiredu, G.", ""),
-        (4, "Multi-criteria decision models for digital transformation investments", "Creating decision-matrix benchmarks for investment in technology frameworks.", "2023", "African Journal of Management Analytics", "Adabor, E.; Engmann, F.", ""),
-        
-        # Nana Assyne (ID: 5)
-        (5, "Human-centered design patterns for higher education web systems", "Examines interface standards and design templates tailored to collegiate user groups.", "2026", "Journal of Web Engineering Practice", "Assyne, N.; Engmann, F.", ""),
-        (5, "Assessing maintainability of student-led capstone software projects", "Evaluating code metrics and architecture layouts in software engineering courses.", "2024", "Software Quality and Education Review", "Assyne, N.; Budu, J.", ""),
-        
-        # Emmanuel Antwi-Boasiako (ID: 6)
-        (6, "Cyber governance maturity indicators for public service institutions", "A security standard benchmark for identifying organizational and legal cyber preparedness.", "2025", "Journal of Cyber Policy and Practice", "Antwi-Boasiako, E.; Budu, J.", ""),
-        (6, "Digital identity and trust architecture in emerging economies", "Investigates privacy laws, governance procedures, and digital registries configurations.", "2023", "Information Security Governance Review", "Antwi-Boasiako, E.; Adabor, E.", "")
+        (
+            2,
+            "A Hybrid Machine Learning Approach for Cybersecurity Threat Modeling in Financial Services",
+            "This paper introduces a hybrid model integrating supervised classification and anomaly detection to model cyber threats in real-time within financial services environments. The model achieves high sensitivity and accuracy on standard benchmarks.",
+            "2026",
+            "IEEE Transactions on Information Forensics and Security",
+            "Joseph Budu, Felicia N. A. Engmann",
+            "https://ieeexplore.ieee.org/document/123456"
+        ),
+        (
+            1,
+            "AI-Powered Curriculum Redesign: Frameworks for Modern Information Systems Programs",
+            "We propose a novel AI-driven curriculum analysis framework to map industry requirements to pedagogical goals in computer science education, optimizing skill retention and syllabus relevance.",
+            "2025",
+            "Journal of Computer Science Education",
+            "Felicia N. A. Engmann, Nana Assyne",
+            "https://dl.acm.org/doi/10.1145/345678"
+        )
     ]
 
     for item in publications_data:
@@ -99,7 +106,35 @@ def seed_data():
             VALUES (?, ?, ?, ?, ?, ?, ?, 'verified')
         """, item)
 
-    # 3. Seed Welcome Messages
+    # 3. Seed Projects
+    projects_data = [
+        (
+            2,
+            "GIMPA Cyber-Sentinel Threat Radar",
+            "An open-source digital forensics tool designed for threat detection in corporate networks. It tracks anomalous network payloads and profiles endpoint risk metrics dynamically.",
+            "https://github.com/josbudu/cyber-sentinel"
+        ),
+        (
+            1,
+            "Smart Academic Advisor System",
+            "An institutional decision support system employing AI to advise students on course selection, workload balance, and career paths based on historical cohort performance.",
+            "https://gimpa.edu.gh/projects/smart-advisor"
+        ),
+        (
+            3,
+            "Digital Transformation in West Africa",
+            "A multi-year research project analyzing the impact of mobile money systems and digital wallets on rural traders in Ghana, Nigeria, and Cote d'Ivoire.",
+            "https://gimpa.edu.gh/research/digital-transformation"
+        )
+    ]
+
+    for item in projects_data:
+        cursor.execute("""
+            INSERT INTO projects (lecturer_id, title, description, url)
+            VALUES (?, ?, ?, ?)
+        """, item)
+
+    # 4. Seed Welcome Messages
     messages_data = [
         # (sender_id, recipient_id, title, content)
         (1, None, "Welcome to the CS & IS Intranet", "Welcome to the GIMPA Department of Computer Science & Information Systems intranet portal! This space is designed for sharing messages, announcements, and managing your verified publications catalog."),
