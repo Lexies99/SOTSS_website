@@ -80,6 +80,28 @@ def init_db():
     )
     """)
 
+    # Create News Table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS news (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        news_id TEXT UNIQUE NOT NULL,
+        title TEXT NOT NULL,
+        date TEXT,
+        source TEXT,
+        link TEXT,
+        image TEXT,
+        desc TEXT,
+        content TEXT,
+        status TEXT DEFAULT 'published'
+    )
+    """)
+
+    # Migration check for existing databases
+    try:
+        cursor.execute("ALTER TABLE news ADD COLUMN status TEXT DEFAULT 'published'")
+    except sqlite3.OperationalError:
+        pass # Column already exists
+
     conn.commit()
     conn.close()
 

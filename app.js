@@ -4,8 +4,8 @@ let faculty = [
     id: 'felicia-engmann',
     name: 'Dr. Felicia N. A. Engmann',
     role: 'Head of Department',
-    email: 'csshead@gimpa.edu.gh',
-    photo: 'assets/images/felicia-engmann.png',
+    email: 'fapboadu@gimpa.edu.gh',
+    photo: 'assets/images/Dr.Felicia.jpeg',
     spec: 'Data Science, AI, Curriculum Leadership',
     office: 'Department Office, SOT Main Block',
     phone: '+233 (0) 332095432',
@@ -24,7 +24,7 @@ let faculty = [
     name: 'Dr. Joseph Budu',
     role: 'Senior Lecturer',
     email: 'josbudu@gimpa.edu.gh',
-    photo: 'assets/images/joseph-budu.png',
+    photo: 'assets/images/Dr.Budu.jpeg',
     spec: 'Digital Forensics, Cybersecurity, Data Protection',
     office: 'SOT Block B, Room 2.11',
     phone: '+233 (0) 501620138',
@@ -43,7 +43,7 @@ let faculty = [
     name: 'Prof. Gamel O. Wiredu',
     role: 'Professor',
     email: 'gwiredu@gimpa.edu.gh',
-    photo: 'assets/images/gamel-wiredu.png',
+    photo: '',
     spec: 'Information Systems, Digital Transformation, MIS',
     office: 'SOT Block A, Room 1.04',
     extraLabel: 'Programme Role',
@@ -63,7 +63,7 @@ let faculty = [
     name: 'Prof. Emmanuel S. Adabor',
     role: 'Professor',
     email: 'csshead@gimpa.edu.gh',
-    photo: '',
+    photo: 'assets/images/Prof.Adabor.jpg',
     spec: 'Industrial Analytics, Optimization, Operations Research',
     office: 'SOT Annex, Room 3.06',
     phone: '+233 (0) 302908076',
@@ -82,7 +82,7 @@ let faculty = [
     name: 'Dr. Nana Assyne',
     role: 'Lecturer',
     email: 'csshead@gimpa.edu.gh',
-    photo: '',
+    photo: 'assets/images/DR.Nana_Assyne.jpeg',
     spec: 'Software Engineering, HCI, Web Systems',
     office: 'SOT Block C, Room 1.15',
     phone: '+233 302-401681-3',
@@ -101,7 +101,7 @@ let faculty = [
     name: 'Dr. Emmanuel Antwi-Boasiako',
     role: 'Lecturer',
     email: 'csshead@gimpa.edu.gh',
-    photo: '',
+    photo: 'assets/images/Dr.Antwi-Boasiako.jpg',
     spec: 'Cyber Policy, Digital Identity, Security Governance',
     office: 'SOT Block C, Room 2.03',
     phone: '+233 (0) 501620138',
@@ -144,6 +144,327 @@ const news = [
     desc: 'Join our growing faculty in computer science, cybersecurity, data science, and information systems.',
     text: `<p>The department is inviting talented academics to contribute to teaching, research, mentorship, and programme development in computer science and information systems.</p>
            <p>Priority areas include cybersecurity, data science, artificial intelligence, software systems, ICT, and information systems research.</p>`
+  },
+  {
+    id: 'sotss-hci-usability-2026',
+    news_id: 'sotss-hci-usability-2026',
+    title: 'Dr. Nana Assyne Highlights Human-Centered Design in Higher Ed Systems',
+    date: 'Apr 18, 2026',
+    source: 'SOTSS Publication Spotlight',
+    image: 'assets/images/1000210972.png',
+    desc: "Dr. Nana Assyne's latest journal article outlines key UI/UX design patterns that improve usability, system maintainability, and accessibility for academic web portals.",
+    text: `<p>Dr. Nana Assyne's latest research publication examines human-centered design principles and accessibility standards for tertiary education web interfaces in West Africa.</p><p>The study highlights how responsive layouts, clear visual hierarchy, and intuitive navigation structures directly improve student engagement and retention across academic portals.</p><p style="margin-top:24px;"><a href="#profile/nana-assyne" class="btn btn-primary">📚 View Dr. Nana Assyne's Publications &amp; Profile &rarr;</a></p>`
+  }
+];
+
+const programmesData = [
+  {
+    id: 'bsc-computer-science',
+    title: 'BSc Computer Science',
+    level: 'Undergraduate',
+    duration: '4 Years (8 Semesters)',
+    mode: 'Full-time (Day)',
+    tag: 'BSc · 4 Years',
+    shortDesc: 'Strong technical skills in programming, data structures, algorithms, networking, software engineering, AI and robotics.',
+    overview: 'The Bachelor of Science in Computer Science programme is designed to equip students with a solid foundation in computational theory, software engineering, algorithms, data structures, and emerging technology paradigms including Artificial Intelligence and Robotics.',
+    curriculum: [
+      'Data Structures & Algorithms',
+      'Object-Oriented Programming (Java / C++)',
+      'Artificial Intelligence & Machine Learning',
+      'Database Management Systems & SQL',
+      'Computer Architecture & Operating Systems',
+      'Software Engineering & System Architecture',
+      'Computer Networks & Distributed Systems',
+      'Cybersecurity Fundamentals & Cryptography'
+    ],
+    requirements: [
+      'WASSCE / SSSCE Applicants: Passes (A1-C6 / A-D) in 3 core subjects (English, Mathematics, Integrated Science) and 3 elective subjects (Elective Mathematics, Physics, Chemistry / Computer Studies).',
+      'GCE A-Level Applicants: Passes in 3 subjects including Mathematics and Physics.',
+      'HND / Diploma Holders: Relevant HND in Computer Science / IT with minimum Second Class Lower for direct entry into 2nd or 3rd year.'
+    ],
+    careers: [
+      'Software Developer / Engineer',
+      'Data Scientist & AI Specialist',
+      'Full-Stack Web Developer',
+      'Network Administrator & Security Analyst',
+      'Database Administrator'
+    ]
+  },
+  {
+    id: 'bsc-ict',
+    title: 'BSc Information & Communication Technology',
+    level: 'Undergraduate',
+    duration: '4 Years (8 Semesters)',
+    mode: 'Full-time (Day / Evening)',
+    tag: 'BSc · 4 Years',
+    shortDesc: 'IT entrepreneurship, wireless networks, IT auditing, human-computer interaction, mobile programming and networking.',
+    overview: 'The BSc ICT programme trains students to leverage modern information and communication technologies for organizational efficiency, enterprise digital transformation, mobile solution delivery, and IT governance.',
+    curriculum: [
+      'Web Development & Mobile Application Design',
+      'Enterprise Information Systems',
+      'Wireless Communications & Mobile Computing',
+      'IT Project Management & Audit',
+      'Human-Computer Interaction (HCI)',
+      'IT Entrepreneurship & Innovation',
+      'Information Security & Risk Management'
+    ],
+    requirements: [
+      'WASSCE / SSSCE Applicants: Credit passes (A1-C6 / A-D) in English, Core Mathematics, Integrated Science and 3 elective subjects.',
+      'Mature Applicants: Must be at least 25 years old and pass the GIMPA Entrance Examination.'
+    ],
+    careers: [
+      'IT Manager / Systems Administrator',
+      'Mobile & Web Application Developer',
+      'IT Consultant & Technology Auditor',
+      'E-Commerce Specialist & Tech Entrepreneur'
+    ]
+  },
+  {
+    id: 'bsc-health-informatics',
+    title: 'BSc Health Informatics',
+    level: 'Undergraduate',
+    duration: '4 Years (8 Semesters)',
+    mode: 'Full-time (Day)',
+    tag: 'BSc · 4 Years',
+    shortDesc: 'Applying information technology and computing to healthcare systems, data management and health service delivery.',
+    overview: 'This interdisciplinary programme combines computer science, health data analytics, and medical informatics to train professionals who manage health information systems, electronic medical records (EMR), and telemedicine infrastructure.',
+    curriculum: [
+      'Health Information Systems & EMRs',
+      'Medical Terminology & Bio-statistics',
+      'Healthcare Data Analytics & Mining',
+      'Telemedicine & Health IoT',
+      'Health Information Privacy & Law',
+      'Database Systems for Healthcare'
+    ],
+    requirements: [
+      'WASSCE / SSSCE Applicants: Credit passes in Core English, Core Mathematics, Integrated Science and 3 Electives (Science or General Arts).',
+      'Diploma in Nursing / Health Information Management holders qualify for advanced placement.'
+    ],
+    careers: [
+      'Health Informatics Specialist',
+      'Clinical Data Analyst',
+      'Electronic Health Record (EHR) System Manager',
+      'Healthcare IT Consultant'
+    ]
+  },
+  {
+    id: 'pgd-ict',
+    title: 'PG Diploma in ICT',
+    level: 'Postgraduate Diploma',
+    duration: '1 Year (2 Semesters)',
+    mode: 'Flexible (Weekend / Evening)',
+    tag: 'PG Diploma',
+    shortDesc: 'A bridge for non-ICT graduates wishing to transition into ICT fields. Covers programming, databases, web technologies and networking.',
+    overview: 'Designed for non-IT degree holders seeking a conversion pathway into computing. Provides core competencies in computer programming, web systems, database design, and computer networking.',
+    curriculum: [
+      'Fundamentals of Computer Systems & Software',
+      'Database System Design',
+      'Web Technologies & Programming',
+      'Computer Networking & Security'
+    ],
+    requirements: [
+      'Bachelor’s degree in any non-computing discipline from a recognized institution.'
+    ],
+    careers: [
+      'Junior Software Developer',
+      'IT Support Specialist',
+      'Database Administrator',
+      'Pathway to MSc/MPhil ICT'
+    ]
+  },
+  {
+    id: 'pgd-mis',
+    title: 'PG Diploma in Management Information Systems',
+    level: 'Postgraduate Diploma',
+    duration: '1 Year (2 Semesters)',
+    mode: 'Flexible (Weekend / Evening)',
+    tag: 'PG Diploma',
+    shortDesc: 'Foundation in MIS principles covering analysis, development, implementation and management of information systems.',
+    overview: 'Provides business and technical managers with knowledge required to design, evaluate, and implement enterprise information systems that drive organizational strategy.',
+    curriculum: [
+      'Management Information Systems Foundations',
+      'Business Process Analysis & System Design',
+      'Enterprise Data Management',
+      'IT Infrastructure & Cloud Strategy'
+    ],
+    requirements: [
+      'Bachelor’s degree in Business, Public Administration, Science, or related disciplines.'
+    ],
+    careers: [
+      'Systems Analyst',
+      'MIS Coordinator',
+      'Business Intelligence Analyst'
+    ]
+  },
+  {
+    id: 'msc-mphil-ict',
+    title: 'MSc/MPhil Information & Communication Technology',
+    level: 'Postgraduate',
+    duration: '2 Years (4 Semesters)',
+    mode: 'Weekends / Evening',
+    tag: 'MSc/MPhil · 2 Years',
+    shortDesc: 'Scientific knowledge for analytical thinking in ICT development — network security, decision support systems, AI applications and more.',
+    overview: 'Advanced postgraduate program emphasizing research, cloud architectures, network security, decision support systems, and emerging ICT frameworks.',
+    curriculum: [
+      'Advanced Computer Networks & Cloud Computing',
+      'Decision Support Systems & Data Mining',
+      'Advanced Information Security',
+      'Research Methodology & Dissertation (MPhil thesis)'
+    ],
+    requirements: [
+      'Good First Degree (Minimum 2nd Class Lower) in ICT, Computer Science, Engineering, or related technical fields.'
+    ],
+    careers: [
+      'Chief Technology Officer (CTO)',
+      'Enterprise Architect',
+      'Senior IT Researcher / Lecturer'
+    ]
+  },
+  {
+    id: 'msc-it-law',
+    title: 'MSc Information Technology & Law',
+    level: 'Postgraduate',
+    duration: '2 Years (4 Semesters)',
+    mode: 'Weekends / Evening',
+    tag: 'MSc · 2 Years',
+    shortDesc: 'Legal and administrative implications of ICT adoption — digital media law, computer forensics, cybercrime investigation and data protection.',
+    overview: 'Interdisciplinary program developed jointly to address digital media law, data protection regulations (GDPR / Ghana Data Protection Act), cybercrime investigation, and intellectual property in technology.',
+    curriculum: [
+      'Cybercrime & Computer Forensics Law',
+      'Data Protection & Privacy Regulation',
+      'Intellectual Property in Digital Media',
+      'E-Commerce & Digital Contract Law'
+    ],
+    requirements: [
+      'Bachelor’s degree in Law (LLB), Computer Science, ICT, Business, or Public Administration.'
+    ],
+    careers: [
+      'Data Protection Officer (DPO)',
+      'Cyber Law & Regulatory Advisor',
+      'IT Compliance Auditor'
+    ]
+  },
+  {
+    id: 'mphil-mis',
+    title: 'MPhil Management Information Systems',
+    level: 'Postgraduate Research',
+    duration: '2 Years (4 Semesters)',
+    mode: 'Regular (Day)',
+    tag: 'MPhil · 2 Years',
+    shortDesc: 'Analysis, development, implementation and management of MIS and their applications in business and public administration.',
+    overview: 'A research-intensive Master of Philosophy degree preparing graduates for academic research, PhD entry, and senior strategic advisory roles in information systems management.',
+    curriculum: [
+      'Advanced Theories in Information Systems',
+      'Quantitative & Qualitative Research Methods',
+      'Digital Transformation & Innovation Policy',
+      'MPhil Thesis Research'
+    ],
+    requirements: [
+      'Good Bachelor’s Degree (First Class or 2nd Class Upper) in MIS, CS, ICT, or Business Administration.'
+    ],
+    careers: [
+      'University Lecturer / Academic Researcher',
+      'Senior Digital Transformation Consultant',
+      'Pathway to PhD Information Systems'
+    ]
+  },
+  {
+    id: 'msc-mis',
+    title: 'MSc Management Information Systems',
+    level: 'Postgraduate Professional',
+    duration: '2 Years (4 Semesters)',
+    mode: 'Flexible (Evening / Weekend)',
+    tag: 'MSc · 2 Years',
+    shortDesc: 'Strategic value and challenges of MIS as adopted by public and private sector organisations, with alternative methodologies and philosophies.',
+    overview: 'Focuses on executive management of information technology assets, enterprise resource planning (ERP), digital leadership, and public sector ICT strategy.',
+    curriculum: [
+      'Strategic Management of IT',
+      'ERP Systems & Business Analytics',
+      'Managing Digital Projects & Change',
+      'Applied MIS Capstone Project'
+    ],
+    requirements: [
+      'Bachelor’s Degree in any discipline with relevant industry work experience.'
+    ],
+    careers: [
+      'IT Director / MIS Manager',
+      'ERP Project Lead',
+      'Digital Strategy Manager'
+    ]
+  },
+  {
+    id: 'msc-cybersecurity',
+    title: 'MSc Digital Forensics & Cybersecurity',
+    level: 'Postgraduate Professional',
+    duration: '1 Year (3 Semesters)',
+    mode: 'Weekends',
+    tag: 'MSc · 1 Year',
+    shortDesc: 'Cybercrime risk management, digital forensics, IT audit, cryptography and security mechanisms, and legal aspects of IT.',
+    overview: 'Specialized master’s program covering incident response, reverse engineering, digital evidence recovery, network defense, penetration testing, and ISO 27001 security compliance.',
+    curriculum: [
+      'Digital Evidence Handling & Computer Forensics',
+      'Ethical Hacking & Penetration Testing',
+      'Applied Cryptography & Network Defense',
+      'Cyber Security Governance & ISO Standards'
+    ],
+    requirements: [
+      'Bachelor’s degree in Computer Science, ICT, Electrical Engineering, Mathematics, or Physics.'
+    ],
+    careers: [
+      'Chief Information Security Officer (CISO)',
+      'Digital Forensics Investigator',
+      'Penetration Tester / Security Consultant'
+    ]
+  },
+  {
+    id: 'msc-industrial-analytics',
+    title: 'MSc Industrial Analytics',
+    level: 'Postgraduate',
+    duration: '2 Years (4 Semesters)',
+    mode: 'Flexible',
+    tag: 'MSc · 2 Years',
+    shortDesc: 'Advanced mathematical, statistical, and computational techniques for solving real-world industrial problems with data-driven insights.',
+    overview: 'Combines industrial mathematics, operations research, predictive modeling, and supply chain analytics to solve complex decision-making problems in production and logistics.',
+    curriculum: [
+      'Optimization & Operations Research',
+      'Industrial Statistical Modeling',
+      'Supply Chain & Fleet Analytics',
+      'Simio Simulation & Process Optimization'
+    ],
+    requirements: [
+      'Bachelor’s degree in Engineering, Mathematics, Statistics, Computer Science, or Economics.'
+    ],
+    careers: [
+      'Operations Research Analyst',
+      'Industrial Data Scientist',
+      'Supply Chain Analytics Manager'
+    ]
+  },
+  {
+    id: 'phd-information-systems',
+    title: 'PhD Information Systems',
+    level: 'Doctoral',
+    duration: '3 Years (Full-Time)',
+    mode: 'Full-time (Day)',
+    tag: 'PhD · 3 Years',
+    shortDesc: 'Rigorous scientific inquiry into technology integration, cybersecurity, data analytics and digital transformation. Develops advanced analytical skills and theoretical insights.',
+    overview: 'The PhD in Information Systems is GIMPA’s flagship doctoral research program. Candidates conduct original empirical research at the intersection of technology, human behavior, organization design, and societal impact.',
+    curriculum: [
+      'Philosophy of Science & Technology Theory',
+      'Advanced Quantitative Methods & Econometrics',
+      'Advanced Qualitative Methods & Case Research',
+      'Doctoral Research Seminars & Thesis Defense'
+    ],
+    requirements: [
+      'Master’s degree (MPhil, MSc, MBA) in IS, Computer Science, ICT, Mathematics, or related field with strong research thesis component.',
+      'Research Proposal (3-5 pages) detailing prospective research topic.',
+      'Successful interview with the Graduate Admissions Committee.'
+    ],
+    careers: [
+      'Tenure-Track University Professor',
+      'Principal Research Scientist',
+      'Senior Policy Advisor to Governments & Multinationals'
+    ]
   }
 ];
 
@@ -453,7 +774,7 @@ function introduction() {
         <div class="hero-content" style="padding:60px 0">
           <div class="hero-badge">About the Department</div>
           <h2>Introduction to the Department of Computer Science &amp; Information Systems</h2>
-          <p>Established in September 2023 through the merger of the departments of Computer Sciences and Information Systems and Innovation, we deliver relevant education and cutting-edge research in computing fields.</p>
+          <p>Delivering high-caliber computing education, industry-aligned training, and cutting-edge research under GIMPA School of Technology and Social Sciences.</p>
         </div>
       </div>
     </section>
@@ -463,10 +784,11 @@ function introduction() {
         <div class="two-col">
           <div class="two-col-text">
             <div class="accent-line"></div>
-            <h2>About the Department</h2>
-            <p>The Department of Computer Science and Information Systems was established following the merger of the departments of Computer Sciences and Information Systems and Innovation by the Institute's management in September 2023. The staff strength at the time of establishment was eleven full-time lecturers.</p>
-            <p>The department began with existing academic programmes from the merged departments, including BSc Computer Science, BSc Information and Communication Technology, MSc/MPhil ICT, MSc IT and Law, MSc/MPhil Management Information Systems, MSc Industrial Analytics, MSc Digital Forensics and Cybersecurity, PhD Information Systems, and more.</p>
-            <p>Both classrooms and computer laboratories are shared with the Department of Information Systems and Innovation within the School of Technology. Ghana Institute of Management and Public Administration uses Simio simulation software under a grant from Simio LLC.</p>
+            <h2>About the Department &amp; Institutional History</h2>
+            <p>The Ghana Institute of Management and Public Administration (GIMPA) was established in <strong>1961</strong> as a joint initiative of the Government of Ghana and the United Nations Special Fund to train public administration leaders.</p>
+            <p>In <strong>September 2017</strong>, the Department of Computer Sciences was created under the School of Technology to decentralize academic administration and offer specialized degree programs in computational sciences.</p>
+            <p>In <strong>September 2023</strong>, GIMPA management formally merged the <em>Department of Computer Sciences</em> and the <em>Department of Information Systems and Innovation</em> to establish the unified <strong>Department of Computer Science &amp; Information Systems</strong> under the School of Technology and Social Sciences (SOTSS).</p>
+            <p>Both classrooms and computer laboratories are equipped with modern computing infrastructure and specialized software, including Simio simulation software under an academic grant from Simio LLC.</p>
           </div>
           <div class="two-col-img">
             <img src="assets/images/1000211039.png" alt="Computer Lab">
@@ -480,18 +802,17 @@ function introduction() {
         <div class="two-col" style="align-items:center">
           <div>
             <div class="staff-card" style="max-width:320px;margin:0 auto">
-              <div class="staff-avatar">FE</div>
+              <div class="staff-photo"><img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>
               <h3>Dr. Felicia Engmann</h3>
               <div class="role">Head, Department of Computer Science &amp; IS</div>
-              <div class="email"><a href="mailto:csshead@gimpa.edu.gh">csshead@gimpa.edu.gh</a></div>
             </div>
           </div>
           <div class="two-col-text">
             <div class="accent-line"></div>
             <h2>Message from the Head</h2>
-            <p>A warm welcome to the Department of Computer Sciences. This department hosts typical computer and other related computational sciences programmes within GIMPA.</p>
-            <p>Driven by the needs of Ghana and the West African Sub-region, we employ our core values of excellence, quality and connectedness to deliver relevant education to our students, offer consultancy and training to our stakeholders, and conduct cutting-edge research in the computing fields.</p>
-            <p>We achieve these using state-of-the-art facilities and employing faculty with diverse backgrounds in Information Technology and Computing. I am proud to welcome you to this portal. I look forward to receiving you as a student, researcher, or industry practitioner.</p>
+            <p>A warm welcome to the Department of Computer Science &amp; Information Systems. Our department hosts computational and information technology degree programs within GIMPA.</p>
+            <p>Driven by the needs of Ghana and the West African sub-region, we employ our core values of excellence, quality and connectedness to deliver relevant education to our students, offer consultancy and training to stakeholders, and conduct cutting-edge research.</p>
+            <p>I am proud to welcome you to this portal. I look forward to receiving you as a student, researcher, or industry practitioner.</p>
           </div>
         </div>
       </div>
@@ -522,20 +843,20 @@ function introduction() {
         </div>
         <div class="stats-row">
           <div class="stat-item">
-            <div class="number">11+</div>
-            <div class="label">Faculty Members</div>
+            <div class="number">1961</div>
+            <div class="label">GIMPA Founded</div>
           </div>
           <div class="stat-item">
-            <div class="number">10+</div>
-            <div class="label">Programmes Offered</div>
-          </div>
-          <div class="stat-item">
-            <div class="number">9</div>
-            <div class="label">Research Areas</div>
+            <div class="number">2017</div>
+            <div class="label">CS Dept Created</div>
           </div>
           <div class="stat-item">
             <div class="number">2023</div>
-            <div class="label">Year Established</div>
+            <div class="label">Dept Merger (SOTSS)</div>
+          </div>
+          <div class="stat-item">
+            <div class="number">12</div>
+            <div class="label">Academic Programmes</div>
           </div>
         </div>
       </div>
@@ -546,99 +867,67 @@ function introduction() {
         <div class="section-header">
           <div class="accent-line"></div>
           <h2>Academic Programmes</h2>
-          <p>We offer a comprehensive range of undergraduate, postgraduate diploma, master's, and doctoral programmes.</p>
+          <p>Click on any programme below to view detailed curriculum, entry requirements, and career pathways.</p>
         </div>
 
         <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Undergraduate Programmes</h3>
         <div class="card-grid" style="margin-bottom:40px">
-          <div class="programme-card">
-            <span class="tag">BSc · 4 Years</span>
-            <h3>BSc Computer Science</h3>
-            <p>Strong technical skills in programming, data structures, algorithms, networking, software engineering, AI and robotics.</p>
-            <div class="meta"><span>Full-time</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">BSc · 4 Years</span>
-            <h3>BSc Information &amp; Communication Technology</h3>
-            <p>IT entrepreneurship, wireless networks, IT auditing, human-computer interaction, mobile programming and networking.</p>
-            <div class="meta"><span>Full-time</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">BSc · 4 Years</span>
-            <h3>BSc Health Informatics</h3>
-            <p>Applying information technology and computing to healthcare systems, data management and health service delivery.</p>
-            <div class="meta"><span>Full-time</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
+          ${programmesData.filter(p => p.level === 'Undergraduate').map(p => `
+            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
+              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span class="tag">${p.tag}</span>
+                <h3>${p.title}</h3>
+                <p>${p.shortDesc}</p>
+                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
+              </div>
+            </a>
+          `).join('')}
         </div>
 
         <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Postgraduate Diploma Programmes</h3>
         <div class="card-grid" style="margin-bottom:40px">
-          <div class="programme-card">
-            <span class="tag">PG Diploma</span>
-            <h3>PG Diploma in ICT</h3>
-            <p>A bridge for non-ICT graduates wishing to transition into ICT fields. Covers programming, databases, web technologies and networking.</p>
-            <div class="meta"><span>Flexible</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">PG Diploma</span>
-            <h3>PG Diploma in Management Information Systems</h3>
-            <p>Foundation in MIS principles covering analysis, development, implementation and management of information systems.</p>
-            <div class="meta"><span>Flexible</span><span>josbudu@gimpa.edu.gh</span></div>
-          </div>
+          ${programmesData.filter(p => p.level === 'Postgraduate Diploma').map(p => `
+            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
+              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span class="tag">${p.tag}</span>
+                <h3>${p.title}</h3>
+                <p>${p.shortDesc}</p>
+                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
+              </div>
+            </a>
+          `).join('')}
         </div>
 
         <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Master's Programmes</h3>
         <div class="card-grid" style="margin-bottom:40px">
-          <div class="programme-card">
-            <span class="tag">MSc/MPhil · 2 Years</span>
-            <h3>MSc/MPhil Information &amp; Communication Technology</h3>
-            <p>Scientific knowledge for analytical thinking in ICT development — network security, decision support systems, AI applications and more.</p>
-            <div class="meta"><span>Weekends/Evening</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">MSc · 2 Years</span>
-            <h3>MSc Information Technology &amp; Law</h3>
-            <p>Legal and administrative implications of ICT adoption — digital media law, computer forensics, cybercrime investigation and data protection.</p>
-            <div class="meta"><span>Weekends/Evening</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">MPhil · 2 Years</span>
-            <h3>MPhil Management Information Systems</h3>
-            <p>Analysis, development, implementation and management of MIS and their applications in business and public administration.</p>
-            <div class="meta"><span>Regular (Day)</span><span>gwiredu@gimpa.edu.gh</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">MSc · 2 Years</span>
-            <h3>MSc Management Information Systems</h3>
-            <p>Strategic value and challenges of MIS as adopted by public and private sector organisations, with alternative methodologies and philosophies.</p>
-            <div class="meta"><span>Flexible</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">MSc · 1 Year</span>
-            <h3>MSc Digital Forensics &amp; Cybersecurity</h3>
-            <p>Cybercrime risk management, digital forensics, IT audit, cryptography and security mechanisms, and legal aspects of IT.</p>
-            <div class="meta"><span>Weekends</span><span>josbudu@gimpa.edu.gh</span></div>
-          </div>
-          <div class="programme-card">
-            <span class="tag">MSc · 2 Years</span>
-            <h3>MSc Industrial Analytics</h3>
-            <p>Advanced mathematical, statistical, and computational techniques for solving real-world industrial problems with data-driven insights.</p>
-            <div class="meta"><span>Flexible</span></div>
-          </div>
+          ${programmesData.filter(p => p.level.includes('Postgraduate') && !p.level.includes('Diploma') && !p.level.includes('Doctoral')).map(p => `
+            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
+              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span class="tag">${p.tag}</span>
+                <h3>${p.title}</h3>
+                <p>${p.shortDesc}</p>
+                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
+              </div>
+            </a>
+          `).join('')}
         </div>
 
         <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Doctoral Programme</h3>
         <div class="card-grid">
-          <div class="programme-card">
-            <span class="tag">PhD · 3 Years</span>
-            <h3>PhD Information Systems</h3>
-            <p>Rigorous scientific inquiry into technology integration, cybersecurity, data analytics and digital transformation. Develops advanced analytical skills and theoretical insights.</p>
-            <div class="meta"><span>Full-time</span><span>Coordinator: Prof. Gamel Wiredu</span></div>
-          </div>
+          ${programmesData.filter(p => p.level === 'Doctoral').map(p => `
+            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
+              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span class="tag">${p.tag}</span>
+                <h3>${p.title}</h3>
+                <p>${p.shortDesc}</p>
+                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
+              </div>
+            </a>
+          `).join('')}
         </div>
 
         <div style="text-align:center;margin-top:40px">
-          <a href="https://apply.gimpa.edu.gh/start" class="btn btn-primary">Apply Now →</a>
+          <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary">Apply Now →</a>
         </div>
       </div>
     </section>
@@ -665,6 +954,84 @@ function introduction() {
             <p>Learn about industry partnerships, student associations, and alumni engagement opportunities.</p>
             <span class="card-link">Explore partnerships →</span>
           </a>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function programmeDetail(id) {
+  const prog = programmesData.find(p => p.id === id);
+  if (!prog) {
+    return `<section class="section"><div class="container"><h2>Programme Not Found</h2><p>The requested academic programme could not be found.</p><a href="#introduction" class="btn btn-primary">Back to Introduction</a></div></section>`;
+  }
+
+  return `
+    <section class="hero" style="min-height:360px">
+      <div class="hero-bg slideshow">
+        <img class="active" src="assets/images/1000210972.png" alt="${prog.title}">
+      </div>
+      <div class="container">
+        <div class="hero-content" style="padding:50px 0">
+          <div class="hero-badge">${prog.level}</div>
+          <h2 style="font-size:2.2rem">${prog.title}</h2>
+          <p style="font-size:1.1rem; max-width:750px">${prog.shortDesc}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <a href="#introduction" class="btn btn-outline" style="margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px; color: var(--primary); border-color: #c8d8ea">← Back to All Programmes</a>
+        
+        <div class="two-col" style="align-items: flex-start; gap: 40px;">
+          <div class="two-col-text" style="flex: 1;">
+            <div class="accent-line"></div>
+            <h2>Programme Overview</h2>
+            <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); margin-bottom: 24px;">${prog.overview}</p>
+            
+            <h3 style="font-size: 1.3rem; color: var(--primary); margin-top: 30px; margin-bottom: 14px;">Core Curriculum &amp; Key Modules</h3>
+            <ul style="list-style: disc; margin-left: 20px; color: var(--text-body); line-height: 1.8; margin-bottom: 30px;">
+              ${prog.curriculum.map(m => `<li style="margin-bottom: 6px;"><strong>${m}</strong></li>`).join('')}
+            </ul>
+
+            <h3 style="font-size: 1.3rem; color: var(--primary); margin-top: 30px; margin-bottom: 14px;">Career Opportunities &amp; Industry Pathways</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+              ${prog.careers.map(c => `<span style="background: #eef6ff; color: var(--primary); border: 1px solid #c8d8ea; padding: 6px 14px; border-radius: 999px; font-size: 0.88rem; font-weight: 600;">💼 ${c}</span>`).join('')}
+            </div>
+
+            <div style="margin-top: 40px; padding: 24px; background: var(--primary); border-radius: var(--radius); color: #fff;">
+              <h3 style="color:#fff; font-size: 1.3rem; margin-bottom: 8px;">Ready to Apply?</h3>
+              <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 16px;">Applications are open for the upcoming academic session. Start your application online via the GIMPA Admissions Portal.</p>
+              <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-light" style="background: #fff; color: var(--primary); font-weight: 700;">Apply Online Now &rarr;</a>
+            </div>
+          </div>
+
+          <div style="width: 340px; flex-shrink: 0;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);">
+              <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--accent); padding-bottom: 8px;">Programme Specifications</h3>
+              
+              <div style="margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Duration</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.duration}</div>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Study Mode</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.mode}</div>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Academic Level</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.level}</div>
+              </div>
+
+              <h3 style="font-size: 1.05rem; color: var(--primary); margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">Admission Requirements</h3>
+              <ul style="font-size: 0.85rem; color: var(--text-body); line-height: 1.6; padding-left: 16px;">
+                ${prog.requirements.map(r => `<li style="margin-bottom: 8px;">${r}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -891,10 +1258,10 @@ function contact() {
         <div style="max-width:360px">
           <div class="staff-card">
             <a class="staff-card-link" href="#profile/felicia-engmann">
-              <div class="staff-photo"><img class="photo" src="assets/images/felicia-engmann.png" alt="Dr. Felicia Engmann" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>
+              <div class="staff-photo"><img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>
               <h3>Dr. Felicia Engmann</h3>
               <div class="role" style="font-size:0.82rem; color:var(--accent); font-weight:600; margin-bottom:8px">Head, Dept. of Computer Science &amp; IS</div>
-              <div class="email" style="font-size:0.8rem; color:var(--primary)">csshead@gimpa.edu.gh</div>
+              <div class="email" style="font-size:0.8rem; color:var(--primary)">fapboadu@gimpa.edu.gh</div>
             </a>
           </div>
         </div>
@@ -1003,7 +1370,60 @@ function contact() {
   `;
 }
 
+window.currentNewsPage = window.currentNewsPage || 1;
+
+window.changeNewsPage = function(page) {
+  window.currentNewsPage = page;
+  render();
+  const newsHeader = document.getElementById('sotssNewsHeader');
+  if (newsHeader) {
+    newsHeader.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 function newsList() {
+  const allNews = window.dynamicNews && window.dynamicNews.length > 0 ? window.dynamicNews : news;
+  
+  // Filter for School of Technology and Social Sciences relevance
+  const sotssKeywords = [
+    'sotss', 'technology', 'computer', 'information systems', 'cyber', 'data',
+    'analytics', 'software', 'programming', 'ai', 'robotics', 'engineering',
+    'digital', 'ict', 'science', 'innovation', 'tech', 'mentorship',
+    'hackathon', 'research', 'lab', 'social sciences'
+  ];
+  
+  const sotssNews = allNews.filter(item => {
+    const fullText = ((item.title || '') + ' ' + (item.desc || '') + ' ' + (item.source || '')).toLowerCase();
+    return sotssKeywords.some(k => fullText.includes(k));
+  });
+
+  const activeNews = sotssNews.length > 0 ? sotssNews : allNews;
+  
+  const pageSize = 6;
+  const totalItems = activeNews.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  
+  if (window.currentNewsPage > totalPages) {
+    window.currentNewsPage = totalPages;
+  }
+  if (window.currentNewsPage < 1) {
+    window.currentNewsPage = 1;
+  }
+
+  const currentPage = window.currentNewsPage;
+  const startIndex = (currentPage - 1) * pageSize;
+  const visibleNews = activeNews.slice(startIndex, startIndex + pageSize);
+
+  let paginationButtonsHTML = '';
+  for (let i = 1; i <= totalPages; i++) {
+    const isActive = i === currentPage;
+    paginationButtonsHTML += `
+      <button onclick="window.changeNewsPage(${i})" style="min-width: 42px; height: 42px; border-radius: 8px; font-weight: ${isActive ? '700' : '600'}; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; border: 1.5px solid ${isActive ? 'var(--primary)' : '#cbd5e1'}; background: ${isActive ? 'var(--primary)' : '#ffffff'}; color: ${isActive ? '#ffffff' : 'var(--primary)'}; box-shadow: 0 2px 4px rgba(0,0,0,0.05);" onmouseover="if(!${isActive}) { this.style.background='#eef6ff'; this.style.borderColor='var(--primary)'; }" onmouseout="if(!${isActive}) { this.style.background='#ffffff'; this.style.borderColor='#cbd5e1'; }">
+        ${i}
+      </button>
+    `;
+  }
+
   return `
     <section class="hero" style="min-height:380px">
       <div class="hero-bg slideshow">
@@ -1013,32 +1433,92 @@ function newsList() {
       </div>
       <div class="container">
         <div class="hero-content" style="padding:60px 0">
-          <div class="hero-badge">Department News</div>
-          <h2>News Concerning the Department</h2>
-          <p>Stay informed about announcements, partnerships, student opportunities, and important updates from the Department of Computer Science and Information Systems.</p>
+          <div class="hero-badge">Department News &amp; Feeds</div>
+          <h2>School of Technology &amp; Social Sciences News</h2>
+          <p>Official announcements, research spotlights, and real-time updates from GIMPA SOTSS and social channels.</p>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Latest Department News</h2>
-          <p>Updates and announcements from the Department of Computer Science and Information Systems.</p>
-        </div>
-        <div class="news-grid">
-          ${news.map(n => `
-            <a class="news-card" href="#news-${n.id}">
-              <div class="news-card-img"><img src="${n.image}" alt="${n.title}"></div>
-              <div class="news-card-body">
-                <div class="date">${n.date}</div>
-                <h3>${n.title}</h3>
-                <p>${n.desc}</p>
-                <span class="card-link" style="margin-top: 14px; font-weight:600; font-size:0.88rem; color:var(--primary)">Read full story →</span>
-              </div>
+        <!-- Social Channels Toolbar -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px 24px; border-radius: var(--radius); margin-bottom: 30px; gap: 16px;">
+          <div>
+            <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 4px; font-weight: 700;">Follow Official SOTSS Channels</h3>
+            <p style="font-size: 0.85rem; color: var(--text-body); margin: 0;">Stay connected across all major official social media platforms</p>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <a href="https://gimpa.edu.gh/" target="_blank" class="btn btn-outline" style="font-size: 0.84rem; padding: 8px 14px; display: inline-flex; align-items: center; background: #fff; color: var(--primary); border-color: #cbd5e1; border-radius: 8px; font-weight: 600; text-decoration: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              GIMPA Web
             </a>
-          `).join('')}
+            <a href="https://www.instagram.com/sotss_gimpa/" target="_blank" class="btn btn-outline" style="font-size: 0.84rem; padding: 8px 14px; display: inline-flex; align-items: center; background: #fff; color: #d62976; border-color: #fbcfe8; border-radius: 8px; font-weight: 600; text-decoration: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              Instagram @sotss_gimpa
+            </a>
+            <a href="https://www.facebook.com/SOTSS.GIMPA" target="_blank" class="btn btn-outline" style="font-size: 0.84rem; padding: 8px 14px; display: inline-flex; align-items: center; background: #fff; color: #1877f2; border-color: #bfdbfe; border-radius: 8px; font-weight: 600; text-decoration: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook SOTSS
+            </a>
+            <a href="https://www.linkedin.com/school/gimpa/" target="_blank" class="btn btn-outline" style="font-size: 0.84rem; padding: 8px 14px; display: inline-flex; align-items: center; background: #fff; color: #0a66c2; border-color: #bae6fd; border-radius: 8px; font-weight: 600; text-decoration: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              LinkedIn SOTSS
+            </a>
+          </div>
+        </div>
+
+        <div id="sotssNewsHeader" class="section-header">
+          <div class="accent-line"></div>
+          <h2>SOTSS Department News Feed</h2>
+          <p>Showing ${startIndex + 1}–${Math.min(startIndex + pageSize, totalItems)} of ${totalItems} School of Technology &amp; Social Sciences updates</p>
+        </div>
+        
+        <div class="news-grid">
+          ${visibleNews.map((n, idx) => {
+            const itemId = n.news_id || n.id || String(n.id);
+            const cardHref = n.link && n.link.startsWith('http') ? n.link : `#news-${itemId}`;
+            const fallbackImages = [
+              'assets/images/1000210972.png',
+              'assets/images/1000211039.png',
+              'assets/images/1000211043.png',
+              'assets/images/1000211395.png',
+              'assets/images/1000211042.png',
+              'assets/images/1000211024.png',
+              'assets/images/1000211025.png',
+              'assets/images/1000211035.png'
+            ];
+            const cardImg = (n.image && n.image.trim() !== '') ? n.image : fallbackImages[idx % fallbackImages.length];
+            return `
+              <a class="news-card" href="${cardHref}" target="${n.link && n.link.startsWith('http') ? '_blank' : '_self'}" style="text-decoration:none; color:inherit;">
+                <div class="news-card-img"><img src="${cardImg}" alt="${n.title}"></div>
+                <div class="news-card-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span class="date" style="font-size:0.78rem; font-weight:700; color:var(--accent);">${n.date}</span>
+                    <span style="font-size:0.75rem; background:#eef6ff; color:var(--primary); padding:2px 8px; border-radius:4px; font-weight:600;">${n.source || 'SOTSS News'}</span>
+                  </div>
+                  <h3>${n.title}</h3>
+                  <p>${n.desc}</p>
+                  <span class="card-link" style="margin-top: 14px; font-weight:600; font-size:0.88rem; color:var(--primary)">Read full update &rarr;</span>
+                </div>
+              </a>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Pagination Controls -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 40px; gap: 10px;">
+          <button onclick="window.changeNewsPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} style="height: 42px; padding: 0 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: 1.5px solid ${currentPage === 1 ? '#e2e8f0' : '#cbd5e1'}; background: ${currentPage === 1 ? '#f8fafc' : '#ffffff'}; color: ${currentPage === 1 ? '#94a3b8' : 'var(--primary)'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'}; transition: all 0.2s ease;">
+            &larr; Previous
+          </button>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            ${paginationButtonsHTML}
+          </div>
+
+          <button onclick="window.changeNewsPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''} style="height: 42px; padding: 0 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: 1.5px solid ${currentPage >= totalPages ? '#e2e8f0' : '#cbd5e1'}; background: ${currentPage >= totalPages ? '#f8fafc' : '#ffffff'}; color: ${currentPage >= totalPages ? '#94a3b8' : 'var(--primary)'}; cursor: ${currentPage >= totalPages ? 'not-allowed' : 'pointer'}; transition: all 0.2s ease;">
+            Next &rarr;
+          </button>
         </div>
       </div>
     </section>
@@ -1046,25 +1526,74 @@ function newsList() {
 }
 
 function newsDetail(id) {
-  const item = news.find(n => n.id === id);
+  const allNews = window.dynamicNews && window.dynamicNews.length > 0 ? window.dynamicNews : news;
+  
+  // Extract raw identifier (strip 'news-' prefix if present)
+  const rawId = id.startsWith('news-') ? id.substring(5) : id;
+
+  const item = allNews.find(n => {
+    const nId = String(n.news_id || n.id || '');
+    return nId === rawId || nId === id || ('news-' + nId) === id;
+  }) || news.find(n => n.id === id || n.id === rawId || ('news-' + n.id) === id);
+
   if (!item) {
-    return `<section class="section"><div class="container"><h2>News story not found.</h2><a href="#news" class="btn btn-dark">Back to News</a></div></section>`;
+    return `
+      <section class="section">
+        <div class="container" style="text-align: center; padding: 60px 0;">
+          <h2 style="color: var(--primary); margin-bottom: 16px;">News Story Not Found</h2>
+          <p style="color: var(--text-body); margin-bottom: 24px;">The requested article could not be located. It may have been updated or moved.</p>
+          <a href="#news" class="btn btn-primary" style="text-decoration:none;">&larr; Back to SOTSS News Feed</a>
+        </div>
+      </section>
+    `;
   }
+
+  const itemTitle = item.title || 'SOTSS News Update';
+  const itemDate = item.date || 'Recent';
+  const itemSource = item.source || 'SOTSS News';
+  const itemImage = item.image || 'assets/images/1000211039.png';
+  const itemContent = item.content || item.text || `<p>${item.desc || ''}</p>`;
+  const externalLink = item.link && item.link.startsWith('http') ? item.link : '';
+
   return `
+    <section class="hero" style="min-height:280px">
+      <div class="hero-bg slideshow">
+        <img class="active" src="${itemImage}" alt="${itemTitle}">
+      </div>
+      <div class="container">
+        <div class="hero-content" style="padding:40px 0">
+          <div class="hero-badge">${itemSource}</div>
+          <h2 style="font-size:2rem">${itemTitle}</h2>
+          <p style="font-size:0.95rem; color:var(--accent); font-weight:600">${itemDate}</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container">
-        <a href="#news" class="btn btn-outline" style="margin-bottom: 30px; display: inline-flex; align-items: center; gap: 8px; color: var(--primary); border-color: #c8d8ea">← Back to News</a>
+        <a href="#news" class="btn btn-outline" style="margin-bottom: 30px; display: inline-flex; align-items: center; gap: 8px; color: var(--primary); border-color: #c8d8ea; background: #fff; text-decoration: none;">&larr; Back to SOTSS News Feed</a>
         
-        <div class="two-col">
-          <div class="two-col-text">
-            <span class="date" style="color: var(--accent); font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em;">${item.date}</span>
-            <h2>${item.title}</h2>
-            <div style="margin-top: 20px; line-height: 1.8; color: var(--text-dark)">
-              ${item.text}
+        <div class="two-col" style="align-items: flex-start; gap: 40px;">
+          <div class="two-col-text" style="flex: 1;">
+            <div class="accent-line"></div>
+            <span class="date" style="color: var(--accent); font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 8px; text-transform: uppercase;">${itemDate} · ${itemSource}</span>
+            <h2 style="font-size: 1.8rem; color: var(--primary); margin-bottom: 20px;">${itemTitle}</h2>
+            
+            <div style="font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); margin-bottom: 24px;">
+              ${itemContent}
             </div>
+
+            ${externalLink ? `
+              <div style="margin-top: 30px;">
+                <a href="${externalLink}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                  Read Full Story on Official Source &rarr;
+                </a>
+              </div>
+            ` : ''}
           </div>
-          <div class="two-col-img">
-            <img src="${item.image}" alt="${item.title}" style="border-radius: var(--radius); box-shadow: var(--shadow)">
+          
+          <div style="width: 380px; flex-shrink: 0;">
+            <img src="${itemImage}" alt="${itemTitle}" style="width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid #e2e8f0; object-fit: cover;">
           </div>
         </div>
       </div>
@@ -1780,8 +2309,11 @@ function intranetView() {
                   Messages Box
                 </button>
                 ${isAdmin ? `
+                  <button onclick="window.switchIntranetTab('news-admin')" class="intranet-tab-btn" style="display: flex; align-items: center; gap: 10px; width: 100%; border: none; background: none; padding: 12px 16px; border-radius: var(--radius-sm); text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent;">
+                    📰 News Moderation
+                  </button>
                   <button onclick="window.switchIntranetTab('admin')" class="intranet-tab-btn" style="display: flex; align-items: center; gap: 10px; width: 100%; border: none; background: none; padding: 12px 16px; border-radius: var(--radius-sm); text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid transparent;">
-                    Admin Tools
+                    ⚙️ Faculty &amp; Pubs Admin
                   </button>
                 ` : ''}
               </nav>
@@ -2418,6 +2950,99 @@ function renderIntranetAdmin(lecturers, publications) {
   `;
 }
 
+function renderIntranetNewsAdmin(newsItems) {
+  const publishedCount = newsItems.filter(n => n.status === 'published').length;
+  const pendingCount = newsItems.filter(n => n.status === 'pending').length;
+
+  return `
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 0 0 4px 0;">📰 SOTSS News Moderation &amp; Cover Image Manager</h2>
+          <p style="font-size: 0.88rem; color: var(--text-body); margin: 0;">Review scraped &amp; submitted news stories, upload high-resolution cover photos, and confirm stories before publishing live on the website.</p>
+        </div>
+        <button onclick="window.showCreateNewsModal()" class="btn btn-primary" style="font-size: 0.88rem; padding: 10px 18px; font-weight: 700; border-radius: 8px;">
+          + Create Manual News
+        </button>
+      </div>
+
+      <!-- Quick Summary Badges -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 8px;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #166534; text-transform: uppercase;">Published Live</span>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #15803d; margin-top: 4px;">${publishedCount} Stories</div>
+        </div>
+        <div style="background: #fffbeb; border: 1px solid #fef3c7; padding: 16px; border-radius: 8px;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #92400e; text-transform: uppercase;">Pending Moderation</span>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #b45309; margin-top: 4px;">${pendingCount} Stories</div>
+        </div>
+        <div style="background: #f0f9ff; border: 1px solid #bae6fd; padding: 16px; border-radius: 8px;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #075985; text-transform: uppercase;">Total System News</span>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0369a1; margin-top: 4px;">${newsItems.length} Stories</div>
+        </div>
+      </div>
+
+      <!-- News Items List -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        ${newsItems.length === 0 ? '<div style="padding: 40px; text-align: center; color: #64748b;">No news items available for moderation.</div>' : ''}
+        ${newsItems.map(item => {
+          const isPublished = item.status === 'published';
+          const itemId = item.news_id || item.id;
+          return `
+            <div style="background: #ffffff; border: 1px solid ${isPublished ? '#e2e8f0' : '#fde68a'}; border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+              
+              <!-- Image Preview & Upload Button -->
+              <div style="width: 140px; flex-shrink: 0; text-align: center;">
+                <div style="width: 140px; height: 95px; border-radius: 8px; overflow: hidden; background: #f1f5f9; border: 1px solid #cbd5e1; margin-bottom: 8px; position: relative;">
+                  <img src="${item.image || 'assets/images/1000211039.png'}" alt="Cover Image" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <button onclick="window.triggerImageUpload('${itemId}')" style="font-size: 0.78rem; padding: 7px 10px; font-weight: 700; width: 100%; background: #0f172a; color: #ffffff; border: 1px solid #0f172a; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+                  📷 Change Photo
+                </button>
+                <input type="file" id="newsImgFile_${itemId}" accept="image/*" style="display:none;" onchange="window.uploadNewsImageFile('${itemId}')">
+              </div>
+
+              <!-- Main Details -->
+              <div style="flex: 1; min-width: 260px;">
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent);">${item.date || 'Recent'}</span>
+                  <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600;">${item.source || 'SOTSS News'}</span>
+                  <span style="font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; ${isPublished ? 'background: #dcfce7; color: #15803d;' : 'background: #fef3c7; color: #b45309;'}">
+                    ${isPublished ? '🟢 Published Live' : '🟡 Pending Review'}
+                  </span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 0 0 6px 0;">${item.title}</h4>
+                <p style="font-size: 0.85rem; color: #475569; margin: 0 0 10px 0; line-height: 1.4;">${item.desc}</p>
+                ${item.link ? `<a href="${item.link}" target="_blank" style="font-size: 0.78rem; font-weight: 600; color: #0284c7;">🔗 External Source Link &rarr;</a>` : ''}
+              </div>
+
+              <!-- Action Controls -->
+              <div style="display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; min-width: 140px;">
+                ${isPublished ? `
+                  <button onclick="window.updateNewsStatus('${itemId}', 'pending')" class="btn btn-outline" style="font-size: 0.8rem; padding: 8px 12px; font-weight: 700; color: #b45309; border-color: #fde68a; background: #fffbeb;">
+                    ⏸️ Unpublish
+                  </button>
+                ` : `
+                  <button onclick="window.updateNewsStatus('${itemId}', 'published')" class="btn btn-primary" style="font-size: 0.8rem; padding: 8px 12px; font-weight: 700; background: #16a34a; border-color: #16a34a; color: #fff;">
+                    ✅ Confirm &amp; Publish
+                  </button>
+                `}
+                <button onclick="window.promptNewsImageUrl('${itemId}')" class="btn btn-outline" style="font-size: 0.8rem; padding: 6px 12px; font-weight: 600; color: #0369a1; border-color: #bae6fd;">
+                  🔗 Custom Image URL
+                </button>
+                <button onclick="window.deleteNewsItem('${itemId}')" class="btn btn-outline" style="font-size: 0.8rem; padding: 6px 12px; font-weight: 600; color: #dc2626; border-color: #fecaca; background: #fef2f2;">
+                  🗑️ Delete Story
+                </button>
+              </div>
+
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
 function getAuthHeaders() {
   const token = localStorage.getItem('sotssToken');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -2427,6 +3052,14 @@ async function loadDynamicData() {
   try {
     const resLecturers = await fetch('/api/public/lecturers');
     const resPubs = await fetch('/api/public/publications');
+    const resNews = await fetch('/api/public/news');
+
+    if (resNews && resNews.ok) {
+      const fetchedNews = await resNews.json();
+      if (fetchedNews && fetchedNews.length > 0) {
+        window.dynamicNews = fetchedNews;
+      }
+    }
     
     if (resLecturers.ok) {
       const dbLecturers = await resLecturers.json();
@@ -2492,6 +3125,29 @@ async function loadDynamicData() {
     console.error("Failed to load dynamic data, using static fallback", err);
   }
 }
+
+let lastAutoNewsSync = 0;
+async function autoSyncNews() {
+  const now = Date.now();
+  if (now - lastAutoNewsSync < 60000) return; // Prevent duplicate syncs within 60s
+  lastAutoNewsSync = now;
+  try {
+    const res = await fetch('/api/public/fetch-news', { method: 'POST' });
+    if (res.ok) {
+      const resNews = await fetch('/api/public/news');
+      if (resNews.ok) {
+        window.dynamicNews = await resNews.json();
+        if (location.hash === '#news') {
+          render();
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Failed to auto-sync news:', err);
+  }
+}
+
+window.syncLatestNews = autoSyncNews;
 
 async function switchIntranetTab(tabName) {
   window.activeIntranetTab = tabName;
@@ -2576,6 +3232,14 @@ async function switchIntranetTab(tabName) {
         html = renderIntranetMessages(messages, lecturers);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load intranet inbox. Server returned ${res.status}.</div>`;
+      }
+    } else if (tabName === 'news-admin') {
+      const res = await fetch('/api/admin/news', { headers });
+      if (res.ok) {
+        const newsItems = await res.json();
+        html = renderIntranetNewsAdmin(newsItems);
+      } else {
+        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load news moderation panel. Server returned ${res.status}.</div>`;
       }
     } else if (tabName === 'admin') {
       const res = await fetch('/api/public/lecturers');
@@ -3646,6 +4310,7 @@ function render() {
   } else if (r === 'news') {
     viewHTML = newsList();
     activeTab = 'news';
+    autoSyncNews();
   } else if (r === 'login') {
     if (localStorage.getItem('sotssToken')) {
       location.hash = '#intranet';
@@ -3676,6 +4341,9 @@ function render() {
   } else if (r.startsWith('project/')) {
     viewHTML = projectDetail(parseInt(r.split('/')[1]));
     activeTab = '';
+  } else if (r.startsWith('programme/')) {
+    viewHTML = programmeDetail(r.split('/')[1]);
+    activeTab = 'introduction';
   } else if (r.startsWith('news-')) {
     viewHTML = newsDetail(r);
     activeTab = 'news';
@@ -3832,6 +4500,263 @@ document.addEventListener('click', function(event) {
     results.classList.remove('active');
   }
 });
+
+// News Moderation & Image Upload Global Handlers
+window.updateNewsStatus = async function(newsId, statusVal) {
+  try {
+    const formData = new FormData();
+    formData.append('status_val', statusVal);
+    const res = await fetch(`/api/admin/news/${newsId}/status`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: formData
+    });
+    if (res.ok) {
+      alert(`News status updated to ${statusVal.toUpperCase()}!`);
+      window.switchIntranetTab('news-admin');
+      loadDynamicData();
+    } else {
+      alert('Failed to update news status.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error updating news status.');
+  }
+};
+
+window.triggerImageUpload = function(newsId) {
+  const fileInput = document.getElementById(`newsImgFile_${newsId}`);
+  if (fileInput) fileInput.click();
+};
+
+window.uploadNewsImageFile = async function(newsId) {
+  const fileInput = document.getElementById(`newsImgFile_${newsId}`);
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) return;
+
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const res = await fetch(`/api/admin/news/${newsId}/image`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: formData
+    });
+    if (res.ok) {
+      alert('New cover photo uploaded successfully!');
+      window.switchIntranetTab('news-admin');
+      loadDynamicData();
+    } else {
+      alert('Failed to upload cover photo.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error uploading cover photo.');
+  }
+};
+
+window.promptNewsImageUrl = async function(newsId) {
+  const url = prompt('Enter image URL or asset path (e.g. assets/images/1000210972.png):');
+  if (!url) return;
+
+  const formData = new FormData();
+  formData.append('image_url', url);
+
+  try {
+    const res = await fetch(`/api/admin/news/${newsId}/image`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: formData
+    });
+    if (res.ok) {
+      alert('News cover image URL updated!');
+      window.switchIntranetTab('news-admin');
+      loadDynamicData();
+    } else {
+      alert('Failed to update news image URL.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error updating image URL.');
+  }
+};
+
+window.deleteNewsItem = async function(newsId) {
+  if (!confirm('Are you sure you want to delete this news story?')) return;
+  try {
+    const res = await fetch(`/api/admin/news/${newsId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (res.ok) {
+      alert('News story deleted successfully.');
+      window.switchIntranetTab('news-admin');
+      loadDynamicData();
+    } else {
+      alert('Failed to delete news story.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error deleting news story.');
+  }
+};
+
+window.showCreateNewsModal = function() {
+  const existingModal = document.getElementById('customNewsModalOverlay');
+  if (existingModal) existingModal.remove();
+
+  const modalHtml = `
+    <div id="customNewsModalOverlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease;">
+      <div style="background: #ffffff; width: 100%; max-width: 620px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; overflow: hidden; max-height: 90vh; display: flex; flex-direction: column;">
+        
+        <!-- Header -->
+        <div style="background: var(--primary); color: #ffffff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            📰 Create &amp; Publish SOTSS News Story
+          </h3>
+          <button onclick="document.getElementById('customNewsModalOverlay').remove()" style="background: none; border: none; color: #ffffff; font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 0 4px;">&times;</button>
+        </div>
+
+        <!-- Body Form -->
+        <div style="padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;">
+          
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 4px;">News Story Title *</label>
+            <input type="text" id="modalNewsTitle" placeholder="e.g., SOTSS Faculty Team Awarded Research Innovation Grant" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; outline: none;">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Publication Date</label>
+              <input type="text" id="modalNewsDate" value="Aug 06, 2026" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; outline: none;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 4px;">News Source</label>
+              <input type="text" id="modalNewsSource" value="SOTSS Newsroom" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; outline: none;">
+            </div>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Short Teaser Summary (Shown on News Cards) *</label>
+            <textarea id="modalNewsDesc" rows="2" placeholder="Brief 2-line overview of the news article..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Full Article Content *</label>
+            <textarea id="modalNewsContent" rows="4" placeholder="Detailed article text or HTML paragraphs..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Cover Image File Upload Selector -->
+          <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 16px; text-align: center;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;">📷 Upload Cover Photo File (from Computer)</label>
+            <input type="file" id="modalNewsFile" accept="image/*" onchange="window.previewModalImage(this)" style="display: none;">
+            
+            <div id="modalImagePreviewBox" style="width: 100%; max-height: 140px; border-radius: 6px; overflow: hidden; display: none; margin-bottom: 10px; background: #e2e8f0;">
+              <img id="modalImagePreviewImg" src="" style="width: 100%; height: 140px; object-fit: cover;">
+            </div>
+
+            <button type="button" onclick="document.getElementById('modalNewsFile').click()" class="btn btn-outline" style="font-size: 0.82rem; padding: 8px 16px; font-weight: 600; background: #ffffff; border-color: var(--primary); color: var(--primary);">
+              📁 Select Image File from Computer
+            </button>
+            <span id="modalFileName" style="display: block; font-size: 0.78rem; color: #64748b; margin-top: 6px;">No file selected (Default topic image will be used if omitted)</span>
+          </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" onclick="document.getElementById('customNewsModalOverlay').remove()" class="btn btn-outline" style="font-size: 0.88rem; padding: 10px 18px; font-weight: 600;">
+            Cancel
+          </button>
+          <button type="button" onclick="window.submitCustomNewsForm('published')" class="btn btn-primary" style="font-size: 0.88rem; padding: 10px 20px; font-weight: 700; background: #16a34a; border-color: #16a34a; color: #fff;">
+            ✅ Publish Live
+          </button>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+};
+
+window.previewModalImage = function(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const box = document.getElementById('modalImagePreviewBox');
+      const img = document.getElementById('modalImagePreviewImg');
+      const name = document.getElementById('modalFileName');
+      if (box && img) {
+        img.src = e.target.result;
+        box.style.display = 'block';
+      }
+      if (name) {
+        name.textContent = `Selected: ${input.files[0].name}`;
+      }
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+
+window.submitCustomNewsForm = async function(statusVal) {
+  const title = document.getElementById('modalNewsTitle').value.trim();
+  const desc = document.getElementById('modalNewsDesc').value.trim();
+  const content = document.getElementById('modalNewsContent').value.trim();
+  const date = document.getElementById('modalNewsDate').value.trim() || 'Recent';
+  const source = document.getElementById('modalNewsSource').value.trim() || 'SOTSS Newsroom';
+  const fileInput = document.getElementById('modalNewsFile');
+
+  if (!title || !desc || !content) {
+    alert('Please complete the Title, Teaser Summary, and Article Content fields.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('desc', desc);
+  formData.append('content', content.startsWith('<p>') ? content : `<p>${content}</p>`);
+  formData.append('date', date);
+  formData.append('source', source);
+  formData.append('status_val', statusVal);
+  formData.append('image_url', 'assets/images/1000211039.png');
+
+  try {
+    const res = await fetch('/api/admin/news/create', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: formData
+    });
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const newsId = data.news_id;
+      
+      // If image file attached, upload it
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const imgFormData = new FormData();
+        imgFormData.append('file', fileInput.files[0]);
+        await fetch(`/api/admin/news/${newsId}/image`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: imgFormData
+        });
+      }
+
+      alert('News story created and published successfully!');
+      const overlay = document.getElementById('customNewsModalOverlay');
+      if (overlay) overlay.remove();
+      window.switchIntranetTab('news-admin');
+      loadDynamicData();
+    } else {
+      alert('Failed to create news story: ' + (data.detail || 'Unknown error'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error creating news story.');
+  }
+};
 
 // Bootstrapping the application
 async function initApp() {

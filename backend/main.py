@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Form, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, status, Form, BackgroundTasks, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -11,6 +11,8 @@ import string
 import random
 import smtplib
 import socket
+import shutil
+import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -290,6 +292,137 @@ def get_public_projects():
     projects = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return projects
+
+@app.get("/api/public/news")
+def get_public_news():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT id, news_id, title, date, source, link, image, desc, content, status FROM news WHERE status = 'published' ORDER BY id DESC")
+        news_items = [dict(row) for row in cursor.fetchall()]
+    except Exception:
+        news_items = []
+    conn.close()
+    
+    # If database news table is empty, trigger initial fetch
+    if not news_items:
+        try:
+            from backend.news_scraper import fetch_and_store_news
+            fetch_and_store_news()
+            conn = sqlite3.connect(DB_PATH)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, news_id, title, date, source, link, image, desc, content, status FROM news WHERE status = 'published' ORDER BY id DESC")
+            news_items = [dict(row) for row in cursor.fetchall()]
+            conn.close()
+        except Exception as e:
+            print("Failed to auto-fetch news:", e)
+            
+    return news_items
+
+@app.post("/api/public/fetch-news")
+def trigger_news_fetch():
+    from backend.news_scraper import fetch_and_store_news
+    count = fetch_and_store_news()
+    return {"status": "success", "message": f"Successfully pulled {count} news items from GIMPA website & social media channels."}
+
+# --- ADMIN NEWS MODERATION ENDPOINTS ---
+
+@app.get("/api/admin/news")
+def get_admin_news(current_user: dict = Depends(get_current_lecturer)):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, news_id, title, date, source, link, image, desc, content, status FROM news ORDER BY id DESC")
+    news_items = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return news_items
+
+@app.post("/api/admin/news/{news_id}/status")
+def update_news_status(
+    news_id: str,
+    status_val: str = Form(...),
+    current_user: dict = Depends(get_current_lecturer)
+):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE news SET status = ? WHERE news_id = ? OR id = ?", (status_val, news_id, news_id))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": f"News status updated to {status_val}"}
+
+@app.post("/api/admin/news/{news_id}/image")
+async def update_news_image(
+    news_id: str,
+    image_url: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+    current_user: dict = Depends(get_current_lecturer)
+):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    final_image_path = image_url
+    if file and file.filename:
+        ext = os.path.splitext(file.filename)[1]
+        filename = f"news_upload_{re.sub(r'[^a-zA-Z0-9]', '', news_id)[:20]}{ext}"
+        save_dir = os.path.join(os.path.dirname(__file__), "..", "assets", "images")
+        os.makedirs(save_dir, exist_ok=True)
+        save_path = os.path.join(save_dir, filename)
+        with open(save_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        final_image_path = f"assets/images/{filename}"
+
+    if not final_image_path:
+        raise HTTPException(status_code=400, detail="No image file or image URL provided")
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE news SET image = ? WHERE news_id = ? OR id = ?", (final_image_path, news_id, news_id))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "image": final_image_path, "message": "News image updated successfully"}
+
+@app.post("/api/admin/news/create")
+def create_manual_news(
+    title: str = Form(...),
+    date: str = Form(...),
+    source: str = Form("SOTSS Department"),
+    link: str = Form(""),
+    desc: str = Form(...),
+    content: str = Form(...),
+    status_val: str = Form("published"),
+    image_url: str = Form("assets/images/1000211039.png"),
+    current_user: dict = Depends(get_current_lecturer)
+):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    news_id = "manual-" + re.sub(r'[^a-z0-9]', '', title.lower())[:25] + str(random.randint(100, 999))
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO news (news_id, title, date, source, link, image, desc, content, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (news_id, title, date, source, link, image_url, desc, content, status_val))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "news_id": news_id, "message": "News article created successfully"}
+
+@app.delete("/api/admin/news/{news_id}")
+def delete_news_item(news_id: str, current_user: dict = Depends(get_current_lecturer)):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM news WHERE news_id = ? OR id = ?", (news_id, news_id))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "News item deleted"}
+
 
 @app.get("/api/lecturer/me")
 def get_me(lecturer: dict = Depends(get_current_lecturer)):
