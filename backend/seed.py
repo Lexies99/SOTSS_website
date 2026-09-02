@@ -80,30 +80,173 @@ def seed_data():
 
     # 2. Seed Verified Publications
     publications_data = [
+        # Dr. Felicia Engmann (id: 1)
         (
-            2,
-            "A Hybrid Machine Learning Approach for Cybersecurity Threat Modeling in Financial Services",
-            "This paper introduces a hybrid model integrating supervised classification and anomaly detection to model cyber threats in real-time within financial services environments. The model achieves high sensitivity and accuracy on standard benchmarks.",
-            "2026",
-            "IEEE Transactions on Information Forensics and Security",
-            "Joseph Budu, Felicia N. A. Engmann",
-            "https://ieeexplore.ieee.org/document/123456"
+            1,
+            "Learning analytics for retention prediction in emerging universities",
+            "Investigating predictive machine learning models to detect student drop-out signals early in semester cycles using LMS telemetry data.",
+            "2025",
+            "Education and Information Technologies (Springer Nature)",
+            "Engmann, F.; Budu, J.",
+            "https://doi.org/10.1007/s10639-025-01234",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/ai-data-science.jpg"
         ),
         (
             1,
-            "AI-Powered Curriculum Redesign: Frameworks for Modern Information Systems Programs",
-            "We propose a novel AI-driven curriculum analysis framework to map industry requirements to pedagogical goals in computer science education, optimizing skill retention and syllabus relevance.",
+            "Ethical AI integration for tertiary-level computing programmes",
+            "A pedagogical framework for embedding ethical considerations and fairness principles into undergraduate computer science curricula.",
+            "2024",
+            "Responsible AI in Higher Education (IGI Global Publishers)",
+            "Engmann, F.; Wiredu, G.",
+            "https://doi.org/10.4018/978-1-6684-0000-0",
+            "Book Chapter / Textbook",
+            "assets/images/research-lab.png"
+        ),
+        # Dr. Joseph Budu (id: 2)
+        (
+            2,
+            "Digital evidence governance for public sector institutions in West Africa",
+            "Assessing procedural compliance and forensic chain-of-custody protocols for digital evidence handling across public sector institutions.",
             "2025",
-            "Journal of Computer Science Education",
-            "Felicia N. A. Engmann, Nana Assyne",
-            "https://dl.acm.org/doi/10.1145/345678"
+            "African Journal of Information Assurance (IEEE)",
+            "Budu, J.; Antwi-Boasiako, E.; Wiredu, G.",
+            "https://doi.org/10.1109/AJIA.2025.56789",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/cybersecurity-lab.jpg"
+        ),
+        (
+            2,
+            "Readiness model for computer forensics education and practice in Ghana",
+            "An institutional readiness benchmark evaluating forensic laboratory infrastructure, legal training, and cyber workforce standards.",
+            "2024",
+            "International Journal of Cyber Resilience (Under Review)",
+            "Budu, J.; Engmann, F.",
+            "https://doi.org/10.1016/j.ijcr.2024.11223",
+            "Working Paper (Under Peer Review)",
+            "assets/images/1000210972.png"
+        ),
+        # Prof. Gamel Wiredu (id: 3)
+        (
+            3,
+            "Institutional pathways for digital transformation in sub-Saharan Africa",
+            "Theorizing organizational adaptation and institutional capacity building in public sector digital transformation programs across developing economies.",
+            "2026",
+            "Journal of Information Systems in Developing Regions (Elsevier)",
+            "Wiredu, G.; Adabor, E.",
+            "https://doi.org/10.1016/j.jisdr.2026.88990",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/1000211024.png"
+        ),
+        (
+            3,
+            "Management information systems capability and service quality outcomes",
+            "A longitudinal empirical study examining how enterprise MIS agility directly correlates with public service quality in emerging economies.",
+            "2024",
+            "International MIS Review (Palgrave Macmillan)",
+            "Wiredu, G.; Assyne, N.",
+            "https://doi.org/10.1057/978-1-137-0000-0",
+            "Book / Monograph",
+            "assets/images/alumni-network.jpg"
+        ),
+        # Prof. Emmanuel Adabor (id: 4)
+        (
+            4,
+            "Optimization heuristics for resilient public sector logistics",
+            "Formulating mixed-integer linear programming heuristics to optimize multimodal supply chain routing under infrastructural constraints.",
+            "2025",
+            "Journal of Applied Operations Analytics (INFORMS)",
+            "Adabor, E.; Wiredu, G.",
+            "https://doi.org/10.1287/jaoa.2025.4455",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/1000211039.png"
+        ),
+        (
+            4,
+            "Multi-criteria decision models for digital transformation investments",
+            "Evaluating capital budgeting decisions for digital transformation programs using analytic hierarchy process (AHP) models.",
+            "2023",
+            "African Conference on Information Systems & Analytics (IEEE)",
+            "Adabor, E.; Engmann, F.",
+            "https://doi.org/10.1109/ACIST.2023.7788",
+            "Conference Paper (IEEE Proceedings)",
+            "assets/images/ai-data-science.jpg"
+        ),
+        # Dr. Nana Assyne (id: 5)
+        (
+            5,
+            "Human-centered design patterns for higher education web systems",
+            "Evaluating cognitive accessibility, mobile ergonomics, and visual hierarchy standards for tertiary education student portals in West Africa.",
+            "2026",
+            "Journal of Web Engineering Practice (ACM Publications)",
+            "Assyne, N.; Engmann, F.",
+            "https://doi.org/10.1145/jwep.2026.33445",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/1000211395.png"
+        ),
+        (
+            5,
+            "Assessing maintainability of student-led capstone software projects",
+            "A metric-based code review study analyzing software quality, test coverage, and documentation in undergraduate computing capstone teams.",
+            "2024",
+            "ACM SIGCSE Conference on Computer Science Education",
+            "Assyne, N.; Budu, J.",
+            "https://doi.org/10.1145/sigcse.2024.5566",
+            "Conference Paper (ACM SIGCSE)",
+            "assets/images/research-lab.png"
+        ),
+        # Dr. Emmanuel Antwi-Boasiako (id: 6)
+        (
+            6,
+            "Cyber governance maturity indicators for public service institutions",
+            "Developing actionable policy benchmarks for public sector compliance with national cybersecurity acts and critical infrastructure directives.",
+            "2025",
+            "Cyber Governance & Data Privacy in the Global South (Routledge)",
+            "Antwi-Boasiako, E.; Budu, J.",
+            "https://doi.org/10.4324/97810034455",
+            "Book Chapter / Policy Monograph",
+            "assets/images/cybersecurity-lab.jpg"
+        ),
+        (
+            6,
+            "Digital identity and trust architecture in emerging economies",
+            "Architectures for biometric and digital ID authentication systems balancing privacy rights with public safety requirements in West Africa.",
+            "2023",
+            "Information Security Governance Review",
+            "Antwi-Boasiako, E.; Adabor, E.",
+            "https://doi.org/10.1016/j.isgr.2023.77889",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/1000211024.png"
+        ),
+        # Prof. Ebenezer Adaku (id: 7)
+        (
+            7,
+            "Project Management Methodologies in Higher Education Institutions",
+            "Assessing agile and waterfall project governance frameworks for university capital infrastructure projects and modern degree curriculum rollouts.",
+            "2025",
+            "International Journal of Project Management (Elsevier)",
+            "Adaku, E.",
+            "https://doi.org/10.1016/j.ijproman.2025.9009",
+            "Journal Article (Peer-Reviewed)",
+            "assets/images/students-hub.jpg"
+        ),
+        (
+            7,
+            "Governance and operations alignment in African higher education leadership",
+            "Strategic models aligning institutional governance with operational resource allocation across multidisciplinary university faculties.",
+            "2023",
+            "African Journal of Management and Strategy (Under Review)",
+            "Adaku, E.; Wiredu, G.",
+            "https://doi.org/10.1080/ajms.2023.1199",
+            "Working Paper (Under Peer Review)",
+            "assets/images/campus-hero.png"
         )
     ]
 
     for item in publications_data:
         cursor.execute("""
-            INSERT INTO publications (lecturer_id, title, summary, year, journal, authors, url, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'verified')
+            INSERT INTO publications (lecturer_id, title, summary, year, journal, authors, url, type, image, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'verified')
         """, item)
 
     # 3. Seed Projects

@@ -47,6 +47,8 @@ def init_db():
         journal TEXT,
         authors TEXT,
         url TEXT,
+        type TEXT DEFAULT 'Journal Article (Peer-Reviewed)',
+        image TEXT DEFAULT 'assets/images/research-lab.png',
         status TEXT DEFAULT 'unverified',
         FOREIGN KEY (lecturer_id) REFERENCES lecturers (id) ON DELETE CASCADE
     )

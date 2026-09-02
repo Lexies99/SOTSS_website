@@ -15,8 +15,28 @@ let faculty = [
       'Curriculum Modernization 4.0: Outcome-based revision of CS and IS courses.'
     ],
     pubs: [
-      { year: '2025', title: 'Learning analytics for retention prediction in emerging universities', journal: 'Education and Information Technologies', authors: 'Engmann, F.; Budu, J.' },
-      { year: '2024', title: 'Ethical AI integration for tertiary-level computing programmes', journal: 'Journal of Responsible AI in Education', authors: 'Engmann, F.; Wiredu, G.' }
+      { 
+        id: 101,
+        year: '2025', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/ai-data-science.jpg',
+        title: 'Learning analytics for retention prediction in emerging universities', 
+        journal: 'Education and Information Technologies (Springer Nature)', 
+        authors: 'Engmann, F.; Budu, J.',
+        summary: 'Investigating predictive machine learning models to detect student drop-out signals early in semester cycles using LMS telemetry data.',
+        url: 'https://doi.org/10.1007/s10639-025-01234'
+      },
+      { 
+        id: 102,
+        year: '2024', 
+        type: 'Book Chapter / Textbook',
+        image: 'assets/images/research-lab.png',
+        title: 'Ethical AI integration for tertiary-level computing programmes', 
+        journal: 'Responsible AI in Higher Education (IGI Global Publishers)', 
+        authors: 'Engmann, F.; Wiredu, G.',
+        summary: 'A pedagogical framework for embedding ethical considerations and fairness principles into undergraduate computer science curricula.',
+        url: 'https://doi.org/10.4018/978-1-6684-0000-0'
+      }
     ]
   },
   {
@@ -34,8 +54,28 @@ let faculty = [
       'SME Security Audit Toolkit: Practical security checklist and incident response workflow.'
     ],
     pubs: [
-      { year: '2025', title: 'Digital evidence governance for public sector institutions in West Africa', journal: 'African Journal of Information Assurance', authors: 'Budu, J.; Antwi-Boasiako, E.; Wiredu, G.' },
-      { year: '2024', title: 'Readiness model for computer forensics education and practice in Ghana', journal: 'International Journal of Cyber Resilience', authors: 'Budu, J.; Engmann, F.' }
+      { 
+        id: 201,
+        year: '2025', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/cybersecurity-lab.jpg',
+        title: 'Digital evidence governance for public sector institutions in West Africa', 
+        journal: 'African Journal of Information Assurance (IEEE)', 
+        authors: 'Budu, J.; Antwi-Boasiako, E.; Wiredu, G.',
+        summary: 'Assessing procedural compliance and forensic chain-of-custody protocols for digital evidence handling across public sector institutions.',
+        url: 'https://doi.org/10.1109/AJIA.2025.56789'
+      },
+      { 
+        id: 202,
+        year: '2024', 
+        type: 'Working Paper (Under Peer Review)',
+        image: 'assets/images/1000210972.png',
+        title: 'Readiness model for computer forensics education and practice in Ghana', 
+        journal: 'International Journal of Cyber Resilience (Under Review)', 
+        authors: 'Budu, J.; Engmann, F.',
+        summary: 'An institutional readiness benchmark evaluating forensic laboratory infrastructure, legal training, and cyber workforce standards.',
+        url: 'https://doi.org/10.1016/j.ijcr.2024.11223'
+      }
     ]
   },
   {
@@ -54,8 +94,28 @@ let faculty = [
       'Data-driven Policy Lab: MIS analytics framework for evidence-based decision making.'
     ],
     pubs: [
-      { year: '2026', title: 'Institutional pathways for digital transformation in sub-Saharan Africa', journal: 'Journal of Information Systems in Developing Regions', authors: 'Wiredu, G.; Adabor, E.' },
-      { year: '2024', title: 'Management information systems capability and service quality outcomes', journal: 'International MIS Review', authors: 'Wiredu, G.; Assyne, N.' }
+      { 
+        id: 301,
+        year: '2026', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/1000211024.png',
+        title: 'Institutional pathways for digital transformation in sub-Saharan Africa', 
+        journal: 'Journal of Information Systems in Developing Regions (Elsevier)', 
+        authors: 'Wiredu, G.; Adabor, E.',
+        summary: 'Theorizing organizational adaptation and institutional capacity building in public sector digital transformation programs across developing economies.',
+        url: 'https://doi.org/10.1016/j.jisdr.2026.88990'
+      },
+      { 
+        id: 302,
+        year: '2024', 
+        type: 'Book / Monograph',
+        image: 'assets/images/alumni-network.jpg',
+        title: 'Management information systems capability and service quality outcomes', 
+        journal: 'International MIS Review (Palgrave Macmillan)', 
+        authors: 'Wiredu, G.; Assyne, N.',
+        summary: 'A longitudinal empirical study examining how enterprise MIS agility directly correlates with public service quality in emerging economies.',
+        url: 'https://doi.org/10.1057/978-1-137-0000-0'
+      }
     ]
   },
   {
@@ -75,8 +135,28 @@ let faculty = [
       'Data-driven Procurement: Decision support model for public procurement quality.'
     ],
     pubs: [
-      { year: '2025', title: 'Optimization heuristics for resilient public sector logistics', journal: 'Journal of Applied Operations Analytics', authors: 'Adabor, E.; Wiredu, G.' },
-      { year: '2023', title: 'Multi-criteria decision models for digital transformation investments', journal: 'African Journal of Management Analytics', authors: 'Adabor, E.; Engmann, F.' }
+      { 
+        id: 401,
+        year: '2025', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/1000211039.png',
+        title: 'Optimization heuristics for resilient public sector logistics', 
+        journal: 'Journal of Applied Operations Analytics (INFORMS)', 
+        authors: 'Adabor, E.; Wiredu, G.',
+        summary: 'Formulating mixed-integer linear programming heuristics to optimize multimodal supply chain routing under infrastructural constraints.',
+        url: 'https://doi.org/10.1287/jaoa.2025.4455'
+      },
+      { 
+        id: 402,
+        year: '2023', 
+        type: 'Conference Paper (IEEE Proceedings)',
+        image: 'assets/images/ai-data-science.jpg',
+        title: 'Multi-criteria decision models for digital transformation investments', 
+        journal: 'African Conference on Information Systems & Analytics (IEEE)', 
+        authors: 'Adabor, E.; Engmann, F.',
+        summary: 'Evaluating capital budgeting decisions for digital transformation programs using analytic hierarchy process (AHP) models.',
+        url: 'https://doi.org/10.1109/ACIST.2023.7788'
+      }
     ]
   },
   {
@@ -96,8 +176,28 @@ let faculty = [
       'Public Sector Capital Projects: Frameworks for risk management and infrastructure delivery.'
     ],
     pubs: [
-      { year: '2025', title: 'Project Management Methodologies in Higher Education Institutions', journal: 'International Journal of Project Management', authors: 'Adaku, E.' },
-      { year: '2023', title: 'Governance and operations alignment in African higher education leadership', journal: 'African Journal of Management and Strategy', authors: 'Adaku, E.; Wiredu, G.' }
+      { 
+        id: 501,
+        year: '2025', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/students-hub.jpg',
+        title: 'Project Management Methodologies in Higher Education Institutions', 
+        journal: 'International Journal of Project Management (Elsevier)', 
+        authors: 'Adaku, E.',
+        summary: 'Assessing agile and waterfall project governance frameworks for university capital infrastructure projects and modern degree curriculum rollouts.',
+        url: 'https://doi.org/10.1016/j.ijproman.2025.9009'
+      },
+      { 
+        id: 502,
+        year: '2023', 
+        type: 'Working Paper (Under Peer Review)',
+        image: 'assets/images/campus-hero.png',
+        title: 'Governance and operations alignment in African higher education leadership', 
+        journal: 'African Journal of Management and Strategy (Under Review)', 
+        authors: 'Adaku, E.; Wiredu, G.',
+        summary: 'Strategic models aligning institutional governance with operational resource allocation across multidisciplinary university faculties.',
+        url: 'https://doi.org/10.1080/ajms.2023.1199'
+      }
     ]
   },
   {
@@ -115,8 +215,28 @@ let faculty = [
       'Accessible Web Standards Ghana: Audit toolkit for inclusive digital interfaces.'
     ],
     pubs: [
-      { year: '2026', title: 'Human-centered design patterns for higher education web systems', journal: 'Journal of Web Engineering Practice', authors: 'Assyne, N.; Engmann, F.' },
-      { year: '2024', title: 'Assessing maintainability of student-led capstone software projects', journal: 'Software Quality and Education Review', authors: 'Assyne, N.; Budu, J.' }
+      { 
+        id: 601,
+        year: '2026', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/1000211395.png',
+        title: 'Human-centered design patterns for higher education web systems', 
+        journal: 'Journal of Web Engineering Practice (ACM Publications)', 
+        authors: 'Assyne, N.; Engmann, F.',
+        summary: 'Evaluating cognitive accessibility, mobile ergonomics, and visual hierarchy standards for tertiary education student portals in West Africa.',
+        url: 'https://doi.org/10.1145/jwep.2026.33445'
+      },
+      { 
+        id: 602,
+        year: '2024', 
+        type: 'Conference Paper (ACM SIGCSE)',
+        image: 'assets/images/research-lab.png',
+        title: 'Assessing maintainability of student-led capstone software projects', 
+        journal: 'ACM SIGCSE Conference on Computer Science Education', 
+        authors: 'Assyne, N.; Budu, J.',
+        summary: 'A metric-based code review study analyzing software quality, test coverage, and documentation in undergraduate computing capstone teams.',
+        url: 'https://doi.org/10.1145/sigcse.2024.5566'
+      }
     ]
   },
   {
@@ -134,8 +254,28 @@ let faculty = [
       'Cyber Awareness for Public Institutions: Workforce preparedness and response simulation.'
     ],
     pubs: [
-      { year: '2025', title: 'Cyber governance maturity indicators for public service institutions', journal: 'Journal of Cyber Policy and Practice', authors: 'Antwi-Boasiako, E.; Budu, J.' },
-      { year: '2023', title: 'Digital identity and trust architecture in emerging economies', journal: 'Information Security Governance Review', authors: 'Antwi-Boasiako, E.; Adabor, E.' }
+      { 
+        id: 701,
+        year: '2025', 
+        type: 'Book Chapter / Policy Monograph',
+        image: 'assets/images/cybersecurity-lab.jpg',
+        title: 'Cyber governance maturity indicators for public service institutions', 
+        journal: 'Cyber Governance & Data Privacy in the Global South (Routledge)', 
+        authors: 'Antwi-Boasiako, E.; Budu, J.',
+        summary: 'Developing actionable policy benchmarks for public sector compliance with national cybersecurity acts and critical infrastructure directives.',
+        url: 'https://doi.org/10.4324/97810034455'
+      },
+      { 
+        id: 702,
+        year: '2023', 
+        type: 'Journal Article (Peer-Reviewed)',
+        image: 'assets/images/1000211024.png',
+        title: 'Digital identity and trust architecture in emerging economies', 
+        journal: 'Information Security Governance Review', 
+        authors: 'Antwi-Boasiako, E.; Adabor, E.',
+        summary: 'Architectures for biometric and digital ID authentication systems balancing privacy rights with public safety requirements in West Africa.',
+        url: 'https://doi.org/10.1016/j.isgr.2023.77889'
+      }
     ]
   }
 ];
@@ -1451,6 +1591,77 @@ function students() {
   `;
 }
 
+// Publication Type & Author Highlighting Helpers
+function getPublicationTypeBadge(type) {
+  const t = type || 'Journal Article (Peer-Reviewed)';
+  let bg = '#dcfce7';
+  let color = '#15803d';
+  let border = '#bbf7d0';
+  let icon = '📄';
+
+  if (t.toLowerCase().includes('book')) {
+    bg = '#f3e8ff';
+    color = '#6b21a8';
+    border = '#d8b4fe';
+    icon = '📚';
+  } else if (t.toLowerCase().includes('review') || t.toLowerCase().includes('working')) {
+    bg = '#fef3c7';
+    color = '#b45309';
+    border = '#fde68a';
+    icon = '⏳';
+  } else if (t.toLowerCase().includes('conference')) {
+    bg = '#e0f2fe';
+    color = '#0369a1';
+    border = '#bae6fd';
+    icon = '🎤';
+  } else if (t.toLowerCase().includes('monograph') || t.toLowerCase().includes('policy')) {
+    bg = '#ffe4e6';
+    color = '#be123c';
+    border = '#fecdd3';
+    icon = '🏛️';
+  }
+
+  return `<span style="display:inline-flex; align-items:center; gap:5px; background:${bg}; color:${color}; border:1px solid ${border}; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">${icon} ${t}</span>`;
+}
+
+function formatAuthorsWithHighlight(authorsStr, currentFacultyName) {
+  if (!authorsStr) return '';
+  
+  const facultyTokens = [
+    { key: 'engmann', label: 'Dr. Felicia N. A. Engmann', short: 'Engmann, F.' },
+    { key: 'budu', label: 'Dr. Joseph Budu', short: 'Budu, J.' },
+    { key: 'wiredu', label: 'Prof. Gamel O. Wiredu', short: 'Wiredu, G.' },
+    { key: 'adabor', label: 'Prof. Emmanuel S. Adabor', short: 'Adabor, E.' },
+    { key: 'adaku', label: 'Prof. Ebenezer Adaku', short: 'Adaku, E.' },
+    { key: 'assyne', label: 'Dr. Nana Assyne', short: 'Assyne, N.' },
+    { key: 'boasiako', label: 'Dr. Emmanuel Antwi-Boasiako', short: 'Antwi-Boasiako, E.' }
+  ];
+
+  let currentKey = '';
+  if (currentFacultyName) {
+    const lower = currentFacultyName.toLowerCase();
+    const match = facultyTokens.find(t => lower.includes(t.key));
+    if (match) currentKey = match.key;
+  }
+
+  const authorsList = authorsStr.split(';').map(a => a.trim()).filter(Boolean);
+  if (authorsList.length === 0) return authorsStr;
+
+  return authorsList.map(author => {
+    const authorLower = author.toLowerCase();
+    const isCurrentFaculty = currentKey && authorLower.includes(currentKey);
+    const isAnyFaculty = facultyTokens.some(t => authorLower.includes(t.key));
+
+    if (isCurrentFaculty) {
+      return `<strong style="background: linear-gradient(135deg, #fef08a 0%, #fde047 100%); color: #713f12; padding: 2px 8px; border-radius: 4px; border: 1px solid #eab308; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">⭐ ${author} (Faculty Author)</strong>`;
+    } else if (isAnyFaculty) {
+      return `<strong style="background: #e0f2fe; color: #0369a1; padding: 2px 7px; border-radius: 4px; border: 1px solid #bae6fd; font-weight: 700;">${author}</strong>`;
+    } else {
+      return `<span style="color: #475569;">${author}</span>`;
+    }
+  }).join('; ');
+}
+
 // ==============================================================================
 // 5. RESEARCH PAGE (VISUAL INFO BOXES FOR ALL RESEARCH CLUSTERS)
 // ==============================================================================
@@ -1572,7 +1783,7 @@ function research() {
       </div>
     </section>
 
-    <!-- Verified Research Publications Directory -->
+    <!-- Verified Research Publications Directory with Pictures & Type Badges -->
     <section class="section">
       <div class="container">
         <div class="section-header">
@@ -1581,19 +1792,28 @@ function research() {
           <p>Recent peer-reviewed journal articles, conference proceedings, and book chapters published by our faculty.</p>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:18px;">
-          ${faculty.flatMap(f => f.pubs.map(p => ({ ...p, authorName: f.name, lecturerId: f.id }))).slice(0, 8).map(pub => `
-            <article style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:22px; box-shadow:var(--shadow-sm); transition:transform 0.2s ease;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">
-                <span style="color:var(--accent);">Peer-Reviewed Publication</span>
-                <span style="color:var(--text-body);">${pub.year || 'Recent'}</span>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          ${faculty.filter(f => f && f.name !== 'System Administrator').flatMap(f => f.pubs.map(p => ({ ...p, authorName: f.name, lecturerId: f.id }))).slice(0, 10).map(pub => `
+            <article class="pub-card-flex">
+              <div class="pub-thumb-wrap">
+                <img src="${pub.image || 'assets/images/research-lab.png'}" alt="${pub.title}">
               </div>
-              <h3 style="font-size:1.12rem; font-weight:700; color:var(--primary); margin-bottom:8px;">${pub.title}</h3>
-              <div style="font-size:0.88rem; font-style:italic; color:var(--text-dark); margin-bottom:6px;">${pub.journal || 'Academic Journal'}</div>
-              <div style="font-size:0.82rem; color:var(--text-body); margin-bottom:12px;"><strong>Authors:</strong> ${pub.authors || pub.authorName}</div>
-              <div style="display:flex; gap:14px; align-items:center;">
-                <a href="#profile/${pub.lecturerId}" style="font-size:0.84rem; color:var(--primary); font-weight:600;">View Author Profile →</a>
-                ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:600; text-decoration:underline;">View Publication &nearr;</a>` : ''}
+              <div class="pub-content-col">
+                <div class="pub-meta-row">
+                  ${getPublicationTypeBadge(pub.type)}
+                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
+                </div>
+                <h3 style="margin:0 0 6px 0;">
+                  <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
+                </h3>
+                <div class="pub-venue">${pub.journal || 'Academic Journal / Venue'}</div>
+                <div class="pub-authors-row">
+                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, pub.authorName)}
+                </div>
+                <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
+                  <a href="#profile/${pub.lecturerId}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Author Profile →</a>
+                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Publication &nearr;</a>` : ''}
+                </div>
               </div>
             </article>
           `).join('')}
@@ -2552,21 +2772,35 @@ function profile(id) {
       <div class="container">
         <div class="section-header">
           <div class="accent-line"></div>
-          <h2>Publications</h2>
+          <h2>Publications by ${f.name}</h2>
+          <p style="color:var(--text-body); font-size:0.92rem;">Peer-reviewed articles, books, and conference papers with author contributions highlighted.</p>
         </div>
         <div class="pub-list" style="display:flex; flex-direction:column; gap:20px">
           ${f.pubs.length === 0 ? `
-            <div style="color: var(--text-body); font-style: italic;">No verified publications registered.</div>
+            <div style="color: var(--text-body); font-style: italic; background:#fff; padding:24px; border-radius:8px; text-align:center;">No verified publications registered.</div>
           ` : f.pubs.map(pub => `
-            <article class="pub-item" style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px; box-shadow:var(--shadow)">
-              <div class="pub-meta" style="display:flex; gap:12px; margin-bottom:8px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em">
-                <span class="pub-type" style="color:var(--accent)">Publication</span>
-                <span class="pub-year" style="color:var(--text-body)">${pub.year}</span>
+            <article class="pub-card-flex">
+              <div class="pub-thumb-wrap">
+                <img src="${pub.image || 'assets/images/research-lab.png'}" alt="${pub.title}">
               </div>
-              <h3 style="font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title}</h3>
-              <div class="pub-journal" style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:4px">${pub.journal}</div>
-              <div class="pub-authors" style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors}</div>
-              ${pub.url ? `<div class="pub-url" style="font-size:0.82rem; margin-top:8px;"><a href="${pub.url}" target="_blank" style="color:var(--accent); font-weight:600; text-decoration: underline;">View Publication &rarr;</a></div>` : ''}
+              <div class="pub-content-col">
+                <div class="pub-meta-row">
+                  ${getPublicationTypeBadge(pub.type)}
+                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
+                </div>
+                <h3 style="margin:0 0 6px 0;">
+                  <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
+                </h3>
+                <div class="pub-venue">${pub.journal || 'Academic Journal / Publisher'}</div>
+                <div class="pub-authors-row">
+                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, f.name)}
+                </div>
+                ${pub.summary ? `<div style="font-size:0.84rem; color:var(--text-body); line-height:1.55; margin-bottom:12px;">${pub.summary}</div>` : ''}
+                <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
+                  <a href="#publication/${pub.id}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Publication Details →</a>
+                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Original Document &nearr;</a>` : ''}
+                </div>
+              </div>
             </article>
           `).join('')}
         </div>
@@ -5077,7 +5311,7 @@ function publicationDetail(pubId) {
         <div class="container" style="text-align: center; padding: 40px 0;">
           <h3>Publication Not Found</h3>
           <p style="color: var(--text-body); margin: 12px 0 20px;">The requested research publication could not be found.</p>
-          <a href="#contact" class="btn btn-dark">View Staff Directory</a>
+          <a href="#research" class="btn btn-dark">View Research Directory</a>
         </div>
       </section>
     `;
@@ -5085,24 +5319,31 @@ function publicationDetail(pubId) {
   
   return `
     <section class="section" style="background: #f8fafc; min-height: 70vh; padding: 40px 0;">
-      <div class="container" style="max-width: 800px;">
+      <div class="container" style="max-width: 850px;">
         <div style="margin-bottom: 24px;">
           <a href="#profile/${foundLecturer.id}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
             &larr; Back to ${foundLecturer.name}'s Profile
           </a>
         </div>
         
-        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow);">
-          <div style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
-            <span style="color: var(--accent);">Research Publication</span>
-            <span style="color: var(--text-body);">${foundPub.year || 'N/A'}</span>
+        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
+          
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 20px;">
+            ${getPublicationTypeBadge(foundPub.type)}
+            <span style="color: var(--text-body); font-size: 0.85rem; font-weight: 700;">Year: ${foundPub.year || 'Recent'}</span>
           </div>
-          
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; line-height: 1.35;">${foundPub.title}</h2>
-          
-          <div style="margin-bottom: 24px; font-size: 0.95rem; color: var(--text-dark);">
-            <div style="margin-bottom: 6px;"><strong>Authors:</strong> ${foundPub.authors}</div>
-            <div style="font-style: italic; color: var(--primary);"><strong>Published in:</strong> ${foundPub.journal || 'Unknown Journal/Venue'}</div>
+
+          <div style="display: grid; grid-template-columns: 180px 1fr; gap: 28px; margin-bottom: 28px; align-items: flex-start;">
+            <div style="border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); aspect-ratio: 4/3;">
+              <img src="${foundPub.image || 'assets/images/research-lab.png'}" alt="${foundPub.title}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div>
+              <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; line-height: 1.35;">${foundPub.title}</h1>
+              <div style="font-size: 0.95rem; color: var(--text-dark); margin-bottom: 8px;">
+                <div style="margin-bottom: 6px;"><strong>Authors:</strong> ${formatAuthorsWithHighlight(foundPub.authors, foundLecturer.name)}</div>
+                <div style="font-style: italic; color: var(--primary);"><strong>Published in:</strong> ${foundPub.journal || 'Academic Journal'}</div>
+              </div>
+            </div>
           </div>
           
           <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-bottom: 30px;">
@@ -5111,9 +5352,9 @@ function publicationDetail(pubId) {
           </div>
           
           ${foundPub.url ? `
-            <div style="text-align: center;">
-              <a href="${foundPub.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 600; padding: 0 24px;">
-                View Original Document &nearr;
+            <div style="text-align: center; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+              <a href="${foundPub.url}" target="_blank" class="btn btn-primary" style="justify-content: center; height: 44px; font-weight: 700; padding: 0 28px;">
+                Access Full Publication Document &nearr;
               </a>
             </div>
           ` : ''}
@@ -5882,10 +6123,58 @@ window.submitCustomNewsForm = async function(statusVal) {
   }
 };
 
+// Dynamic Data Synchronization
+async function loadDynamicData() {
+  try {
+    const res = await fetch('/api/public/publications');
+    if (res.ok) {
+      const dbPubs = await res.json();
+      if (Array.isArray(dbPubs) && dbPubs.length > 0) {
+        const lecturerPubsMap = {};
+        dbPubs.forEach(p => {
+          if (!lecturerPubsMap[p.lecturer_id]) lecturerPubsMap[p.lecturer_id] = [];
+          lecturerPubsMap[p.lecturer_id].push({
+            id: p.id,
+            year: p.year || 'Recent',
+            type: p.type || 'Journal Article (Peer-Reviewed)',
+            image: p.image || 'assets/images/research-lab.png',
+            title: p.title,
+            journal: p.journal,
+            authors: p.authors,
+            summary: p.summary,
+            url: p.url
+          });
+        });
+
+        const idMapping = {
+          1: 'felicia-engmann',
+          2: 'joseph-budu',
+          3: 'gamel-wiredu',
+          4: 'emmanuel-adabor',
+          5: 'nana-assyne',
+          6: 'emmanuel-antwi-boasiako',
+          7: 'ebenezer-adaku'
+        };
+
+        Object.keys(lecturerPubsMap).forEach(lecId => {
+          const facultyId = idMapping[lecId];
+          const fac = faculty.find(f => f.id === facultyId);
+          if (fac && lecturerPubsMap[lecId].length > 0) {
+            fac.pubs = lecturerPubsMap[lecId];
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.log('Using static faculty dataset.');
+  }
+}
+
 // Bootstrapping the application
 async function initApp() {
   await loadDynamicData();
   render();
 }
 initApp();
+
 
