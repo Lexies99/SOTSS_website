@@ -469,21 +469,21 @@ const programmesData = [
 ];
 
 const searchPages = [
-  { title: 'Home', hash: '#home', section: 'Main page', keywords: 'home department computer science information systems gimpa' },
-  { title: 'Introduction', hash: '#introduction', section: 'Main page', keywords: 'introduction about department mission vision programmes' },
-  { title: 'Research', hash: '#research', section: 'Main page', keywords: 'research machine learning ai data science cybersecurity analytics' },
-  { title: 'Contact', hash: '#contact', section: 'Main page', keywords: 'contact faculty staff lecturer email phone office' },
-  { title: 'Department News', hash: '#news', section: 'Main page', keywords: 'news department notification announcement updates' },
-  { title: 'Cooperation', hash: '#cooperation', section: 'Main page', keywords: 'cooperation partnership industry alumni internship collaboration' },
+  { title: 'Home', hash: '#home', section: 'Main page', keywords: 'home department computer science information systems gimpa sotss' },
+  { title: 'About Us', hash: '#about', section: 'Main page', keywords: 'about us department history mission vision leadership merger felicia engmann' },
+  { title: 'Study With Us', hash: '#study', section: 'Main page', keywords: 'study programmes undergraduate masters phd bsc ict computer science analytics' },
+  { title: 'For Students', hash: '#students', section: 'Main page', keywords: 'students portal lms moodle timetable academic calendar advising clubs gdsc internships handbook faq' },
+  { title: 'Research & Innovation', hash: '#research', section: 'Main page', keywords: 'research machine learning ai data science cybersecurity digital forensics iot robotics' },
+  { title: 'Faculty & Staff', hash: '#faculty', section: 'Main page', keywords: 'faculty staff lecturers directory professors research interests office email' },
+  { title: 'Alumni Network', hash: '#alumni', section: 'Main page', keywords: 'alumni network graduates success stories career mentorship registration' },
+  { title: 'Department News', hash: '#news', section: 'Main page', keywords: 'news department notification announcement updates press' },
+  { title: 'Contact', hash: '#contact', section: 'Main page', keywords: 'contact location email phone greenhill accra office' },
   { title: 'Dr. Joseph Budu', hash: '#profile/joseph-budu', section: 'Faculty profile', keywords: 'joseph budu cybersecurity digital forensics senior lecturer' },
-  { title: 'Prof. Gamel O. Wiredu', hash: '#profile/gamel-wiredu', section: 'Faculty profile', keywords: 'gamel wiredu professor information systems mis' },
+  { title: 'Prof. Gamel O. Wiredu', hash: '#profile/gamel-wiredu', section: 'Faculty profile', keywords: 'gamel wiredu professor information systems mis phd' },
   { title: 'Dr. Felicia N. A. Engmann', hash: '#profile/felicia-engmann', section: 'Faculty profile', keywords: 'felicia engmann head of department data science ai' },
   { title: 'Prof. Emmanuel S. Adabor', hash: '#profile/emmanuel-adabor', section: 'Faculty profile', keywords: 'emmanuel adabor professor industrial analytics optimization' },
   { title: 'Dr. Nana Assyne', hash: '#profile/nana-assyne', section: 'Faculty profile', keywords: 'nana assyne lecturer software engineering hci' },
-  { title: 'Dr. Emmanuel Antwi-Boasiako', hash: '#profile/emmanuel-antwi-boasiako', section: 'Faculty profile', keywords: 'emmanuel antwi boasiako lecturer cyber policy identity' },
-  { title: 'News: GIMPA & UESTC Academic Partnership', hash: '#news-uestc-partnership', section: 'Department News', keywords: 'uestc china international collaboration joint research exchange academic partner' },
-  { title: 'News: GIMPA & York University Student Consulting', hash: '#news-york-consulting', section: 'Department News', keywords: 'york student consulting project industry partner challenge client communication' },
-  { title: 'News: Faculty Vacancy (Senior Lecturers & Lecturers)', hash: '#news-faculty-vacancy', section: 'Department News', keywords: 'vacancy jobs senior lecturers recruitment computer science information systems' }
+  { title: 'Dr. Emmanuel Antwi-Boasiako', hash: '#profile/emmanuel-antwi-boasiako', section: 'Faculty profile', keywords: 'emmanuel antwi boasiako lecturer cyber policy identity' }
 ];
 
 const root = document.getElementById('root');
@@ -504,13 +504,14 @@ function topBar() {
     <div class="top-bar">
       <div class="container">
         <div class="top-bar-left">
-          <a href="https://gimpa.edu.gh/">GIMPA Home</a>
-          <a href="https://lms.gimpa.edu.gh/">LMS</a>
-          <a href="https://apply.gimpa.edu.gh/start">Apply Now</a>
+          <a href="https://gimpa.edu.gh/" target="_blank">GIMPA Home</a>
+          <a href="https://lms.gimpa.edu.gh/" target="_blank">LMS</a>
+          <a href="https://apply.gimpa.edu.gh/start" target="_blank" style="color:#ffd700;font-weight:700">Apply Now</a>
+          <a href="#students">Student Hub</a>
           ${isLoggedIn && user ? `<span class="user-welcome" style="margin-left: 15px; color: #bfd3e7; font-size: 0.8rem;">Welcome, ${user.name}</span>` : ''}
         </div>
         <div class="top-bar-right">
-          <a href="https://gimpa.edu.gh/library/">Library</a>
+          <a href="https://gimpa.edu.gh/library/" target="_blank">Library</a>
           ${isLoggedIn ? `<a href="#intranet" class="intranet-link" style="margin-right: 15px; font-weight: 600; color: var(--accent);">Intranet Portal</a>` : ''}
           <a href="#intranet" class="notification-bell" aria-label="Notifications" title="Notifications" onclick="window.activeIntranetTab = 'verification';" style="${isLoggedIn ? 'display: inline-flex;' : 'display: none;'}"><span class="notification-dot"></span></a>
           <a href="${isLoggedIn ? '#logout' : '#login'}" class="login-link">${isLoggedIn ? 'Logout' : 'Login'}</a>
@@ -521,7 +522,7 @@ function topBar() {
 }
 
 function header(active) {
-  const isNavActive = (item) => active === item ? 'active' : '';
+  const isNavActive = (item) => (active === item || (item === 'about' && active === 'introduction') || (item === 'study' && active === 'programmes')) ? 'active' : '';
   return `
     <header>
       <div class="container">
@@ -530,25 +531,30 @@ function header(active) {
             <div class="logo-icon">CS</div>
             <div class="logo-text">
               <h1>Computer Science &amp; IS</h1>
-              <span>GIMPA · School of Technology</span>
+              <span>GIMPA · School of Technology &amp; Social Sciences</span>
             </div>
           </a>
-          <div class="search-bar">
-            <input type="search" id="siteSearch" placeholder="Search website">
-            <div class="search-results" id="siteSearchResults"></div>
-          </div>
+          
           <nav>
             <button class="nav-toggle" onclick="document.querySelector('nav ul').classList.toggle('open')" aria-label="Toggle menu">
               <span></span><span></span><span></span>
             </button>
             <ul>
               <li><a href="#home" class="${isNavActive('home')}">Home</a></li>
-              <li><a href="#introduction" class="${isNavActive('introduction')}">Introduction</a></li>
+              <li><a href="#about" class="${isNavActive('about')}">About Us</a></li>
+              <li><a href="#study" class="${isNavActive('study')}">Study With Us</a></li>
+              <li><a href="#students" class="${isNavActive('students')}">For Students</a></li>
               <li><a href="#research" class="${isNavActive('research')}">Research</a></li>
-              <li><a href="#contact" class="${isNavActive('contact') || isNavActive('profile')}">Contact</a></li>
+              <li><a href="#faculty" class="${isNavActive('faculty') || isNavActive('profile')}">Faculty &amp; Staff</a></li>
+              <li><a href="#alumni" class="${isNavActive('alumni') || isNavActive('cooperation')}">Alumni</a></li>
               <li><a href="#news" class="${isNavActive('news')}">News</a></li>
-              <li><a href="#cooperation" class="${isNavActive('cooperation')}">Cooperation</a></li>
+              <li><a href="#contact" class="${isNavActive('contact')}">Contact</a></li>
             </ul>
+
+            <div class="header-search">
+              <input type="search" id="siteSearch" placeholder="Search...">
+              <div class="search-results" id="siteSearchResults"></div>
+            </div>
           </nav>
         </div>
       </div>
@@ -562,44 +568,50 @@ function footer() {
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="logo" style="margin-bottom:4px">
+            <div class="logo" style="margin-bottom:8px">
               <div class="logo-icon">CS</div>
               <div class="logo-text">
-                <h1 style="font-size:1rem">Computer Science &amp; IS</h1>
-                <span>GIMPA</span>
+                <h1 style="font-size:1.05rem">Computer Science &amp; IS</h1>
+                <span>GIMPA · School of Technology</span>
               </div>
             </div>
-            <p>The Department of Computer Science and Information Systems, School of Technology and Social Sciences, Ghana Institute of Management and Public Administration.</p>
+            <p>Department of Computer Science and Information Systems, School of Technology and Social Sciences, Ghana Institute of Management and Public Administration (GIMPA).</p>
+            <div style="margin-top:14px; font-size:0.85rem; color:#cbd5e1;">Greenhill Campus, Achimota, Accra, Ghana</div>
           </div>
           <div class="footer-col">
-            <h4>Quick Links</h4>
-            <a href="#home">Home</a>
-            <a href="#introduction">Introduction</a>
-            <a href="#research">Research</a>
-            <a href="#contact">Contact</a>
-            <a href="#cooperation">Cooperation</a>
+            <h4>Explore</h4>
+            <a href="#about">About Us</a>
+            <a href="#study">Study With Us</a>
+            <a href="#students">For Students</a>
+            <a href="#research">Research &amp; Innovation</a>
+            <a href="#faculty">Faculty &amp; Staff</a>
+            <a href="#alumni">Alumni Network</a>
+            <a href="#news">News &amp; Events</a>
           </div>
           <div class="footer-col">
-            <h4>Programmes</h4>
-            <a href="#introduction">BSc Computer Science</a>
-            <a href="#introduction">BSc ICT</a>
-            <a href="#introduction">MSc Cybersecurity</a>
-            <a href="#introduction">PhD Info Systems</a>
+            <h4>Academic Degrees</h4>
+            <a href="#programme/bsc-computer-science">BSc Computer Science</a>
+            <a href="#programme/bsc-ict">BSc ICT</a>
+            <a href="#programme/msc-cybersecurity">MSc Digital Forensics &amp; Cyber</a>
+            <a href="#programme/msc-industrial-analytics">MSc Industrial Analytics</a>
+            <a href="#programme/phd-information-systems">PhD Information Systems</a>
+            <a href="https://apply.gimpa.edu.gh/start" target="_blank" style="color:#38bdf8;font-weight:700">Online Admissions Portal →</a>
           </div>
           <div class="footer-col">
-            <h4>Contact</h4>
+            <h4>Contact &amp; Support</h4>
             <a href="mailto:csshead@gimpa.edu.gh">csshead@gimpa.edu.gh</a>
             <a href="tel:+233501620138">+233 (0) 501620138</a>
-            <a>Mon-Sat: 8:30 – 18:00 GMT</a>
-            <a href="https://gimpa.edu.gh/">gimpa.edu.gh</a>
+            <a href="tel:+233302401681">+233 302-401681-3</a>
+            <a>Mon – Sat: 8:30 – 18:00 GMT</a>
+            <a href="#contact" style="color:#ffd700;font-weight:600">Send an Inquiry →</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 GIMPA. All rights reserved.</span>
+          <span>© 2026 GIMPA School of Technology &amp; Social Sciences. All rights reserved.</span>
           <div class="social-links">
-            <a href="https://gimpa.edu.gh/" title="Website"><img class="inline-icon" src="assets/icons/icon-screen.svg" alt="Website"></a>
-            <a href="mailto:csshead@gimpa.edu.gh" title="Email"><img class="inline-icon" src="assets/icons/icon-email.svg" alt="Email"></a>
-            <a href="tel:+233501620138" title="Phone"><img class="inline-icon" src="assets/icons/icon-phone.svg" alt="Phone"></a>
+            <a href="https://gimpa.edu.gh/" target="_blank" title="GIMPA Official Website"><img class="inline-icon" src="assets/icons/icon-screen.svg" alt="Website"></a>
+            <a href="mailto:csshead@gimpa.edu.gh" title="Email Department"><img class="inline-icon" src="assets/icons/icon-email.svg" alt="Email"></a>
+            <a href="tel:+233501620138" title="Call Department"><img class="inline-icon" src="assets/icons/icon-phone.svg" alt="Phone"></a>
           </div>
         </div>
       </div>
@@ -607,75 +619,259 @@ function footer() {
   `;
 }
 
-// Pages Definitions
+// Global Carousel State for Home Page
+window.heroSlidesData = [
+  {
+    image: 'assets/images/campus-hero.png',
+    title: 'GIMPA Greenhill Technology Campus',
+    desc: 'State-of-the-art computational laboratories, lecture theatres, and research facilities in Accra.'
+  },
+  {
+    image: 'assets/images/students-hub.jpg',
+    title: 'Collaborative Student Innovation & Learning',
+    desc: 'Empowering future software engineers, data scientists, and IT leaders in collaborative commons.'
+  },
+  {
+    image: 'assets/images/cybersecurity-lab.jpg',
+    title: 'Cyber Range & Digital Forensics Lab',
+    desc: 'Advanced threat intelligence simulation, network defense, and digital forensics investigations.'
+  },
+  {
+    image: 'assets/images/ai-data-science.jpg',
+    title: 'Artificial Intelligence & Robotics Research',
+    desc: 'Pioneering machine learning, computer vision, and applied robotics across West Africa.'
+  },
+  {
+    image: 'assets/images/alumni-network.jpg',
+    title: 'Global Alumni Leadership & Impact',
+    desc: 'Our graduates lead top technology enterprises, fintech pioneers, and international research institutions.'
+  }
+];
 
+window.currentHeroSlide = 0;
+window.heroSlideInterval = null;
+
+window.changeHeroSlide = function(delta) {
+  const total = window.heroSlidesData.length;
+  window.goToHeroSlide((window.currentHeroSlide + delta + total) % total);
+};
+
+window.goToHeroSlide = function(index) {
+  window.currentHeroSlide = index;
+  const slides = document.querySelectorAll('.hero-carousel-slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  const titleEl = document.getElementById('heroSlideTitle');
+  const descEl = document.getElementById('heroSlideDesc');
+
+  slides.forEach((s, idx) => {
+    s.classList.toggle('active', idx === index);
+  });
+  dots.forEach((d, idx) => {
+    d.classList.toggle('active', idx === index);
+  });
+
+  if (titleEl && window.heroSlidesData[index]) {
+    titleEl.textContent = window.heroSlidesData[index].title;
+  }
+  if (descEl && window.heroSlidesData[index]) {
+    descEl.textContent = window.heroSlidesData[index].desc;
+  }
+};
+
+window.startHeroAutoplay = function() {
+  if (window.heroSlideInterval) clearInterval(window.heroSlideInterval);
+  window.heroSlideInterval = setInterval(() => {
+    if (document.querySelector('.hero-carousel-container')) {
+      window.changeHeroSlide(1);
+    }
+  }, 5000);
+};
+
+// ==============================================================================
+// 1. HOME PAGE (SPLIT HERO: TEXT LEFT + IMAGE SLIDER WITH ARROWS RIGHT)
+// ==============================================================================
 function home() {
+  setTimeout(() => {
+    window.startHeroAutoplay();
+  }, 50);
+
   return `
-    <section class="hero">
-      <div class="hero-bg slideshow">
-        <img class="active" src="assets/images/1000210972.png" alt="GIMPA CS Slideshow 1">
-        <img src="assets/images/1000211024.png" alt="GIMPA CS Slideshow 2">
-        <img src="assets/images/1000211025.png" alt="GIMPA CS Slideshow 3">
-        <img src="assets/images/1000211035.png" alt="GIMPA CS Slideshow 4">
-      </div>
+    <!-- Split Hero Section: Text Left / Slider Right -->
+    <section class="hero-split-section">
       <div class="container">
-        <div class="hero-content">
-          <div class="hero-badge">School of Technology &amp; Social Sciences</div>
-          <h2>Shaping Ghana's Digital Future Through Computing Excellence</h2>
-          <p>Driven by the needs of Ghana and the West African sub-region, we employ our core values of excellence, quality and connectedness to deliver relevant education, offer consultancy, and conduct cutting-edge research in computing fields.</p>
-          <div class="hero-links">
-            <a href="#introduction" class="btn btn-primary">Department Introduction →</a>
-            <a href="#research" class="btn btn-outline">Our Research Areas</a>
+        <div class="hero-split-grid">
+          
+          <!-- Left Column: Typography & CTAs (Not on top of picture) -->
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">
+              <span style="font-size:1.1rem">🎓</span> GIMPA School of Technology &amp; Social Sciences
+            </div>
+            <h1>Empowering Africa's <span>Tech Leaders</span> Through Computing Excellence</h1>
+            <p>
+              The Department of Computer Science &amp; Information Systems delivers premier degree programmes, world-class research in AI and Cybersecurity, and transformative industry partnerships at GIMPA Greenhill.
+            </p>
+            <div class="hero-actions-row">
+              <a href="#study" class="btn btn-primary" style="padding: 12px 24px; font-weight:700;">Explore Programmes →</a>
+              <a href="#students" class="btn btn-outline" style="padding: 12px 22px; font-weight:600; border-color:#38bdf8; color:#38bdf8;">For Students</a>
+              <a href="#research" class="btn btn-outline" style="padding: 12px 20px; font-weight:600;">Research Labs</a>
+            </div>
+
+            <!-- Key Metric Stats Chips -->
+            <div class="hero-stat-chips">
+              <div class="stat-chip-item">
+                <div class="stat-chip-num">100%</div>
+                <div class="stat-chip-label">GTEC Accredited</div>
+              </div>
+              <div class="stat-chip-item">
+                <div class="stat-chip-num">6+</div>
+                <div class="stat-chip-label">Research Clusters</div>
+              </div>
+              <div class="stat-chip-item">
+                <div class="stat-chip-num">15+</div>
+                <div class="stat-chip-label">Faculty &amp; Fellows</div>
+              </div>
+              <div class="stat-chip-item">
+                <div class="stat-chip-num">94%</div>
+                <div class="stat-chip-label">Graduate Career Rate</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Right Column: Interactive Photo Slider with Arrows & Dots -->
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" onmouseenter="clearInterval(window.heroSlideInterval)" onmouseleave="window.startHeroAutoplay()">
+              ${window.heroSlidesData.map((s, idx) => `
+                <div class="hero-carousel-slide ${idx === 0 ? 'active' : ''}">
+                  <img src="${s.image}" alt="${s.title}">
+                </div>
+              `).join('')}
+
+              <!-- Caption Overlay Bar -->
+              <div class="carousel-caption-bar">
+                <div class="carousel-caption-title" id="heroSlideTitle">${window.heroSlidesData[0].title}</div>
+                <div class="carousel-caption-desc" id="heroSlideDesc">${window.heroSlidesData[0].desc}</div>
+              </div>
+
+              <!-- Navigation Arrows -->
+              <button class="slider-arrow-btn slider-arrow-prev" onclick="window.changeHeroSlide(-1)" aria-label="Previous Slide">‹</button>
+              <button class="slider-arrow-btn slider-arrow-next" onclick="window.changeHeroSlide(1)" aria-label="Next Slide">›</button>
+
+              <!-- Dot Indicators -->
+              <div class="slider-dots-row">
+                ${window.heroSlidesData.map((_, idx) => `
+                  <button class="slider-dot ${idx === 0 ? 'active' : ''}" onclick="window.goToHeroSlide(${idx})" aria-label="Slide ${idx + 1}"></button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
+    <!-- Screen-Filling Wide Info Boxes with Real Images -->
+    <section class="section" style="background:#f8fafc; padding: 70px 0;">
+      <div class="container">
+        <div class="section-header" style="max-width: 800px; margin-bottom: 44px;">
+          <div class="accent-line"></div>
+          <h2>Explore SOTSS Computing Hub</h2>
+          <p>Discover our accredited academic degree pathways, groundbreaking research centers, student community, and alumni impact.</p>
+        </div>
+
+        <div class="info-box-grid">
+          
+          <!-- Box 1: Study With Us -->
+          <a href="#study" class="info-box-card fade-up">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/students-hub.jpg" alt="Study Programmes at GIMPA">
+              <span class="info-box-tag">Academic Degrees</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Study With Us</h3>
+              <p>Explore undergraduate, postgraduate, and PhD programmes in Computer Science, ICT, Cybersecurity, and Industrial Analytics designed for the modern digital economy.</p>
+              <span class="info-box-link">View All Programmes →</span>
+            </div>
+          </a>
+
+          <!-- Box 2: Research & Innovation -->
+          <a href="#research" class="info-box-card fade-up fade-up-d1">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/ai-data-science.jpg" alt="AI & Robotics Research Lab">
+              <span class="info-box-tag">Research Clusters</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Groundbreaking Research</h3>
+              <p>High-impact scientific investigations in Artificial Intelligence, predictive data science, wireless IoT networks, and computational health informatics.</p>
+              <span class="info-box-link">Explore Research Labs →</span>
+            </div>
+          </a>
+
+          <!-- Box 3: For Students -->
+          <a href="#students" class="info-box-card fade-up fade-up-d2">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/1000211024.png" alt="Student Life and Resources">
+              <span class="info-box-tag">Student Central</span>
+            </div>
+            <div class="info-box-content">
+              <h3>For Students</h3>
+              <p>Direct access to GIMPA LMS, Student MIS, academic calendars, timetables, Google Developer Student Club, internship placements, and advisement.</p>
+              <span class="info-box-link">Open Student Hub →</span>
+            </div>
+          </a>
+
+          <!-- Box 4: Faculty Directory -->
+          <a href="#faculty" class="info-box-card fade-up">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/1000211035.png" alt="Faculty & Academic Staff">
+              <span class="info-box-tag">Faculty Directory</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Faculty &amp; Experts</h3>
+              <p>Meet our accomplished professors, senior lecturers, and industry fellows leading computing research and teaching across GIMPA SOTSS.</p>
+              <span class="info-box-link">Meet the Faculty →</span>
+            </div>
+          </a>
+
+          <!-- Box 5: Alumni Network -->
+          <a href="#alumni" class="info-box-card fade-up fade-up-d1">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/alumni-network.jpg" alt="GIMPA SOTSS Alumni">
+              <span class="info-box-tag">Alumni Association</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Alumni &amp; Global Impact</h3>
+              <p>Connect with over two decades of tech graduates working in fintech, cybersecurity, software engineering, government, and global academia.</p>
+              <span class="info-box-link">Join Alumni Network →</span>
+            </div>
+          </a>
+
+          <!-- Box 6: Cybersecurity Lab -->
+          <a href="#research" class="info-box-card fade-up fade-up-d2">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/cybersecurity-lab.jpg" alt="Cybersecurity Lab">
+              <span class="info-box-tag">Specialized Lab</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Cybersecurity &amp; Forensics</h3>
+              <p>Hands-on cyber range training, digital forensics analysis, and vulnerability intelligence simulation in our specialized computing laboratories.</p>
+              <span class="info-box-link">Discover Facilities →</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Department News & Updates -->
     <section class="section">
       <div class="container">
         <div class="section-header">
           <div class="accent-line"></div>
-          <h2>Explore the Department</h2>
-          <p>Discover our programmes, research areas, staff, and partnership opportunities.</p>
-        </div>
-        <div class="card-grid">
-          <a href="#introduction" class="card fade-up fade-up-d1">
-            <div class="card-icon"><img src="assets/icons/icon-document.svg" alt="Document icon"></div>
-            <h3>Department Introduction</h3>
-            <p>Learn about our history, mission, strategic programmes and the merger that formed our dynamic department in 2023.</p>
-            <span class="card-link">Learn more →</span>
-          </a>
-          <a href="#research" class="card fade-up fade-up-d2">
-            <div class="card-icon"><img src="assets/icons/icon-screen.svg" alt="Research icon"></div>
-            <h3>Research &amp; Expertise</h3>
-            <p>Explore our research strengths in predictive analytics, machine learning, wireless sensor networks, cybersecurity and more.</p>
-            <span class="card-link">Explore research →</span>
-          </a>
-          <a href="#contact" class="card fade-up fade-up-d3">
-            <div class="card-icon"><img src="assets/icons/icon-people.svg" alt="People icon"></div>
-            <h3>Staff &amp; Contact</h3>
-            <p>Meet our dynamic blend of experienced and young faculty with diverse backgrounds in IT and computing.</p>
-            <span class="card-link">View staff →</span>
-          </a>
-          <a href="#cooperation" class="card fade-up fade-up-d1">
-            <div class="card-icon"><img src="assets/icons/icon-cooperate.svg" alt="Cooperation icon"></div>
-            <h3>Cooperation</h3>
-            <p>Partner with us through industry collaboration, student internships, alumni networks and community engagement.</p>
-            <span class="card-link">Collaborate →</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Latest News &amp; Updates</h2>
-          <p>Stay informed about the latest happenings in our department and across GIMPA.</p>
+          <h2>Latest News &amp; Spotlights</h2>
+          <p>Stay informed about research breakthroughs, international partnerships, and student achievements.</p>
         </div>
         <div class="news-grid">
-          ${news.map((n, idx) => {
+          ${news.slice(0, 3).map((n, idx) => {
             const fadeClasses = ['fade-up', 'fade-up fade-up-d1', 'fade-up fade-up-d2'];
             const fadeClass = fadeClasses[idx % 3];
             return `
@@ -690,685 +886,1086 @@ function home() {
             `;
           }).join('')}
         </div>
-        <div style="text-align:center;margin-top:32px">
-          <a href="#news" class="btn btn-dark">View Department News →</a>
+        <div style="text-align:center;margin-top:36px">
+          <a href="#news" class="btn btn-dark" style="padding: 12px 28px; font-weight:700;">View All Department News →</a>
         </div>
       </div>
     </section>
 
-    <section class="section section-dark">
+    <!-- Quick Action Banner -->
+    <section class="section" style="background: linear-gradient(135deg, #002b49 0%, #083b66 100%); color: #fff; padding: 50px 0;">
       <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2 style="color:#fff">Apply to Study With Us</h2>
-          <p>We offer undergraduate, postgraduate diploma, master's, and doctoral programmes in computing and information systems.</p>
-        </div>
-        <div class="card-grid">
-          <div class="card card-dark">
-            <h3>BSc Computer Science</h3>
-            <p>A four-year programme equipping graduates with strong technical skills in programming, algorithms, AI, robotics and software engineering.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">4 Years · Full-time</div>
-          </div>
-          <div class="card card-dark">
-            <h3>BSc Information &amp; Communication Technology</h3>
-            <p>A scientific approach to ICT covering IT entrepreneurship, wireless networks, mobile programming, and human-computer interaction.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">4 Years · Full-time</div>
-          </div>
-          <div class="card card-dark">
-            <h3>MSc Digital Forensics &amp; Cybersecurity</h3>
-            <p>Imparts knowledge on cybersecurity risk analysis, digital forensics, cryptography, and the legal aspects of information technology.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">1 Year · Weekends</div>
-          </div>
-          <div class="card card-dark">
-            <h3>PhD Information Systems</h3>
-            <p>A doctoral programme for those who seek to deeply understand and advance the critical field of information systems through rigorous scientific inquiry.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">3 Years · Full-time</div>
-          </div>
-          <div class="card card-dark">
-            <h3>MSc/MPhil Information &amp; Communication Technology</h3>
-            <p>Equips students with scientific knowledge for analytical thinking in ICT development and management, including AI applications.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">2 Years · Weekends/Evening</div>
-          </div>
-          <div class="card card-dark">
-            <h3>MSc Industrial Analytics</h3>
-            <p>Combines advanced mathematical, statistical, and computational techniques with domain knowledge to solve real-world industrial problems.</p>
-            <div style="margin-top:14px;font-size:0.82rem;color:var(--text-secondary)">2 Years · Flexible</div>
-          </div>
-        </div>
-        <div style="text-align:center;margin-top:40px">
-          <a href="https://apply.gimpa.edu.gh/start" class="btn btn-primary">Apply Now →</a>
-          <a href="#introduction" class="btn btn-outline" style="margin-left:12px">View All Programmes</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="two-col">
-          <div class="two-col-text">
-            <div class="accent-line"></div>
-            <h2>Research at the Department</h2>
-            <p>The department has a dynamic blend of experienced and young faculty with enormous research output. We pride ourselves in our ability to innovate and provide cutting-edge information technology solutions across various platforms in collaboration with our students.</p>
-            <p>Our research areas include predictive analytics, wireless sensor networks and IoT, machine learning, computational immunology, biomedical informatics, and computing in mathematics, natural science, engineering and medicine.</p>
-            <a href="#research" class="btn btn-dark" style="margin-top:16px">Explore Our Research →</a>
-          </div>
-          <div class="two-col-img">
-            <img src="assets/images/1000211395.png" alt="Students in computer lab">
-          </div>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function introduction() {
-  return `
-    <section class="hero" style="min-height:380px">
-      <div class="hero-bg slideshow">
-        <img class="active" src="assets/images/1000210972.png" alt="GIMPA CS Slideshow 1">
-        <img src="assets/images/1000211024.png" alt="GIMPA CS Slideshow 2">
-        <img src="assets/images/1000211025.png" alt="GIMPA CS Slideshow 3">
-        <img src="assets/images/1000211035.png" alt="GIMPA CS Slideshow 4">
-      </div>
-      <div class="container">
-        <div class="hero-content" style="padding:60px 0">
-          <div class="hero-badge">About the Department</div>
-          <h2>Introduction to the Department of Computer Science &amp; Information Systems</h2>
-          <p>Delivering high-caliber computing education, industry-aligned training, and cutting-edge research under GIMPA School of Technology and Social Sciences.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="two-col">
-          <div class="two-col-text">
-            <div class="accent-line"></div>
-            <h2>About the Department &amp; Institutional History</h2>
-            <p>The Ghana Institute of Management and Public Administration (GIMPA) was established in <strong>1961</strong> as a joint initiative of the Government of Ghana and the United Nations Special Fund to train public administration leaders.</p>
-            <p>In <strong>September 2017</strong>, the Department of Computer Sciences was created under the School of Technology to decentralize academic administration and offer specialized degree programs in computational sciences.</p>
-            <p>In <strong>September 2023</strong>, GIMPA management formally merged the <em>Department of Computer Sciences</em> and the <em>Department of Information Systems and Innovation</em> to establish the unified <strong>Department of Computer Science &amp; Information Systems</strong> under the School of Technology and Social Sciences (SOTSS).</p>
-            <p>Both classrooms and computer laboratories are equipped with modern computing infrastructure and specialized software, including Simio simulation software under an academic grant from Simio LLC.</p>
-          </div>
-          <div class="two-col-img">
-            <img src="assets/images/1000211039.png" alt="Computer Lab">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="two-col" style="align-items:center">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px;">
           <div>
-            <div class="staff-card" style="max-width:320px;margin:0 auto">
-              <div class="staff-photo"><img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>
-              <h3>Dr. Felicia Engmann</h3>
-              <div class="role">Head, Department of Computer Science &amp; IS</div>
+            <h2 style="color: #fff; font-size: 1.8rem; margin-bottom: 8px;">Ready to Begin Your Tech Career at GIMPA?</h2>
+            <p style="color: #cbd5e1; font-size: 1rem; margin: 0; max-width: 650px;">Admissions are open for Regular, Evening, and Weekend sessions across all undergraduate and postgraduate programmes.</p>
+          </div>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="padding: 12px 26px; font-weight: 700; background: #ffd700; color: #002b49; border-color: #ffd700;">Apply Online Now →</a>
+            <a href="#contact" class="btn btn-outline" style="padding: 12px 24px; font-weight: 600;">Contact Department</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// ==============================================================================
+// 2. ABOUT US PAGE (REPLACES INTRODUCTION)
+// ==============================================================================
+function about() {
+  return `
+    <section class="hero-split-section" style="padding: 50px 0;">
+      <div class="container">
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Institutional Profile</div>
+            <h1>About the <span>Department</span> &amp; SOTSS</h1>
+            <p>
+              The Department of Computer Science &amp; Information Systems is the premier computing and computational intelligence academic department at the Ghana Institute of Management and Public Administration (GIMPA).
+            </p>
+            <div class="hero-actions-row">
+              <a href="#study" class="btn btn-primary">Our Programmes →</a>
+              <a href="#faculty" class="btn btn-outline">Meet Faculty</a>
+            </div>
+          </div>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/campus-hero.png" alt="GIMPA Campus" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- History & Department Merger -->
+    <section class="section">
+      <div class="container">
+        <div class="two-col" style="align-items: center; gap: 48px;">
+          <div class="two-col-text">
+            <div class="accent-line"></div>
+            <h2>Institutional History &amp; Strategic Merger</h2>
+            <p>
+              The Ghana Institute of Management and Public Administration (GIMPA) was established in <strong>1961</strong> as a joint initiative of the Government of Ghana and the United Nations Special Fund to build executive leadership and public administration excellence.
+            </p>
+            <p>
+              In <strong>September 2017</strong>, the Department of Computer Sciences was created under the School of Technology to deliver specialized undergraduate and graduate programmes in software engineering and IT infrastructure.
+            </p>
+            <p>
+              In <strong>September 2023</strong>, GIMPA management formally unified the <em>Department of Computer Sciences</em> and the <em>Department of Information Systems and Innovation</em> to establish the <strong>Department of Computer Science &amp; Information Systems</strong> under the School of Technology and Social Sciences (SOTSS).
+            </p>
+            <p>
+              This merger consolidated academic faculty, research laboratories, and industry linkages to build a powerhouse in computational research, enterprise systems, and cyber innovation.
+            </p>
+          </div>
+          <div class="two-col-img">
+            <img src="assets/images/1000211039.png" alt="Computing Lab Facility" style="border-radius:var(--radius); box-shadow:var(--shadow-lg); width:100%;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Message from Head of Department -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="two-col" style="align-items: center; gap: 48px;">
+          <div style="text-align: center;">
+            <div class="staff-card" style="max-width: 320px; margin: 0 auto; box-shadow: var(--shadow-lg);">
+              <div class="staff-photo">
+                <img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width: 120px; height: 120px; border-radius: 50%; margin: auto; object-fit: cover; border: 4px solid #38bdf8;">
+              </div>
+              <h3 style="font-size: 1.25rem; margin-top: 10px;">Dr. Felicia Engmann</h3>
+              <div class="role" style="font-size: 0.88rem; color: var(--accent); font-weight: 700; margin-bottom: 6px;">Head of Department</div>
+              <div style="font-size: 0.8rem; color: var(--text-body);">Department of Computer Science &amp; IS</div>
             </div>
           </div>
           <div class="two-col-text">
             <div class="accent-line"></div>
-            <h2>Message from the Head</h2>
-            <p>A warm welcome to the Department of Computer Science &amp; Information Systems. Our department hosts computational and information technology degree programs within GIMPA.</p>
-            <p>Driven by the needs of Ghana and the West African sub-region, we employ our core values of excellence, quality and connectedness to deliver relevant education to our students, offer consultancy and training to stakeholders, and conduct cutting-edge research.</p>
-            <p>I am proud to welcome you to this portal. I look forward to receiving you as a student, researcher, or industry practitioner.</p>
+            <h2>Message from the Head of Department</h2>
+            <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-dark);">
+              "A warm welcome to the Department of Computer Science &amp; Information Systems at GIMPA. Our department is committed to delivering transformative computing education, pioneering applied research, and fostering an inspiring community of innovators."
+            </p>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-body);">
+              "Driven by the needs of Ghana and the West African sub-region, we employ our core values of excellence, quality, and connectedness to prepare graduates who not only master technical tools but also understand how to leverage technology to solve real-world problems. Whether you are an aspiring student, continuing researcher, or industry partner, we invite you to join us in shaping the digital future."
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-dark">
+    <!-- Mission, Vision & Core Values (Wide Cards with Images) -->
+    <section class="section" style="background: #f8fafc;">
       <div class="container">
         <div class="section-header">
           <div class="accent-line"></div>
-          <h2 style="color:#fff">Our Mission &amp; Vision</h2>
-        </div>
-        <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
-          <div class="card card-dark">
-            <div class="card-icon"><img src="assets/icons/icon-document.svg" alt="Mission icon"></div>
-            <h3>Mission</h3>
-            <p>To deliver relevant computing education, offer consultancy and training to stakeholders, and conduct cutting-edge research driven by the needs of Ghana and the West African sub-region.</p>
-          </div>
-          <div class="card card-dark">
-            <div class="card-icon"><img src="assets/icons/icon-screen.svg" alt="Vision icon"></div>
-            <h3>Vision</h3>
-            <p>To be a leading centre of excellence in computer science education and research, producing versatile IT professionals who drive digital transformation across Africa.</p>
-          </div>
-          <div class="card card-dark">
-            <div class="card-icon"><img src="assets/icons/icon-badge.svg" alt="Values icon"></div>
-            <h3>Core Values</h3>
-            <p>Excellence, quality, and connectedness guide everything we do — from curriculum design and research to industry partnerships and student mentorship.</p>
-          </div>
-        </div>
-        <div class="stats-row">
-          <div class="stat-item">
-            <div class="number">1961</div>
-            <div class="label">GIMPA Founded</div>
-          </div>
-          <div class="stat-item">
-            <div class="number">2017</div>
-            <div class="label">CS Dept Created</div>
-          </div>
-          <div class="stat-item">
-            <div class="number">2023</div>
-            <div class="label">Dept Merger (SOTSS)</div>
-          </div>
-          <div class="stat-item">
-            <div class="number">12</div>
-            <div class="label">Academic Programmes</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="programmes">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Academic Programmes</h2>
-          <p>Click on any programme below to view detailed curriculum, entry requirements, and career pathways.</p>
+          <h2>Our Strategic Pillars</h2>
+          <p>Our academic philosophy and guiding principles that drive curriculum, teaching, and industry collaboration.</p>
         </div>
 
-        <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Undergraduate Programmes</h3>
-        <div class="card-grid" style="margin-bottom:40px">
-          ${programmesData.filter(p => p.level === 'Undergraduate').map(p => `
-            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
-              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-                <span class="tag">${p.tag}</span>
-                <h3>${p.title}</h3>
-                <p>${p.shortDesc}</p>
-                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
-              </div>
-            </a>
-          `).join('')}
-        </div>
+        <div class="info-box-grid">
+          <div class="info-box-card">
+            <div class="info-box-img-wrap" style="aspect-ratio: 16/9;">
+              <img src="assets/images/students-hub.jpg" alt="Mission">
+              <span class="info-box-tag">Our Mission</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Educational Mission</h3>
+              <p>To deliver relevant, high-caliber computing education, offer specialized executive consultancy and training to public and private stakeholders, and conduct cutting-edge research driven by the socio-economic needs of Ghana and Africa.</p>
+            </div>
+          </div>
 
-        <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Postgraduate Diploma Programmes</h3>
-        <div class="card-grid" style="margin-bottom:40px">
-          ${programmesData.filter(p => p.level === 'Postgraduate Diploma').map(p => `
-            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
-              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-                <span class="tag">${p.tag}</span>
-                <h3>${p.title}</h3>
-                <p>${p.shortDesc}</p>
-                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
-              </div>
-            </a>
-          `).join('')}
-        </div>
+          <div class="info-box-card">
+            <div class="info-box-img-wrap" style="aspect-ratio: 16/9;">
+              <img src="assets/images/ai-data-science.jpg" alt="Vision">
+              <span class="info-box-tag">Our Vision</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Pan-African Vision</h3>
+              <p>To be a premier centre of excellence in computer science and information systems education across Africa, producing versatile leaders who architect and champion national digital transformation.</p>
+            </div>
+          </div>
 
-        <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Master's Programmes</h3>
-        <div class="card-grid" style="margin-bottom:40px">
-          ${programmesData.filter(p => p.level.includes('Postgraduate') && !p.level.includes('Diploma') && !p.level.includes('Doctoral')).map(p => `
-            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
-              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-                <span class="tag">${p.tag}</span>
-                <h3>${p.title}</h3>
-                <p>${p.shortDesc}</p>
-                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
-              </div>
-            </a>
-          `).join('')}
-        </div>
-
-        <h3 style="font-size:1.1rem;margin-bottom:16px;color:var(--primary)">Doctoral Programme</h3>
-        <div class="card-grid">
-          ${programmesData.filter(p => p.level === 'Doctoral').map(p => `
-            <a href="#programme/${p.id}" class="programme-card-link" style="text-decoration:none; color:inherit; display:block;">
-              <div class="programme-card" style="height:100%; transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-                <span class="tag">${p.tag}</span>
-                <h3>${p.title}</h3>
-                <p>${p.shortDesc}</p>
-                <div class="meta"><span>${p.mode}</span><span style="color:var(--accent); font-weight:600;">View Programme Details →</span></div>
-              </div>
-            </a>
-          `).join('')}
-        </div>
-
-        <div style="text-align:center;margin-top:40px">
-          <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary">Apply Now →</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Read More</h2>
-        </div>
-        <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
-          <a href="#research" class="card">
-            <h3>Research &amp; Expertise</h3>
-            <p>Explore our research areas in predictive analytics, machine learning, IoT, and computational sciences.</p>
-            <span class="card-link">Explore research →</span>
-          </a>
-          <a href="#contact" class="card">
-            <h3>Staff &amp; Contact Information</h3>
-            <p>Meet our faculty members and find contact details for the department.</p>
-            <span class="card-link">View contacts →</span>
-          </a>
-          <a href="#cooperation" class="card">
-            <h3>Cooperation &amp; Partnerships</h3>
-            <p>Learn about industry partnerships, student associations, and alumni engagement opportunities.</p>
-            <span class="card-link">Explore partnerships →</span>
-          </a>
+          <div class="info-box-card">
+            <div class="info-box-img-wrap" style="aspect-ratio: 16/9;">
+              <img src="assets/images/alumni-network.jpg" alt="Values">
+              <span class="info-box-tag">Core Values</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Excellence &amp; Connectedness</h3>
+              <p>Integrity, quality, academic rigor, continuous innovation, and strong connectedness with industry leaders, alumni mentors, and global research consortia.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   `;
 }
 
-function programmeDetail(id) {
-  const prog = programmesData.find(p => p.id === id);
-  if (!prog) {
-    return `<section class="section"><div class="container"><h2>Programme Not Found</h2><p>The requested academic programme could not be found.</p><a href="#introduction" class="btn btn-primary">Back to Introduction</a></div></section>`;
-  }
+// Backward-compatibility alias
+function introduction() {
+  return about();
+}
 
+// ==============================================================================
+// 3. STUDY WITH US PAGE (ALL PROGRAMMES & ADMISSIONS)
+// ==============================================================================
+window.activeProgFilter = 'all';
+
+window.filterProgrammes = function(category) {
+  window.activeProgFilter = category;
+  const buttons = document.querySelectorAll('.prog-filter-btn');
+  buttons.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+  });
+
+  const cards = document.querySelectorAll('.programme-detail-card');
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-level');
+    if (category === 'all' || cardCat === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+function study() {
   return `
-    <section class="hero" style="min-height:360px">
-      <div class="hero-bg slideshow">
-        <img class="active" src="assets/images/1000210972.png" alt="${prog.title}">
-      </div>
+    <section class="hero-split-section" style="padding: 50px 0;">
       <div class="container">
-        <div class="hero-content" style="padding:50px 0">
-          <div class="hero-badge">${prog.level}</div>
-          <h2 style="font-size:2.2rem">${prog.title}</h2>
-          <p style="font-size:1.1rem; max-width:750px">${prog.shortDesc}</p>
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Academic Degrees &amp; Courses</div>
+            <h1>Study With Us at <span>GIMPA SOTSS</span></h1>
+            <p>
+              Choose from industry-aligned undergraduate degrees, specialized master's programmes, and our premier PhD in Information Systems with flexible Day, Evening, and Weekend schedules.
+            </p>
+            <div class="hero-actions-row">
+              <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="background:#ffd700; color:#002b49; border-color:#ffd700; font-weight:700;">Apply Online Now →</a>
+              <a href="#students" class="btn btn-outline">Student Resources</a>
+            </div>
+          </div>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/students-hub.jpg" alt="GIMPA Students" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Programme Catalogue & Filter Bar -->
+    <section class="section" style="background:#f8fafc;">
+      <div class="container">
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Academic Programmes Catalogue</h2>
+          <p>Filter by academic level to find the right degree pathway for your career ambitions.</p>
+        </div>
+
+        <!-- Filter Pills Bar -->
+        <div style="display:flex; justify-content:center; margin-bottom: 36px;">
+          <div class="programme-filter-bar">
+            <button class="prog-filter-btn active" data-category="all" onclick="window.filterProgrammes('all')">All Degrees (${programmesData.length})</button>
+            <button class="prog-filter-btn" data-category="Undergraduate" onclick="window.filterProgrammes('Undergraduate')">Undergraduate</button>
+            <button class="prog-filter-btn" data-category="Master" onclick="window.filterProgrammes('Master')">Master's &amp; MPhil</button>
+            <button class="prog-filter-btn" data-category="Doctoral" onclick="window.filterProgrammes('Doctoral')">PhD / Doctoral</button>
+            <button class="prog-filter-btn" data-category="Postgraduate Diploma" onclick="window.filterProgrammes('Postgraduate Diploma')">Postgrad Diploma</button>
+          </div>
+        </div>
+
+        <!-- Programme Cards Grid -->
+        <div class="info-box-grid" id="programmesGrid">
+          ${programmesData.map(p => {
+            let catGroup = 'Master';
+            let badgeClass = 'badge-postgrad';
+            if (p.level === 'Undergraduate') { catGroup = 'Undergraduate'; badgeClass = 'badge-undergrad'; }
+            else if (p.level === 'Doctoral') { catGroup = 'Doctoral'; badgeClass = 'badge-phd'; }
+            else if (p.level === 'Postgraduate Diploma') { catGroup = 'Postgraduate Diploma'; badgeClass = 'badge-cert'; }
+
+            // Image mapping
+            let cardImg = 'assets/images/students-hub.jpg';
+            if (p.id.includes('cyber')) cardImg = 'assets/images/cybersecurity-lab.jpg';
+            else if (p.id.includes('analytics') || p.id.includes('science')) cardImg = 'assets/images/ai-data-science.jpg';
+            else if (p.id.includes('phd') || p.id.includes('mphil')) cardImg = 'assets/images/campus-hero.png';
+            else if (p.id.includes('ict')) cardImg = 'assets/images/1000211024.png';
+
+            return `
+              <div class="programme-detail-card" data-level="${catGroup}">
+                <img src="${cardImg}" alt="${p.title}" class="prog-header-img">
+                <div class="prog-card-body">
+                  <span class="prog-level-badge ${badgeClass}">${p.level}</span>
+                  <h3 style="font-size:1.15rem; font-weight:700; color:var(--primary); margin-bottom:8px;">${p.title}</h3>
+                  <p style="font-size:0.88rem; color:var(--text-body); line-height:1.55; margin-bottom:14px; flex:1;">${p.shortDesc}</p>
+                  
+                  <div class="prog-meta-list">
+                    <div class="prog-meta-item">
+                      <strong>Duration</strong>
+                      <span>${p.duration}</span>
+                    </div>
+                    <div class="prog-meta-item">
+                      <strong>Study Mode</strong>
+                      <span>${p.mode}</span>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; gap:10px; margin-top:12px;">
+                    <a href="#programme/${p.id}" class="btn btn-outline" style="flex:1; padding:8px 12px; font-size:0.82rem; justify-content:center; text-align:center;">Curriculum Details</a>
+                    <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="padding:8px 14px; font-size:0.82rem; justify-content:center;">Apply Online</a>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Admission Guidelines & How to Apply -->
     <section class="section">
       <div class="container">
-        <a href="#introduction" class="btn btn-outline" style="margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px; color: var(--primary); border-color: #c8d8ea">← Back to All Programmes</a>
-        
-        <div class="two-col" style="align-items: flex-start; gap: 40px;">
-          <div class="two-col-text" style="flex: 1;">
-            <div class="accent-line"></div>
-            <h2>Programme Overview</h2>
-            <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-dark); margin-bottom: 24px;">${prog.overview}</p>
-            
-            <h3 style="font-size: 1.3rem; color: var(--primary); margin-top: 30px; margin-bottom: 14px;">Core Curriculum &amp; Key Modules</h3>
-            <ul style="list-style: disc; margin-left: 20px; color: var(--text-body); line-height: 1.8; margin-bottom: 30px;">
-              ${prog.curriculum.map(m => `<li style="margin-bottom: 6px;"><strong>${m}</strong></li>`).join('')}
-            </ul>
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Admissions Pathways &amp; Requirements</h2>
+          <p>We welcome applications from senior high school graduates, diploma holders, mature students, and postgraduate researchers.</p>
+        </div>
 
-            <h3 style="font-size: 1.3rem; color: var(--primary); margin-top: 30px; margin-bottom: 14px;">Career Opportunities &amp; Industry Pathways</h3>
-            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
-              ${prog.careers.map(c => `<span style="background: #eef6ff; color: var(--primary); border: 1px solid #c8d8ea; padding: 6px 14px; border-radius: 999px; font-size: 0.88rem; font-weight: 600;">💼 ${c}</span>`).join('')}
-            </div>
-
-            <div style="margin-top: 40px; padding: 24px; background: var(--primary); border-radius: var(--radius); color: #fff;">
-              <h3 style="color:#fff; font-size: 1.3rem; margin-bottom: 8px;">Ready to Apply?</h3>
-              <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 16px;">Applications are open for the upcoming academic session. Start your application online via the GIMPA Admissions Portal.</p>
-              <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-light" style="background: #fff; color: var(--primary); font-weight: 700;">Apply Online Now &rarr;</a>
-            </div>
+        <div class="info-box-grid">
+          <div class="card" style="padding: 28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.2rem;">WASSCE / SSSCE Applicants</h3>
+            <p style="font-size:0.9rem; color:var(--text-body); line-height:1.6;">
+              Credit passes (A1–C6 in WASSCE / A–D in SSSCE) in six subjects comprising 3 Core Subjects (English, Core Mathematics, Integrated Science) plus 3 Elective Subjects including Elective Mathematics or Physics.
+            </p>
           </div>
 
-          <div style="width: 340px; flex-shrink: 0;">
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);">
-              <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--accent); padding-bottom: 8px;">Programme Specifications</h3>
-              
-              <div style="margin-bottom: 16px;">
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Duration</div>
-                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.duration}</div>
-              </div>
-
-              <div style="margin-bottom: 16px;">
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Study Mode</div>
-                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.mode}</div>
-              </div>
-
-              <div style="margin-bottom: 16px;">
-                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent);">Academic Level</div>
-                <div style="font-size: 0.95rem; font-weight: 600; color: var(--ink);">${prog.level}</div>
-              </div>
-
-              <h3 style="font-size: 1.05rem; color: var(--primary); margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">Admission Requirements</h3>
-              <ul style="font-size: 0.85rem; color: var(--text-body); line-height: 1.6; padding-left: 16px;">
-                ${prog.requirements.map(r => `<li style="margin-bottom: 8px;">${r}</li>`).join('')}
-              </ul>
-            </div>
+          <div class="card" style="padding: 28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.2rem;">Postgraduate &amp; Master's</h3>
+            <p style="font-size:0.9rem; color:var(--text-body); line-height:1.6;">
+              Bachelor's degree in Computer Science, Information Technology, Engineering, Mathematics, or related scientific disciplines with minimum Second Class Lower from an accredited institution.
+            </p>
           </div>
+
+          <div class="card" style="padding: 28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.2rem;">Mature &amp; Top-Up Students</h3>
+            <p style="font-size:0.9rem; color:var(--text-body); line-height:1.6;">
+              Applicants must be at least 25 years old with relevant industry experience and must pass the GIMPA Mature Students Entrance Examination in English, Mathematics, and Aptitude.
+            </p>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top: 40px;">
+          <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="padding: 14px 32px; font-size: 1rem; font-weight: 700;">Start Your Online Application →</a>
         </div>
       </div>
     </section>
   `;
 }
 
+// ==============================================================================
+// 4. FOR STUDENTS PAGE (COMPREHENSIVE STUDENT HUB & RESOURCES)
+// ==============================================================================
+window.toggleAccordion = function(id) {
+  const item = document.getElementById(id);
+  if (item) {
+    item.classList.toggle('active');
+  }
+};
+
+function students() {
+  return `
+    <section class="hero-split-section" style="padding: 50px 0;">
+      <div class="container">
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Student Central</div>
+            <h1>Resources &amp; Support <span>For Students</span></h1>
+            <p>
+              Essential portals, academic schedules, course registration guides, mentorship, tech clubs, and career placement services for continuing and prospective students.
+            </p>
+            <div class="hero-actions-row">
+              <a href="https://lms.gimpa.edu.gh/" target="_blank" class="btn btn-primary" style="background:#38bdf8; border-color:#38bdf8; color:#002b49; font-weight:700;">Access LMS (Moodle) →</a>
+              <a href="https://gimpa.edu.gh/library/" target="_blank" class="btn btn-outline">Digital Library</a>
+            </div>
+          </div>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/1000211024.png" alt="Student Community" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Access Hub Grid -->
+    <section class="section" style="background:#f8fafc; padding: 60px 0;">
+      <div class="container">
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Quick Portal &amp; Academic Shortcuts</h2>
+          <p>Direct links to key institutional learning tools and administrative portals.</p>
+        </div>
+
+        <div class="student-shortcuts-grid">
+          <a href="https://lms.gimpa.edu.gh/" target="_blank" class="shortcut-card">
+            <div class="shortcut-icon-circle">💻</div>
+            <div class="shortcut-info">
+              <h4>GIMPA LMS</h4>
+              <span>Course slides, quizzes &amp; assignments</span>
+            </div>
+          </a>
+
+          <a href="https://gimpa.edu.gh/library/" target="_blank" class="shortcut-card">
+            <div class="shortcut-icon-circle">📚</div>
+            <div class="shortcut-info">
+              <h4>E-Library &amp; Journals</h4>
+              <span>IEEE, ACM &amp; ScienceDirect</span>
+            </div>
+          </a>
+
+          <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="shortcut-card">
+            <div class="shortcut-icon-circle">📝</div>
+            <div class="shortcut-info">
+              <h4>Admissions Portal</h4>
+              <span>Track application &amp; admissions status</span>
+            </div>
+          </a>
+
+          <a href="#contact" class="shortcut-card">
+            <div class="shortcut-icon-circle">🎧</div>
+            <div class="shortcut-info">
+              <h4>IT Helpdesk</h4>
+              <span>Password reset &amp; account support</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Academic Life & Student Tech Hubs (Image Info Boxes) -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Student Tech Communities &amp; Career Hubs</h2>
+          <p>Join student-led developer communities, participate in national hackathons, and secure industry internships.</p>
+        </div>
+
+        <div class="info-box-grid">
+          
+          <div class="info-box-card">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/students-hub.jpg" alt="Google Developer Student Club">
+              <span class="info-box-tag">Student Club</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Google Developer Student Club (GDSC)</h3>
+              <p>Workshops on web development, Flutter, cloud computing, and AI hackathons connecting students with Google developer technologies.</p>
+            </div>
+          </div>
+
+          <div class="info-box-card">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/cybersecurity-lab.jpg" alt="Cybersecurity Association">
+              <span class="info-box-tag">Specialized Hub</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Cybersecurity &amp; CTF Association</h3>
+              <p>Weekly Capture The Flag (CTF) competitions, ethical hacking drills, and vulnerability testing seminars mentored by faculty researchers.</p>
+            </div>
+          </div>
+
+          <div class="info-box-card">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/ai-data-science.jpg" alt="AI & Robotics Hub">
+              <span class="info-box-tag">Innovation Lab</span>
+            </div>
+            <div class="info-box-content">
+              <h3>AI &amp; Robotics Hub</h3>
+              <p>Hands-on hardware interfacing, computer vision projects, drone programming, and predictive data modeling teams.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Student Handbook & Frequently Asked Questions (FAQ Accordions) -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 40px auto;">
+          <div class="accent-line" style="margin: 0 auto 16px auto;"></div>
+          <h2>Frequently Asked Questions</h2>
+          <p>Find quick answers to common questions about course registration, exams, internship requirements, and student support.</p>
+        </div>
+
+        <div class="accordion-wrapper">
+          
+          <div class="accordion-item" id="faq1">
+            <button class="accordion-header" onclick="window.toggleAccordion('faq1')">
+              <span>How do I register for semester courses?</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-body">
+              Course registration takes place at the start of each semester via the GIMPA Student Information Portal. After clearing semester fee requirements with the finance office, log in, select your prescribed core and elective courses, and click "Submit Registration" before obtaining academic advisor sign-off.
+            </div>
+          </div>
+
+          <div class="accordion-item" id="faq2">
+            <button class="accordion-header" onclick="window.toggleAccordion('faq2')">
+              <span>What are the internship and industrial attachment requirements?</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-body">
+              All BSc Computer Science and BSc ICT students must complete a mandatory 8-to-12-week industrial attachment during the long vacation between Level 300 and Level 400. The departmental internship coordinator provides introductory letters to vetted partner companies across banking, telecom, and tech startups.
+            </div>
+          </div>
+
+          <div class="accordion-item" id="faq3">
+            <button class="accordion-header" onclick="window.toggleAccordion('faq3')">
+              <span>How can I access campus Wi-Fi and computing labs?</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-body">
+              Every enrolled student is assigned official GIMPA student credentials (@st.gimpa.edu.gh). Use these credentials to connect to the "GIMPA-STUDENT" secure Wi-Fi network across Greenhill Campus and to log in to computing workstations in the SOTSS Computer Labs.
+            </div>
+          </div>
+
+          <div class="accordion-item" id="faq4">
+            <button class="accordion-header" onclick="window.toggleAccordion('faq4')">
+              <span>What academic support and tutoring services are available?</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-body">
+              The department runs free peer tutoring sessions for challenging courses such as Data Structures &amp; Algorithms, Object-Oriented Programming (Java/C++), and Discrete Mathematics. Faculty members also hold designated weekly office hours for individual student academic consultations.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// ==============================================================================
+// 5. RESEARCH PAGE (VISUAL INFO BOXES FOR ALL RESEARCH CLUSTERS)
+// ==============================================================================
 function research() {
   return `
-    <section class="hero" style="min-height:380px">
-      <div class="hero-bg slideshow">
-        <img class="active" src="assets/images/1000210972.png" alt="GIMPA CS Slideshow 1">
-        <img src="assets/images/1000211024.png" alt="GIMPA CS Slideshow 2">
-        <img src="assets/images/1000211025.png" alt="GIMPA CS Slideshow 3">
-        <img src="assets/images/1000211035.png" alt="GIMPA CS Slideshow 4">
-      </div>
+    <section class="hero-split-section" style="padding: 50px 0;">
       <div class="container">
-        <div class="hero-content" style="padding:60px 0">
-          <div class="hero-badge">Research &amp; Innovation</div>
-          <h2>Advancing Computing Through Research</h2>
-          <p>Our faculty combines enormous research output with a dynamic blend of experienced and young researchers, innovating across predictive analytics, IoT, machine learning, cybersecurity and more.</p>
-          <div class="hero-links">
-            <a href="#cooperation" class="btn btn-outline">Collaborate with Us</a>
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Scientific Discovery</div>
+            <h1>Research &amp; Innovation at <span>SOTSS</span></h1>
+            <p>
+              Conducting high-impact, peer-reviewed computational research across Artificial Intelligence, Digital Forensics, IoT sensor networks, and Health Informatics.
+            </p>
+            <div class="hero-actions-row">
+              <a href="#faculty" class="btn btn-primary">Research Faculty →</a>
+              <a href="#contact" class="btn btn-outline">Collaborate With Us</a>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Research at the Department</h2>
-          <p>The department has a dynamic blend of experienced and young faculty with enormous research output. We pride ourselves in our ability to innovate and provide cutting-edge information technology solutions across various platforms in collaboration with our students.</p>
-        </div>
-        <div class="two-col">
-          <div class="two-col-text">
-            <h2 style="font-size:1.4rem">Our Research Philosophy</h2>
-            <p>Our research integrates technological, informational, and applied perspectives alongside a human-centred approach. We are committed to addressing real-world challenges facing Ghana and the West African sub-region through innovative computing solutions.</p>
-            <p>We foster close collaboration with industry partners, other universities, and the public sector. Our goal is research excellence that drives socio-economic development and digital transformation across the continent.</p>
-          </div>
-          <div class="two-col-img">
-            <img src="assets/images/1000211042.png" alt="GIMPA Campus">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2 style="color:#fff">Areas of Expertise</h2>
-          <p>Our research activity spans the following key domains, reflecting the interdisciplinary nature of modern computing.</p>
-        </div>
-        <div class="expertise-grid">
-          <div class="expertise-item"><span class="expertise-dot"></span>Predictive Analytics</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Wireless Sensor Networks &amp; IoT</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Machine Learning</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Computer Science Education</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Computing Theory</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Computational Immunology &amp; Biological Dynamics</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Computing in Mathematics, Science &amp; Engineering</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>(Biomedical) Informatics</div>
-          <div class="expertise-item"><span class="expertise-dot"></span>Applied Mathematics &amp; Statistics</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section research-focus-section">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Research Focus Areas</h2>
-          <p>Deep dives into the key themes that define our departmental research agenda.</p>
-        </div>
-        <div class="focus-grid">
-          <div class="focus-card fade-up">
-            <span class="focus-tag">Data Intelligence</span>
-            <h3>Predictive Analytics &amp; Data Science</h3>
-            <p>Developing advanced analytical models for forecasting trends, optimising decision-making and extracting actionable insights from large-scale datasets across diverse industries.</p>
-            <div class="focus-meta"><span>Applied research</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="focus-card fade-up fade-up-d1">
-            <span class="focus-tag">Connected Systems</span>
-            <h3>Wireless Sensor Networks &amp; IoT</h3>
-            <p>Designing and deploying sensor networks and IoT solutions for environmental monitoring, smart agriculture, healthcare and urban systems in the West African context.</p>
-            <div class="focus-meta"><span>Field systems</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="focus-card fade-up fade-up-d2">
-            <span class="focus-tag">Applied AI</span>
-            <h3>Machine Learning &amp; AI</h3>
-            <p>Advancing machine learning algorithms and artificial intelligence applications to solve complex problems in health, finance, education and industrial optimisation.</p>
-            <div class="focus-meta"><span>AI models</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="focus-card fade-up">
-            <span class="focus-tag">Digital Trust</span>
-            <h3>Digital Forensics &amp; Cybersecurity</h3>
-            <p>Researching cybercrime investigation, risk assessment, cryptographic security mechanisms, and legal frameworks for digital evidence in the Ghanaian and African context.</p>
-            <div class="focus-meta"><span>Cybersecurity</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="focus-card fade-up fade-up-d1">
-            <span class="focus-tag">Health Informatics</span>
-            <h3>Computational Immunology &amp; Biomedical Informatics</h3>
-            <p>Applying computational methods to biological systems, modelling immune responses, and leveraging informatics for improved healthcare delivery and biomedical research.</p>
-            <div class="focus-meta"><span>Biomedical systems</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-          <div class="focus-card fade-up fade-up-d2">
-            <span class="focus-tag">Scientific Computing</span>
-            <h3>Applied Mathematics &amp; Computational Science</h3>
-            <p>Employing mathematical modelling, simulation and statistical techniques to solve problems in engineering, natural sciences, medicine and industrial process optimisation.</p>
-            <div class="focus-meta"><span>Modelling</span><span>csshead@gimpa.edu.gh</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="two-col" style="align-items:center">
-          <div class="two-col-text">
-            <div class="accent-line"></div>
-            <h2>Doctoral Programme in Information Systems</h2>
-            <p>Our PhD program is designed for those who seek to deeply understand and advance the critical field of information systems. Our doctoral candidates engage in rigorous scientific inquiry, developing advanced analytical skills and theoretical insights.</p>
-            <p>Through interdisciplinary study and collaborative research, candidates gain expertise to address pressing societal needs, drive business competitiveness, and foster sustainable development.</p>
-            <p><strong>Programme Highlights:</strong> Philosophy of Science and Technology, Advanced Quantitative and Qualitative Research Methods, Directed IS Research and Professional Development, PhD Seminar.</p>
-            <p><strong>Duration:</strong> 3 years (Full-time)</p>
-            <p><strong>Programme Coordinator:</strong> Professor Gamel Wiredu</p>
-            <a href="https://apply.gimpa.edu.gh/start" class="btn btn-dark" style="margin-top:16px">Apply for PhD →</a>
-          </div>
-          <div>
-            <div class="info-box">
-              <h3><img class="inline-icon" src="assets/icons/icon-document.svg" alt="Admission requirements">Admission Requirements</h3>
-              <ul>
-                <li>Master's degree in IS, Computer Science, ICT, Engineering, Mathematics or related fields</li>
-                <li>First class holders in MIS, CS or ICT may be considered</li>
-                <li>Master's from other fields with GPA 3.0+ may apply</li>
-                <li>Shortlisted applicants will be interviewed by the Graduate Admissions Committee</li>
-              </ul>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/ai-data-science.jpg" alt="Research Labs" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- Research Thematic Clusters (Wide Info Boxes with Images) -->
+    <section class="section" style="background:#f8fafc;">
       <div class="container">
-        <div class="info-box" style="max-width:700px;margin:0 auto;text-align:center">
-          <h3 style="justify-content:center"><img class="inline-icon" src="assets/icons/icon-screen.svg" alt="Simulation software">Simulation Software</h3>
-          <p style="color:var(--text-body)">Ghana Institute of Management and Public Administration uses <strong>Simio simulation software</strong> under a grant from Simio LLC, supporting advanced modelling and simulation research across the department.</p>
-          <a href="https://www.simio.com" class="btn btn-dark" style="margin-top:16px">Learn about Simio →</a>
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Research Thematic Clusters</h2>
+          <p>Our departmental research agenda is organized around four interdisciplinary clusters addressing critical technological challenges.</p>
+        </div>
+
+        <div class="info-box-grid">
+          
+          <!-- Cluster 1: AI & Data Science -->
+          <div class="info-box-card fade-up">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/ai-data-science.jpg" alt="AI & Machine Learning">
+              <span class="info-box-tag">Data Intelligence</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Artificial Intelligence &amp; Data Science</h3>
+              <p>Developing predictive algorithms, natural language processing for local languages, computer vision for agricultural disease detection, and deep learning for financial risk forecasting.</p>
+              <span class="info-box-link">Lead: Dr. Felicia Engmann &amp; Prof. Emmanuel Adabor</span>
+            </div>
+          </div>
+
+          <!-- Cluster 2: Cybersecurity & Forensics -->
+          <div class="info-box-card fade-up fade-up-d1">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/cybersecurity-lab.jpg" alt="Cybersecurity & Forensics">
+              <span class="info-box-tag">Digital Trust</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Digital Forensics &amp; Cybersecurity</h3>
+              <p>Investigating cybercrime architectures, automated malware classification, cryptographic protocols, cloud security posture, and legal frameworks for digital evidence in Africa.</p>
+              <span class="info-box-link">Lead: Dr. Joseph Budu &amp; Dr. Emmanuel Antwi-Boasiako</span>
+            </div>
+          </div>
+
+          <!-- Cluster 3: Wireless IoT Networks -->
+          <div class="info-box-card fade-up fade-up-d2">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/research-lab.png" alt="Wireless Networks & IoT">
+              <span class="info-box-tag">Connected Systems</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Wireless Sensor Networks &amp; IoT</h3>
+              <p>Designing low-power wide-area sensor topologies (LoRaWAN) for smart agriculture soil monitoring, flood warning systems, and urban environmental telemetry in West Africa.</p>
+              <span class="info-box-link">Lead: Dr. Nana Assyne &amp; SOTSS IoT Lab</span>
+            </div>
+          </div>
+
+          <!-- Cluster 4: Health Informatics & MIS -->
+          <div class="info-box-card fade-up">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/students-hub.jpg" alt="Health Informatics">
+              <span class="info-box-tag">Applied Computing</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Health Informatics &amp; Enterprise IS</h3>
+              <p>Leveraging electronic medical records, telemedicine frameworks, mobile health interventions, and enterprise information architectures to optimize healthcare delivery.</p>
+              <span class="info-box-link">Lead: Prof. Gamel Wiredu &amp; Fellows</span>
+            </div>
+          </div>
+
+          <!-- Cluster 5: Industrial Analytics & Simulation -->
+          <div class="info-box-card fade-up fade-up-d1">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/1000211039.png" alt="Industrial Analytics">
+              <span class="info-box-tag">Simulation Science</span>
+            </div>
+            <div class="info-box-content">
+              <h3>Industrial Analytics &amp; Simio Lab</h3>
+              <p>Utilizing Simio simulation software under an academic grant from Simio LLC to model supply chain logistics, port operations, and industrial manufacturing workflows.</p>
+              <span class="info-box-link">Lead: Prof. Emmanuel Adabor</span>
+            </div>
+          </div>
+
+          <!-- Cluster 6: Human-Computer Interaction -->
+          <div class="info-box-card fade-up fade-up-d2">
+            <div class="info-box-img-wrap">
+              <img src="assets/images/1000211395.png" alt="HCI and Software Eng">
+              <span class="info-box-tag">User Experience</span>
+            </div>
+            <div class="info-box-content">
+              <h3>HCI &amp; Software Engineering</h3>
+              <p>Designing user-centric digital public goods, accessible interfaces for multilingual users, and agile software engineering frameworks tailored for African startups.</p>
+              <span class="info-box-link">Lead: Dr. Nana Assyne</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <section class="section section-alt">
+    <!-- Verified Research Publications Directory -->
+    <section class="section">
       <div class="container">
-        <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
-          <a href="#introduction" class="card">
-            <h3>Department Introduction</h3>
-            <p>Learn about our history, programmes, and the strategic vision that drives the department.</p>
-            <span class="card-link">Read more →</span>
-          </a>
-          <a href="#contact" class="card">
-            <h3>Staff &amp; Contact</h3>
-            <p>Meet the researchers and faculty behind our cutting-edge research output.</p>
-            <span class="card-link">View staff →</span>
-          </a>
-          <a href="#cooperation" class="card">
-            <h3>Cooperation</h3>
-            <p>Explore ways to partner with us on research projects and industry collaborations.</p>
-            <span class="card-link">Collaborate →</span>
-          </a>
+        <div class="section-header">
+          <div class="accent-line"></div>
+          <h2>Verified Faculty Publications</h2>
+          <p>Recent peer-reviewed journal articles, conference proceedings, and book chapters published by our faculty.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          ${faculty.flatMap(f => f.pubs.map(p => ({ ...p, authorName: f.name, lecturerId: f.id }))).slice(0, 8).map(pub => `
+            <article style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:22px; box-shadow:var(--shadow-sm); transition:transform 0.2s ease;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">
+                <span style="color:var(--accent);">Peer-Reviewed Publication</span>
+                <span style="color:var(--text-body);">${pub.year || 'Recent'}</span>
+              </div>
+              <h3 style="font-size:1.12rem; font-weight:700; color:var(--primary); margin-bottom:8px;">${pub.title}</h3>
+              <div style="font-size:0.88rem; font-style:italic; color:var(--text-dark); margin-bottom:6px;">${pub.journal || 'Academic Journal'}</div>
+              <div style="font-size:0.82rem; color:var(--text-body); margin-bottom:12px;"><strong>Authors:</strong> ${pub.authors || pub.authorName}</div>
+              <div style="display:flex; gap:14px; align-items:center;">
+                <a href="#profile/${pub.lecturerId}" style="font-size:0.84rem; color:var(--primary); font-weight:600;">View Author Profile →</a>
+                ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:600; text-decoration:underline;">View Publication &nearr;</a>` : ''}
+              </div>
+            </article>
+          `).join('')}
+        </div>
+
+        <div style="text-align:center; margin-top:36px;">
+          <a href="#faculty" class="btn btn-dark" style="padding: 12px 28px; font-weight:700;">Explore All Faculty Researchers →</a>
         </div>
       </div>
     </section>
   `;
 }
 
-function contact() {
+// ==============================================================================
+// 6. FACULTY & STAFF PAGE (DEDICATED PAGE WITH SEARCH & FILTERING)
+// ==============================================================================
+window.filterFacultyByRole = function(role) {
+  const buttons = document.querySelectorAll('.faculty-role-btn');
+  buttons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-role') === role));
+
+  const cards = document.querySelectorAll('.staff-card');
+  let visibleCount = 0;
+  cards.forEach(card => {
+    const cardRole = card.getAttribute('data-role') || '';
+    if (role === 'all' || cardRole.toLowerCase().includes(role.toLowerCase())) {
+      card.classList.remove('is-hidden');
+      visibleCount++;
+    } else {
+      card.classList.add('is-hidden');
+    }
+  });
+
+  const emptyEl = document.getElementById('facultyEmpty');
+  if (emptyEl) emptyEl.style.display = visibleCount === 0 ? 'block' : 'none';
+};
+
+function facultyPage() {
   return `
-    <section class="section">
+    <section class="hero-split-section" style="padding: 50px 0;">
       <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Contact Information</h2>
-          <p>Get in touch with the Department of Computer Science and Information Systems.</p>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-item">
-            <h3><img class="inline-icon" src="assets/icons/icon-location.svg" alt="Location">Location</h3>
-            <p>GIMPA School of Technology</p>
-            <p>Ghana Institute of Management and Public Administration</p>
-            <p>Greenhill, Accra, Ghana</p>
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Academic Directory</div>
+            <h1>Faculty &amp; <span>Research Fellows</span></h1>
+            <p>
+              Meet our professors, senior lecturers, and industry adjuncts dedicated to teaching excellence, student mentorship, and world-class scientific inquiry.
+            </p>
+            <div class="hero-actions-row">
+              <a href="#research" class="btn btn-primary">Research Areas →</a>
+              <a href="#contact" class="btn btn-outline">Department Office</a>
+            </div>
           </div>
-          <div class="contact-item">
-            <h3><img class="inline-icon" src="assets/icons/icon-email.svg" alt="Email">Email</h3>
-            <p>Department: <a href="mailto:csshead@gimpa.edu.gh">csshead@gimpa.edu.gh</a></p>
-            <p>General: <a href="mailto:info@gimpa.edu.gh">info@gimpa.edu.gh</a></p>
-            <p>Admissions: <a href="mailto:admissions@gimpa.edu.gh">admissions@gimpa.edu.gh</a></p>
-          </div>
-          <div class="contact-item">
-            <h3><img class="inline-icon" src="assets/icons/icon-phone.svg" alt="Phone">Phone</h3>
-            <p><a href="tel:+233501620138">+233 (0) 501620138</a></p>
-            <p><a href="tel:+233332095432">+233 (0) 332095432</a></p>
-            <p><a href="tel:+233302908076">+233 (0) 302908076</a></p>
-            <p><a href="tel:+233302401681">+233 302-401681-3</a></p>
-          </div>
-          <div class="contact-item">
-            <h3><img class="inline-icon" src="assets/icons/icon-time.svg" alt="Open hours">Open Hours</h3>
-            <p>Monday – Saturday</p>
-            <p>8:30 AM – 6:00 PM GMT</p>
-            <p style="margin-top:8px"><a href="https://gimpa.edu.gh/" target="_blank" style="display:inline-block; padding:8px 20px; font-size:0.82rem; font-weight:700; background:var(--primary); color:#ffffff !important; border-radius:6px; text-decoration:none; letter-spacing:0.01em; transition:opacity 0.2s;">Visit GIMPA Website →</a></p>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/1000211035.png" alt="Faculty" style="width:100%;height:100%;object-fit:cover;">
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-alt">
+    <!-- Faculty Directory Section with Search & Role Filter -->
+    <section class="section" style="background:#f8fafc;">
       <div class="container">
         <div class="section-header">
           <div class="accent-line"></div>
-          <h2>Head of Department</h2>
-        </div>
-        <div style="max-width:360px">
-          <div class="staff-card">
-            <a class="staff-card-link" href="#profile/felicia-engmann">
-              <div class="staff-photo"><img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>
-              <h3>Dr. Felicia Engmann</h3>
-              <div class="role" style="font-size:0.82rem; color:var(--accent); font-weight:600; margin-bottom:8px">Head, Dept. of Computer Science &amp; IS</div>
-              <div class="email" style="font-size:0.8rem; color:var(--primary)">fapboadu@gimpa.edu.gh</div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Faculty Members</h2>
-          <p>Our dynamic blend of experienced and young faculty with diverse backgrounds in IT and computing.</p>
-        </div>
-        
-        <div class="faculty-toolbar" style="margin-top: 14px; margin-bottom: 26px;">
-          <div class="faculty-search">
-            <input type="text" id="facultySearchInput" placeholder="🔍 Search faculty by name, specialization, office..." style="width:100%; border:1px solid #c8d8ea; background:#fff; border-radius:999px; padding:12px 18px 12px 42px; font-size:0.9rem; outline:none; transition:var(--transition)">
-          </div>
-          <div class="faculty-empty" id="facultyEmpty" style="display:none; margin-top:16px; padding:12px 16px; border-radius:var(--radius-sm); background:#e9f4fd; color:var(--primary); font-weight:600;">No faculty members found matching your search.</div>
+          <h2>Faculty &amp; Staff Directory</h2>
+          <p>Search faculty by name, academic title, specialization, or office location.</p>
         </div>
 
-        <div class="staff-grid">
+        <!-- Search Bar and Filter Pills -->
+        <div style="max-width: 750px; margin: 0 auto 36px auto;">
+          <div style="position:relative; margin-bottom: 20px;">
+            <input type="text" id="facultySearchInput" placeholder="🔍 Search faculty by name, specialization, or research area..." style="width:100%; border:1.5px solid #cbd5e1; background:#fff; border-radius:999px; padding:14px 24px; font-size:0.95rem; outline:none; box-shadow:0 2px 6px rgba(0,0,0,0.05); transition:all 0.2s;">
+          </div>
+          
+          <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:8px;">
+            <button class="prog-filter-btn faculty-role-btn active" data-role="all" onclick="window.filterFacultyByRole('all')">All Faculty</button>
+            <button class="prog-filter-btn faculty-role-btn" data-role="Head" onclick="window.filterFacultyByRole('Head')">Head of Dept</button>
+            <button class="prog-filter-btn faculty-role-btn" data-role="Professor" onclick="window.filterFacultyByRole('Professor')">Professors</button>
+            <button class="prog-filter-btn faculty-role-btn" data-role="Senior Lecturer" onclick="window.filterFacultyByRole('Senior Lecturer')">Senior Lecturers</button>
+            <button class="prog-filter-btn faculty-role-btn" data-role="Lecturer" onclick="window.filterFacultyByRole('Lecturer')">Lecturers</button>
+          </div>
+
+          <div id="facultyEmpty" style="display:none; margin-top:20px; padding:14px; text-align:center; border-radius:8px; background:#e0f2fe; color:#0369a1; font-weight:600;">
+            No faculty members found matching your search.
+          </div>
+        </div>
+
+        <!-- Faculty Cards Grid -->
+        <div class="staff-grid" id="facultyDirectoryGrid">
           ${faculty.map(f => `
-            <div class="staff-card" data-search="${f.name} ${f.role} ${f.spec} ${f.email} ${f.office}">
+            <div class="staff-card" data-role="${f.role}" data-search="${f.name} ${f.role} ${f.spec} ${f.email} ${f.office}">
               <a class="staff-card-link" href="#profile/${f.id}">
                 ${f.photo ? 
-                  `<div class="staff-photo"><img class="photo" src="${f.photo}" alt="${f.name}" style="width:88px; height:88px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #7ec5ed"></div>` :
-                  `<div class="staff-avatar">${f.name.split(' ').filter(n => n.includes('.') ? false : true).slice(-2).map(n => n[0]).join('')}</div>`
+                  `<div class="staff-photo"><img class="photo" src="${f.photo}" alt="${f.name}" style="width:100px; height:100px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #38bdf8"></div>` :
+                  `<div class="staff-avatar" style="width:100px; height:100px; font-size:1.8rem;">${f.name.split(' ').filter(n => !n.includes('.')).slice(-2).map(n => n[0]).join('')}</div>`
                 }
-                <h3>${f.name}</h3>
-                <div class="role">${f.role}</div>
-                <div class="email">${f.email}</div>
+                <h3 style="font-size:1.15rem; margin-top:12px;">${f.name}</h3>
+                <div class="role" style="font-size:0.84rem; color:var(--accent); font-weight:700; margin-bottom:6px;">${f.role}</div>
+                <div style="font-size:0.8rem; color:var(--text-body); margin-bottom:8px; line-height:1.4;">${f.spec}</div>
+                <div class="email" style="font-size:0.8rem; color:var(--primary); font-weight:600;">${f.email}</div>
+                <div style="margin-top:14px; font-size:0.82rem; color:var(--accent); font-weight:700;">View Profile &amp; Research →</div>
               </a>
             </div>
           `).join('')}
         </div>
+
+      </div>
+    </section>
+  `;
+}
+
+// ==============================================================================
+// 7. ALUMNI PAGE (SEPARATE DEDICATED ALUMNI PAGE & REGISTRATION)
+// ==============================================================================
+window.handleAlumniRegisterSubmit = async function(event) {
+  event.preventDefault();
+  const statusEl = document.getElementById('alumniRegisterStatus');
+  if (!statusEl) return;
+
+  statusEl.style.display = 'block';
+  statusEl.className = 'status-message';
+  statusEl.style.backgroundColor = '#e0f2fe';
+  statusEl.style.color = '#0369a1';
+  statusEl.textContent = 'Registering with Alumni Association...';
+
+  const formData = new FormData();
+  formData.append('name', document.getElementById('alumniName').value);
+  formData.append('email', document.getElementById('alumniEmail').value);
+  formData.append('phone', document.getElementById('alumniPhone').value);
+  formData.append('grad_year', document.getElementById('alumniYear').value);
+  formData.append('programme', document.getElementById('alumniProgramme').value);
+  formData.append('current_role', document.getElementById('alumniRole').value);
+  formData.append('company', document.getElementById('alumniCompany').value);
+
+  try {
+    const res = await fetch('/api/alumni/register', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      statusEl.style.backgroundColor = '#dcfce7';
+      statusEl.style.color = '#15803d';
+      statusEl.textContent = data.message || 'Registration successful! Check your email for confirmation.';
+      document.getElementById('alumniRegisterForm').reset();
+    } else {
+      statusEl.style.backgroundColor = '#fef2f2';
+      statusEl.style.color = '#b91c1c';
+      statusEl.textContent = data.detail || 'Failed to register. Please try again.';
+    }
+  } catch (err) {
+    statusEl.style.backgroundColor = '#fef2f2';
+    statusEl.style.color = '#b91c1c';
+    statusEl.textContent = 'Network error. Please try again later.';
+  }
+};
+
+function alumni() {
+  return `
+    <section class="hero-split-section" style="padding: 50px 0;">
+      <div class="container">
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Alumni Network</div>
+            <h1>SOTSS Alumni <span>Association</span></h1>
+            <p>
+              A global community of technology trailblazers, engineering leaders, cybersecurity directors, and entrepreneurs driving digital innovation worldwide.
+            </p>
+            <div class="hero-actions-row">
+              <a href="#alumni-register" class="btn btn-primary" style="background:#ffd700; color:#002b49; border-color:#ffd700; font-weight:700;">Join Alumni Network →</a>
+              <a href="#contact" class="btn btn-outline">Partner With Us</a>
+            </div>
+          </div>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/alumni-network.jpg" alt="GIMPA Alumni" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section section-dark">
+    <!-- Alumni Spotlight Stories (Image-backed) -->
+    <section class="section" style="background:#f8fafc;">
       <div class="container">
         <div class="section-header">
           <div class="accent-line"></div>
-          <h2 style="color:#fff">Programme Coordinators</h2>
-          <p>Contact the coordinators for specific programme enquiries.</p>
+          <h2>Alumni Spotlights &amp; Impact</h2>
+          <p>Read about the inspiring career journeys of SOTSS graduates shaping industries across Africa and globally.</p>
         </div>
-        <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
-          <div class="card card-dark">
-            <h3>PhD Information Systems</h3>
-            <p>Coordinator: <strong>Prof. Gamel Wiredu</strong></p>
-            <p style="margin-top:8px"><a href="mailto:csshead@gimpa.edu.gh" style="color:var(--accent)">csshead@gimpa.edu.gh</a></p>
-          </div>
-          <div class="card card-dark">
-            <h3>MSc Digital Forensics &amp; Cybersecurity</h3>
-            <p>Coordinator: <strong>Dr. Joseph Budu</strong></p>
-            <p style="margin-top:8px"><a href="mailto:josbudu@gimpa.edu.gh" style="color:var(--accent)">josbudu@gimpa.edu.gh</a></p>
-          </div>
-          <div class="card card-dark">
-            <h3>MPhil Management Information Systems</h3>
-            <p>Coordinator: <strong>Prof. Gamel Wiredu</strong></p>
-            <p style="margin-top:8px"><a href="mailto:gwiredu@gimpa.edu.gh" style="color:var(--accent)">gwiredu@gimpa.edu.gh</a></p>
-          </div>
-          <div class="card card-dark">
-            <h3>General Enquiries</h3>
-            <p>For all other programmes, contact the department head.</p>
-            <p style="margin-top:8px"><a href="mailto:csshead@gimpa.edu.gh" style="color:var(--accent)">csshead@gimpa.edu.gh</a></p>
+
+        <div class="alumni-spotlight-card">
+          <img src="assets/images/alumni-network.jpg" alt="Alumni Leadership" class="alumni-spotlight-img">
+          <div class="alumni-spotlight-body">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Alumni in Fintech Leadership</span>
+            <h3 style="font-size:1.4rem; color:var(--primary); margin-bottom:12px;">Leading Africa's Digital Payments Transformation</h3>
+            <p style="color:var(--text-body); line-height:1.7; font-size:0.95rem; margin-bottom:16px;">
+              "My journey in computer science at GIMPA provided me with rigorous mathematical foundations and the software architecture discipline required to scale mission-critical payment gateways processing millions of transactions daily."
+            </p>
+            <div style="font-weight:700; color:var(--primary);">Kofi Mensah · BSc Computer Science Class of 2020</div>
+            <div style="font-size:0.85rem; color:var(--text-body);">VP of Engineering, Paystack / Stripe Africa</div>
           </div>
         </div>
+
+        <div class="alumni-spotlight-card">
+          <img src="assets/images/cybersecurity-lab.jpg" alt="Cybersecurity Leader" class="alumni-spotlight-img">
+          <div class="alumni-spotlight-body">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Alumni in Cybersecurity</span>
+            <h3 style="font-size:1.4rem; color:var(--primary); margin-bottom:12px;">Defending National Critical Infrastructure</h3>
+            <p style="color:var(--text-body); line-height:1.7; font-size:0.95rem; margin-bottom:16px;">
+              "The hands-on digital forensics and threat intelligence coursework under Dr. Budu in the MSc Cybersecurity programme directly prepared me for high-stakes incident response and national cyber threat mitigation."
+            </p>
+            <div style="font-weight:700; color:var(--primary);">Ama Serwaa · MSc Digital Forensics &amp; Cybersecurity Class of 2022</div>
+            <div style="font-size:0.85rem; color:var(--text-body);">Chief Information Security Officer, National Financial Switch</div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <div class="accent-line"></div>
-          <h2>Useful Links</h2>
+    <!-- Alumni Registration Form -->
+    <section class="section" id="alumni-register">
+      <div class="container" style="max-width: 800px;">
+        <div class="section-header" style="text-align: center;">
+          <div class="accent-line" style="margin: 0 auto 16px auto;"></div>
+          <h2>Join the SOTSS Alumni Association</h2>
+          <p>Update your details to receive event invitations, guest lecturing opportunities, and connect with fellow graduates.</p>
         </div>
-        <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
-          <a href="https://apply.gimpa.edu.gh/start" class="card">
-            <div class="card-icon"><img src="assets/icons/icon-document.svg" alt="Apply icon"></div>
-            <h3>Apply Online</h3>
-            <p>Submit your application through the GIMPA online portal.</p>
-            <span class="card-link">Apply now →</span>
-          </a>
-          <a href="https://gimpa.edu.gh/admissions/" class="card">
-            <div class="card-icon"><img src="assets/icons/icon-badge.svg" alt="Admissions icon"></div>
-            <h3>Admissions</h3>
-            <p>View admission requirements and important dates.</p>
-            <span class="card-link">View admissions →</span>
-          </a>
-          <a href="https://lms.gimpa.edu.gh/" class="card">
-            <div class="card-icon"><img src="assets/icons/icon-screen.svg" alt="LMS icon"></div>
-            <h3>Learning Management System</h3>
-            <p>Access course materials, assignments, and resources.</p>
-            <span class="card-link">Go to LMS →</span>
-          </a>
-          <a href="https://gimpa.edu.gh/library/" class="card">
-            <div class="card-icon"><img src="assets/icons/icon-library.svg" alt="Library icon"></div>
-            <h3>Library</h3>
-            <p>Access the GIMPA library and digital resources.</p>
-            <span class="card-link">Visit library →</span>
-          </a>
+
+        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius); padding:36px; box-shadow:var(--shadow-lg);">
+          <div id="alumniRegisterStatus" style="display:none; margin-bottom:20px; padding:12px; border-radius:6px; font-size:0.9rem; font-weight:600;"></div>
+
+          <form id="alumniRegisterForm" onsubmit="window.handleAlumniRegisterSubmit(event)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;">
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Full Name *</label>
+                <input type="text" id="alumniName" required placeholder="e.g. Ama Osei" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Email Address *</label>
+                <input type="email" id="alumniEmail" required placeholder="e.g. ama.osei@gmail.com" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;">
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Phone Number</label>
+                <input type="tel" id="alumniPhone" placeholder="e.g. +233 50 123 4567" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Graduation Year *</label>
+                <input type="text" id="alumniYear" required placeholder="e.g. 2023" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Degree / Programme *</label>
+              <select id="alumniProgramme" required style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none; background:#fff;">
+                <option value="BSc Computer Science">BSc Computer Science</option>
+                <option value="BSc Information & Communication Technology">BSc Information & Communication Technology</option>
+                <option value="MSc Digital Forensics & Cybersecurity">MSc Digital Forensics & Cybersecurity</option>
+                <option value="MSc Industrial Analytics">MSc Industrial Analytics</option>
+                <option value="MSc/MPhil ICT">MSc/MPhil ICT</option>
+                <option value="PhD Information Systems">PhD Information Systems</option>
+                <option value="Postgraduate Diploma ICT">Postgraduate Diploma ICT</option>
+              </select>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px;">
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Current Role / Job Title</label>
+                <input type="text" id="alumniRole" placeholder="e.g. Lead Software Engineer" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Current Organization / Company</label>
+                <input type="text" id="alumniCompany" placeholder="e.g. Vodafone Ghana / Standard Chartered" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-weight:700; font-size:1rem; justify-content:center;">Register with Alumni Network →</button>
+          </form>
         </div>
       </div>
     </section>
   `;
 }
+
+// Backward-compatibility alias
+function cooperation() {
+  return alumni();
+}
+
+// ==============================================================================
+// 8. CONTACT PAGE (WITH DIRECT SMTP INQUIRY FORM)
+// ==============================================================================
+window.handleContactSubmit = async function(event) {
+  event.preventDefault();
+  const statusEl = document.getElementById('contactFormStatus');
+  if (!statusEl) return;
+
+  statusEl.style.display = 'block';
+  statusEl.className = 'status-message';
+  statusEl.style.backgroundColor = '#e0f2fe';
+  statusEl.style.color = '#0369a1';
+  statusEl.textContent = 'Sending your message...';
+
+  const formData = new FormData();
+  formData.append('name', document.getElementById('contactName').value);
+  formData.append('email', document.getElementById('contactEmail').value);
+  formData.append('subject', document.getElementById('contactSubject').value);
+  formData.append('message', document.getElementById('contactMessage').value);
+
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      statusEl.style.backgroundColor = '#dcfce7';
+      statusEl.style.color = '#15803d';
+      statusEl.textContent = data.message || 'Thank you! Your message has been sent successfully.';
+      document.getElementById('contactForm').reset();
+    } else {
+      statusEl.style.backgroundColor = '#fef2f2';
+      statusEl.style.color = '#b91c1c';
+      statusEl.textContent = data.detail || 'Failed to send message. Please try again.';
+    }
+  } catch (err) {
+    statusEl.style.backgroundColor = '#fef2f2';
+    statusEl.style.color = '#b91c1c';
+    statusEl.textContent = 'Connection error. Please try again later.';
+  }
+};
+
+function contact() {
+  return `
+    <section class="hero-split-section" style="padding: 50px 0;">
+      <div class="container">
+        <div class="hero-split-grid">
+          <div class="hero-text-side fade-up">
+            <div class="hero-split-badge">Get In Touch</div>
+            <h1>Contact the <span>Department</span></h1>
+            <p>
+              Have questions about academic admissions, corporate research partnerships, or faculty inquiries? Reach out to our administrative team at Greenhill Campus.
+            </p>
+          </div>
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div class="hero-carousel-container" style="aspect-ratio: 16/10;">
+              <img src="assets/images/campus-hero.png" alt="GIMPA Campus" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Location & Contact Details Cards -->
+    <section class="section" style="background:#f8fafc;">
+      <div class="container">
+        <div class="info-box-grid">
+          
+          <div class="card" style="padding:28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.15rem;">📍 Campus Location</h3>
+            <p style="color:var(--text-body); line-height:1.6; font-size:0.92rem; margin:0;">
+              Department of Computer Science &amp; Information Systems<br>
+              School of Technology &amp; Social Sciences<br>
+              GIMPA Greenhill Campus, Achimota, Accra, Ghana
+            </p>
+          </div>
+
+          <div class="card" style="padding:28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.15rem;">📧 Official Email</h3>
+            <p style="color:var(--text-body); line-height:1.6; font-size:0.92rem; margin:0;">
+              Department: <a href="mailto:csshead@gimpa.edu.gh" style="color:var(--primary); font-weight:700;">csshead@gimpa.edu.gh</a><br>
+              General: <a href="mailto:info@gimpa.edu.gh">info@gimpa.edu.gh</a><br>
+              Admissions: <a href="mailto:admissions@gimpa.edu.gh">admissions@gimpa.edu.gh</a>
+            </p>
+          </div>
+
+          <div class="card" style="padding:28px;">
+            <h3 style="color:var(--primary); margin-bottom:12px; font-size:1.15rem;">📞 Telephone Lines</h3>
+            <p style="color:var(--text-body); line-height:1.6; font-size:0.92rem; margin:0;">
+              Direct: <a href="tel:+233501620138" style="color:var(--primary); font-weight:700;">+233 (0) 501620138</a><br>
+              Switchboard: <a href="tel:+233302401681">+233 302-401681-3</a><br>
+              Hours: Mon – Sat: 8:30 – 18:00 GMT
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Contact Inquiry Form -->
+    <section class="section">
+      <div class="container" style="max-width: 800px;">
+        <div class="section-header" style="text-align: center;">
+          <div class="accent-line" style="margin: 0 auto 16px auto;"></div>
+          <h2>Send Us an Online Inquiry</h2>
+          <p>Fill in your details below and our departmental coordinator will get back to you promptly via email.</p>
+        </div>
+
+        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius); padding:36px; box-shadow:var(--shadow-lg);">
+          <div id="contactFormStatus" style="display:none; margin-bottom:20px; padding:12px; border-radius:6px; font-size:0.9rem; font-weight:600;"></div>
+
+          <form id="contactForm" onsubmit="window.handleContactSubmit(event)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;">
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Your Name *</label>
+                <input type="text" id="contactName" required placeholder="e.g. Kwame Mensah" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Your Email Address *</label>
+                <input type="email" id="contactEmail" required placeholder="e.g. kwame@example.com" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+              </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Inquiry Subject *</label>
+              <input type="text" id="contactSubject" required placeholder="e.g. Admission Inquiry for MSc Cybersecurity" style="width:100%; padding:10px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none;">
+            </div>
+
+            <div style="margin-bottom:24px;">
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px;">Your Message / Question *</label>
+              <textarea id="contactMessage" required rows="5" placeholder="Write your message here..." style="width:100%; padding:12px 14px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.92rem; outline:none; resize:vertical;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-weight:700; font-size:1rem; justify-content:center;">Send Inquiry Message →</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 
 window.currentNewsPage = window.currentNewsPage || 1;
 
@@ -4507,18 +5104,27 @@ function render() {
   if (r === 'home') {
     viewHTML = home();
     activeTab = 'home';
-  } else if (r === 'introduction') {
-    viewHTML = introduction();
-    activeTab = 'introduction';
+  } else if (r === 'about' || r === 'introduction') {
+    viewHTML = about();
+    activeTab = 'about';
+  } else if (r === 'study' || r === 'programmes') {
+    viewHTML = study();
+    activeTab = 'study';
+  } else if (r === 'students') {
+    viewHTML = students();
+    activeTab = 'students';
   } else if (r === 'research') {
     viewHTML = research();
     activeTab = 'research';
+  } else if (r === 'faculty' || r === 'staff') {
+    viewHTML = facultyPage();
+    activeTab = 'faculty';
+  } else if (r === 'alumni' || r === 'cooperation') {
+    viewHTML = alumni();
+    activeTab = 'alumni';
   } else if (r === 'contact') {
     viewHTML = contact();
     activeTab = 'contact';
-  } else if (r === 'cooperation') {
-    viewHTML = cooperation();
-    activeTab = 'cooperation';
   } else if (r === 'news') {
     viewHTML = newsList();
     activeTab = 'news';
@@ -4546,16 +5152,16 @@ function render() {
     activeTab = '';
   } else if (r.startsWith('profile/')) {
     viewHTML = profile(r.split('/')[1]);
-    activeTab = 'profile';
+    activeTab = 'faculty';
   } else if (r.startsWith('publication/')) {
     viewHTML = publicationDetail(parseInt(r.split('/')[1]));
-    activeTab = '';
+    activeTab = 'research';
   } else if (r.startsWith('project/')) {
     viewHTML = projectDetail(parseInt(r.split('/')[1]));
-    activeTab = '';
+    activeTab = 'research';
   } else if (r.startsWith('programme/')) {
     viewHTML = programmeDetail(r.split('/')[1]);
-    activeTab = 'introduction';
+    activeTab = 'study';
   } else if (r.startsWith('news-')) {
     viewHTML = newsDetail(r);
     activeTab = 'news';

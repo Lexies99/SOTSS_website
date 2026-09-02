@@ -772,6 +772,88 @@ def trigger_lecturer_scanner(lecturer: dict = Depends(get_current_lecturer)):
     return {"status": "success", "new_publications_found": new_found}
 
 
+@app.post("/api/contact")
+def submit_contact_inquiry(
+    name: str = Form(...),
+    email: str = Form(...),
+    subject: str = Form(...),
+    message: str = Form(...)
+):
+    print(f"[CONTACT INQUIRY] From: {name} <{email}> | Subject: {subject}")
+    
+    # 1. Send notification to department inbox / admin
+    admin_recipient = os.environ.get("SMTP_USER", "alexander.tetteh@st.gimpa.edu.gh")
+    admin_body = f"""New Contact Inquiry Received via SOTSS Website:
+
+Name: {name}
+Email: {email}
+Subject: {subject}
+
+Message:
+{message}
+
+---
+Sent via GIMPA School of Technology & Social Sciences Portal
+"""
+    send_smtp_email(admin_recipient, f"[SOTSS Website Inquiry] {subject}", admin_body)
+    
+    # 2. Send automated confirmation receipt to user
+    user_body = f"""Dear {name},
+
+Thank you for contacting the Department of Computer Science & Information Systems, School of Technology and Social Sciences at GIMPA.
+
+We have received your message regarding: "{subject}".
+A departmental representative will review your inquiry and get back to you shortly.
+
+Best regards,
+Department of Computer Science & Information Systems
+School of Technology & Social Sciences
+Ghana Institute of Management and Public Administration (GIMPA)
+Greenhill, Accra, Ghana
+"""
+    send_smtp_email(email, "We have received your inquiry - GIMPA SOTSS", user_body)
+    
+    return {"status": "success", "message": "Thank you! Your message has been sent successfully."}
+
+
+@app.post("/api/alumni/register")
+def register_alumni(
+    name: str = Form(...),
+    email: str = Form(...),
+    phone: str = Form(""),
+    grad_year: str = Form(...),
+    programme: str = Form(...),
+    current_role: str = Form(""),
+    company: str = Form(""),
+    linkedin: str = Form("")
+):
+    print(f"[ALUMNI REGISTRATION] {name} ({grad_year} - {programme}) at {company}")
+    
+    # Send confirmation email to alumnus
+    alumni_body = f"""Dear {name},
+
+Welcome to the GIMPA School of Technology & Social Sciences Alumni Association!
+
+We are proud to have you as part of our growing network of technology leaders, innovators, and researchers shaping Africa's digital transformation.
+
+Your Registered Information:
+- Degree / Programme: {programme}
+- Year of Graduation: {grad_year}
+- Current Position: {current_role} at {company}
+- Contact Email: {email}
+
+You will receive invitations to upcoming alumni networking mixers, tech hackathons, guest lectures, and student mentorship opportunities.
+
+Warm regards,
+Alumni & Community Engagement Committee
+School of Technology & Social Sciences (SOTSS)
+Ghana Institute of Management and Public Administration (GIMPA)
+"""
+    send_smtp_email(email, "Welcome to GIMPA SOTSS Alumni Network", alumni_body)
+    
+    return {"status": "success", "message": "Registration successful! Welcome to the SOTSS Alumni Network."}
+
+
 # SERVING STATIC FILES
 
 # Mount assets directory (images, icons, etc.)
