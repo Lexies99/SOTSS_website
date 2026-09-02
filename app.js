@@ -1591,6 +1591,82 @@ function students() {
   `;
 }
 
+// Publication Cover Image Resolver
+function getPublicationCoverImage(pub) {
+  if (!pub) return 'assets/images/publications/wiley_ijcs_cover.png';
+  if (pub.image && !pub.image.includes('research-lab.png') && !pub.image.includes('100021') && !pub.image.includes('ai-data-science.jpg')) {
+    return pub.image;
+  }
+  
+  const journal = (pub.journal || '').toLowerCase();
+  const title = (pub.title || '').toLowerCase();
+
+  // 1. Journal of Sensors (Hindawi / Wiley)
+  if (journal.includes('sensor') || journal === 'j. sensors' || journal === 'journal of sensors' || title.includes('green wireless sensor networks') || title.includes('wsn architectures for environmental monitoring') || title.includes('wsn protocols and security')) {
+    return 'assets/images/publications/journal_of_sensors.jpg';
+  }
+
+  // 2. Ethics in Progress
+  if (journal.includes('ethics') || title.includes('ethical ai in healthcare') || title.includes('ethics in progress')) {
+    return 'assets/images/publications/ethics_in_progress.jpg';
+  }
+
+  // 3. Ambient Intelligence and Humanized Computing (Springer)
+  if (journal.includes('ambient') || journal.includes('humanized') || title.includes('mdbea') || title.includes('distance-based energy-aware')) {
+    return 'assets/images/publications/springer_jaihc.jpg';
+  }
+
+  // 4. Wireless Communications and Mobile Computing (Wiley / Hindawi)
+  if (journal.includes('wireless communications') || journal.includes('mobile computing') || title.includes('signal propagation models in soil') || title.includes('energy budget in wsn') || title.includes('smart river monitoring') || title.includes('prolonging the lifetime') || title.includes('scheduling in wireless sensor networks')) {
+    return 'assets/images/publications/wiley_wcmc.jpg';
+  }
+
+  // 5. International Journal of Communication Systems (Wiley)
+  if (journal.includes('communication systems') || title.includes('optimizing packet size') || title.includes('reliability of wireless sensor')) {
+    return 'assets/images/publications/wiley_ijcs_cover.png';
+  }
+
+  // 6. IntechOpen Books
+  if (journal.includes('intechopen') || journal.includes('working title') || title.includes('applications of prediction approaches')) {
+    return 'assets/images/publications/intechopen_book_wsn.png';
+  }
+
+  // 7. IEEE Conferences & Symposia
+  if (journal.includes('ieee') || journal.includes('conference') || journal.includes('icast') || journal.includes('africon') || title.includes('rfid student attendance')) {
+    return 'assets/images/publications/ieee_conference_proceedings.png';
+  }
+
+  // 8. Scientific Reports (Nature Portfolio)
+  if (journal.includes('scientific reports') || journal.includes('nature')) {
+    return 'assets/images/publications/nature_scientific_reports.png';
+  }
+
+  // 9. Heliyon (Elsevier / Cell Press)
+  if (journal.includes('heliyon') || journal.includes('cell press')) {
+    return 'assets/images/publications/heliyon_cell_press.png';
+  }
+
+  // 10. Information and Software Technology (Elsevier)
+  if (journal.includes('information and software') || journal.includes('software technology') || journal.includes('software business') || journal.includes('euromicro')) {
+    return 'assets/images/publications/elsevier_ist_cover.png';
+  }
+
+  // 11. MIS Quarterly
+  if (journal.includes('mis quarterly') || journal.includes('misq')) {
+    return 'assets/images/publications/mis_quarterly.png';
+  }
+
+  // 12. Fallbacks
+  if (title.includes('cyber') || title.includes('security') || title.includes('forensic')) {
+    return 'assets/images/cybersecurity-lab.jpg';
+  }
+  if (title.includes('ai') || title.includes('learning') || title.includes('analytics')) {
+    return 'assets/images/ai-data-science.jpg';
+  }
+
+  return 'assets/images/publications/journal_of_sensors.jpg';
+}
+
 // Publication Type & Author Highlighting Helpers
 function getPublicationTypeBadge(type) {
   const t = type || 'Journal Article (Peer-Reviewed)';
@@ -1814,7 +1890,7 @@ function research() {
           ${faculty.filter(f => f && f.name !== 'System Administrator').flatMap(f => f.pubs.map(p => ({ ...p, authorName: f.name, lecturerId: f.id }))).slice(0, 10).map(pub => `
             <article class="pub-card-flex">
               <div class="pub-thumb-wrap">
-                <img src="${pub.image || 'assets/images/research-lab.png'}" alt="${pub.title}">
+                <img src="${getPublicationCoverImage(pub)}" alt="${pub.title}">
               </div>
               <div class="pub-content-col">
                 <div class="pub-meta-row">
@@ -2799,7 +2875,7 @@ function profile(id) {
           ` : f.pubs.map(pub => `
             <article class="pub-card-flex">
               <div class="pub-thumb-wrap">
-                <img src="${pub.image || 'assets/images/research-lab.png'}" alt="${pub.title}">
+                <img src="${getPublicationCoverImage(pub)}" alt="${pub.title}">
               </div>
               <div class="pub-content-col">
                 <div class="pub-meta-row">
@@ -3437,22 +3513,7 @@ function _renderCrawledAlertCard(pub) {
   const user = userStr ? JSON.parse(userStr) : null;
   const currentLecturerName = user ? user.name : '';
 
-  // Determine cover image
-  let coverImg = pub.image;
-  if (!coverImg || coverImg === 'assets/images/research-lab.png') {
-    if (pub.journal && (pub.journal.toLowerCase().includes('communication systems') || pub.journal.toLowerCase().includes('sensors'))) {
-      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
-    } else if (pub.title && (pub.title.toLowerCase().includes('wireless') || pub.title.toLowerCase().includes('sensor') || pub.title.toLowerCase().includes('green'))) {
-      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
-    } else if (pub.title && (pub.title.toLowerCase().includes('cyber') || pub.title.toLowerCase().includes('security') || pub.title.toLowerCase().includes('forensic'))) {
-      coverImg = 'assets/images/cybersecurity-lab.jpg';
-    } else if (pub.title && (pub.title.toLowerCase().includes('ai') || pub.title.toLowerCase().includes('learning') || pub.title.toLowerCase().includes('analytics') || pub.title.toLowerCase().includes('curriculum'))) {
-      coverImg = 'assets/images/ai-data-science.jpg';
-    } else {
-      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
-    }
-  }
-
+  const coverImg = getPublicationCoverImage(pub);
   const pubType = pub.type || (pub.journal && pub.journal.toLowerCase().includes('conference') ? 'Conference Paper' : 'Journal Article (Peer-Reviewed)');
 
   return `
@@ -3668,7 +3729,7 @@ function renderIntranetVerification(publications) {
           const userStr = localStorage.getItem('sotssUser');
           const user = userStr ? JSON.parse(userStr) : null;
           const currentLecturerName = user ? user.name : '';
-          const coverImg = pub.image || 'assets/images/publications/wiley_ijcs_cover.png';
+          const coverImg = getPublicationCoverImage(pub);
           return `
             <div class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
               <div class="pub-thumb-wrap" style="width:110px; min-width:110px; height:90px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f1f5f9;">
@@ -5401,8 +5462,8 @@ function publicationDetail(pubId) {
           </div>
 
           <div style="display: grid; grid-template-columns: 180px 1fr; gap: 28px; margin-bottom: 28px; align-items: flex-start;">
-            <div style="border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); aspect-ratio: 4/3;">
-              <img src="${foundPub.image || 'assets/images/research-lab.png'}" alt="${foundPub.title}" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); aspect-ratio: 3/4; max-height: 240px;">
+              <img src="${getPublicationCoverImage(foundPub)}" alt="${foundPub.title}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div>
               <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; line-height: 1.35;">${foundPub.title}</h1>
