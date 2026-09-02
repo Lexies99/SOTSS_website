@@ -1750,49 +1750,88 @@ footer {
    ============================================================================== */
 .student-shortcuts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
 }
 .shortcut-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: var(--radius-sm);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 14px;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  box-shadow: 0 4px 14px rgba(0, 30, 60, 0.05);
   text-decoration: none;
   color: inherit;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .shortcut-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+  box-shadow: 0 16px 32px rgba(0, 30, 60, 0.12);
 }
-.shortcut-icon-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  flex-shrink: 0;
+.shortcut-card-img {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  background: #f1f5f9;
 }
-.shortcut-info h4 {
-  font-size: 0.98rem;
+.shortcut-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.shortcut-card:hover .shortcut-card-img img {
+  transform: scale(1.06);
+}
+.shortcut-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 30, 60, 0.88);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 4px;
 }
-.shortcut-info span {
-  font-size: 0.8rem;
+.shortcut-card-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.shortcut-card-body h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.shortcut-card-body p {
+  font-size: 0.84rem;
   color: var(--text-body);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  flex: 1;
+}
+.shortcut-card-link {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  transition: gap 0.2s ease;
+}
+.shortcut-card:hover .shortcut-card-link {
+  color: #0284c7;
+  gap: 9px;
 }
 
 /* Accordion Component */
@@ -2178,6 +2217,7 @@ footer {
   .hero-text-side { padding-right: 0; }
   .info-box-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .info-box-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .student-shortcuts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .alumni-spotlight-card { grid-template-columns: 1fr; }
   .hod-showcase-card { grid-template-columns: 1fr; }
   .hod-message-col { padding: 30px; }
@@ -2185,6 +2225,7 @@ footer {
 
 @media (max-width: 640px) {
   .info-box-grid, .info-box-grid-2, .info-box-grid-4 { grid-template-columns: 1fr; }
+  .student-shortcuts-grid { grid-template-columns: 1fr; }
   .hero-text-side h1 { font-size: 2.1rem; }
   .programme-filter-bar { width: 100%; border-radius: var(--radius-sm); }
   .prog-filter-btn { flex: 1; text-align: center; }

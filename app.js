@@ -1273,34 +1273,50 @@ function students() {
 
         <div class="student-shortcuts-grid">
           <a href="https://lms.gimpa.edu.gh/" target="_blank" class="shortcut-card">
-            <div class="shortcut-icon-circle">💻</div>
-            <div class="shortcut-info">
+            <div class="shortcut-card-img">
+              <img src="assets/images/lms-portal.jpg" alt="GIMPA LMS Moodle">
+              <span class="shortcut-badge">Official LMS</span>
+            </div>
+            <div class="shortcut-card-body">
               <h4>GIMPA LMS</h4>
-              <span>Course slides, quizzes &amp; assignments</span>
+              <p>Access course slides, lecture notes, quizzes, assignments, and semester grades on Moodle.</p>
+              <span class="shortcut-card-link">Access LMS Portal &nearr;</span>
             </div>
           </a>
 
           <a href="https://gimpa.edu.gh/library/" target="_blank" class="shortcut-card">
-            <div class="shortcut-icon-circle">📚</div>
-            <div class="shortcut-info">
+            <div class="shortcut-card-img">
+              <img src="assets/images/elibrary-journals.jpg" alt="GIMPA Digital Library">
+              <span class="shortcut-badge">Research Commons</span>
+            </div>
+            <div class="shortcut-card-body">
               <h4>E-Library &amp; Journals</h4>
-              <span>IEEE, ACM &amp; ScienceDirect</span>
+              <p>Explore IEEE Xplore, ACM Digital Library, ScienceDirect, and international e-resources.</p>
+              <span class="shortcut-card-link">Open Digital Library &nearr;</span>
             </div>
           </a>
 
           <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="shortcut-card">
-            <div class="shortcut-icon-circle">📝</div>
-            <div class="shortcut-info">
+            <div class="shortcut-card-img">
+              <img src="assets/images/admissions-portal.jpg" alt="Admissions Portal">
+              <span class="shortcut-badge">Admissions</span>
+            </div>
+            <div class="shortcut-card-body">
               <h4>Admissions Portal</h4>
-              <span>Track application &amp; admissions status</span>
+              <p>Submit online applications, upload academic transcripts, and track admission status.</p>
+              <span class="shortcut-card-link">Admissions Portal &nearr;</span>
             </div>
           </a>
 
           <a href="#contact" class="shortcut-card">
-            <div class="shortcut-icon-circle">🎧</div>
-            <div class="shortcut-info">
+            <div class="shortcut-card-img">
+              <img src="assets/images/it-helpdesk.jpg" alt="IT Helpdesk & Tech Support">
+              <span class="shortcut-badge">Support Desk</span>
+            </div>
+            <div class="shortcut-card-body">
               <h4>IT Helpdesk</h4>
-              <span>Password reset &amp; account support</span>
+              <p>Get assistance with student email (@st.gimpa.edu.gh), password reset, and campus Wi-Fi access.</p>
+              <span class="shortcut-card-link">Contact IT Helpdesk &rarr;</span>
             </div>
           </a>
         </div>
