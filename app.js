@@ -1644,7 +1644,26 @@ function formatAuthorsWithHighlight(authorsStr, currentFacultyName) {
     if (match) currentKey = match.key;
   }
 
-  const authorsList = authorsStr.split(';').map(a => a.trim()).filter(Boolean);
+  // Parse list whether delimited by semicolons or commas
+  let authorsList = [];
+  if (authorsStr.includes(';')) {
+    authorsList = authorsStr.split(';').map(a => a.trim()).filter(Boolean);
+  } else if (authorsStr.includes(',')) {
+    const rawTokens = authorsStr.split(',').map(a => a.trim()).filter(Boolean);
+    const combined = [];
+    for (let i = 0; i < rawTokens.length; i++) {
+      if (i + 1 < rawTokens.length && rawTokens[i+1].length <= 3 && !rawTokens[i+1].includes(' ')) {
+        combined.push(`${rawTokens[i]}, ${rawTokens[i+1]}`);
+        i++;
+      } else {
+        combined.push(rawTokens[i]);
+      }
+    }
+    authorsList = combined;
+  } else {
+    authorsList = [authorsStr.trim()];
+  }
+
   if (authorsList.length === 0) return authorsStr;
 
   return authorsList.map(author => {
@@ -3414,23 +3433,53 @@ const CRAWLED_PAGE_SIZE   = 5;
 
 function _renderCrawledAlertCard(pub) {
   if (!pub) return '';
+  const userStr = localStorage.getItem('sotssUser');
+  const user = userStr ? JSON.parse(userStr) : null;
+  const currentLecturerName = user ? user.name : '';
+
+  // Determine cover image
+  let coverImg = pub.image;
+  if (!coverImg || coverImg === 'assets/images/research-lab.png') {
+    if (pub.journal && (pub.journal.toLowerCase().includes('communication systems') || pub.journal.toLowerCase().includes('sensors'))) {
+      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
+    } else if (pub.title && (pub.title.toLowerCase().includes('wireless') || pub.title.toLowerCase().includes('sensor') || pub.title.toLowerCase().includes('green'))) {
+      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
+    } else if (pub.title && (pub.title.toLowerCase().includes('cyber') || pub.title.toLowerCase().includes('security') || pub.title.toLowerCase().includes('forensic'))) {
+      coverImg = 'assets/images/cybersecurity-lab.jpg';
+    } else if (pub.title && (pub.title.toLowerCase().includes('ai') || pub.title.toLowerCase().includes('learning') || pub.title.toLowerCase().includes('analytics') || pub.title.toLowerCase().includes('curriculum'))) {
+      coverImg = 'assets/images/ai-data-science.jpg';
+    } else {
+      coverImg = 'assets/images/publications/wiley_ijcs_cover.png';
+    }
+  }
+
+  const pubType = pub.type || (pub.journal && pub.journal.toLowerCase().includes('conference') ? 'Conference Paper' : 'Journal Article (Peer-Reviewed)');
+
   return `
-    <article class="pub-item" style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-        <div style="flex:1;">
-          <div class="pub-meta" style="display:flex; gap:12px; margin-bottom:8px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em">
-            <span style="color:#ea580c">Crawled Alert</span>
-            <span style="color:var(--text-body)">${pub.year || 'N/A'}</span>
-          </div>
-          <h3 style="font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title || 'Untitled Publication'}</h3>
-          <div style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:4px">${pub.journal || 'Unknown Venue'}</div>
-          <div style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors || 'N/A'}</div>
-          ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; padding:10px; border-radius:4px; margin-top:8px;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
-          ${pub.url ? `<div style="font-size:0.82rem; margin-top:8px;"><a href="${pub.url}" target="_blank" rel="noopener noreferrer" style="color:var(--accent); font-weight:600; text-decoration:underline;">Review Online →</a></div>` : ''}
+    <article class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
+      <div class="pub-thumb-wrap" style="width:130px; min-width:130px; height:110px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f1f5f9;">
+        <img src="${coverImg}" alt="${pub.title || 'Publication cover'}" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="pub-content-col" style="flex:1;">
+        <div class="pub-meta-row" style="display:flex; gap:10px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; gap:5px; background:#ffedd5; color:#c2410c; border:1px solid #fed7aa; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">🔍 Crawled Alert</span>
+          ${getPublicationTypeBadge(pubType)}
+          <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || '2025'}</span>
         </div>
-        <div style="display:flex; gap:8px; margin-top:10px; flex-shrink:0;">
-          <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a; cursor:pointer;">Confirm Work</button>
-          <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5; cursor:pointer;">Not Mine</button>
+        <h3 style="font-size:1.08rem; font-weight:700; color:var(--ink); margin:0 0 6px 0; line-height:1.4;">${pub.title || 'Untitled Publication'}</h3>
+        <div class="pub-venue" style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:6px;">${pub.journal || 'Academic Journal / Venue'}</div>
+        <div class="pub-authors-row" style="font-size:0.84rem; color:var(--text-body); margin-bottom:8px;">
+          <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
+        </div>
+        ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; border:1px solid #f1f5f9; padding:10px 14px; border-radius:6px; margin-bottom:12px; line-height:1.55;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:auto;">
+          <div>
+            ${pub.url ? `<a href="${pub.url}" target="_blank" rel="noopener noreferrer" style="font-size:0.82rem; color:var(--accent); font-weight:700; text-decoration:underline;">Review Online &nearr;</a>` : ''}
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a; cursor:pointer;">Confirm Work</button>
+            <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5; cursor:pointer;">Not Mine</button>
+          </div>
         </div>
       </div>
     </article>
@@ -3610,23 +3659,40 @@ function renderIntranetVerification(publications) {
     <!-- ── MY VERIFIED PUBLICATIONS ────────────────────────────────────── -->
     <div>
       <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary); margin-bottom:14px;">📄 My Verified Publications (${verified.length})</h3>
-      <div id="myPubsListContainer" style="display:flex; flex-direction:column; gap:12px;">
+      <div id="myPubsListContainer" style="display:flex; flex-direction:column; gap:16px;">
         ${verified.length === 0 ? `
           <div style="text-align:center; padding:28px; background:#f8fafc; border:1px dashed #c8d8ea; border-radius:var(--radius-sm); color:var(--text-body); font-style:italic; font-size:0.88rem;">
             No verified publications yet. Confirm crawled alerts above or submit manually.
           </div>
-        ` : verified.map(pub => `
-          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; box-shadow:var(--shadow-sm);">
-            <div style="flex:1;">
-              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:#16a34a; margin-bottom:4px;">✔ Verified &nbsp;·&nbsp; ${pub.year || 'N/A'}</div>
-              <div style="font-size:0.95rem; font-weight:700; color:var(--ink); margin-bottom:2px;">${pub.title}</div>
-              <div style="font-size:0.82rem; color:var(--primary); font-style:italic;">${pub.journal || ''}</div>
-              <div style="font-size:0.78rem; color:var(--text-body); margin-top:3px;">${pub.authors || ''}</div>
-              ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.78rem; color:var(--accent); margin-top:4px; display:inline-block;">View →</a>` : ''}
+        ` : verified.map(pub => {
+          const userStr = localStorage.getItem('sotssUser');
+          const user = userStr ? JSON.parse(userStr) : null;
+          const currentLecturerName = user ? user.name : '';
+          const coverImg = pub.image || 'assets/images/publications/wiley_ijcs_cover.png';
+          return `
+            <div class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
+              <div class="pub-thumb-wrap" style="width:110px; min-width:110px; height:90px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f1f5f9;">
+                <img src="${coverImg}" alt="${pub.title}" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+              <div class="pub-content-col" style="flex:1;">
+                <div class="pub-meta-row" style="display:flex; gap:8px; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
+                  <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:#16a34a; background:#dcfce7; border:1px solid #bbf7d0; padding:2px 8px; border-radius:999px;">✔ Verified</span>
+                  ${getPublicationTypeBadge(pub.type || 'Journal Article (Peer-Reviewed)')}
+                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
+                </div>
+                <h4 style="font-size:1rem; font-weight:700; color:var(--ink); margin:0 0 4px 0; line-height:1.35;">${pub.title}</h4>
+                <div style="font-size:0.84rem; color:var(--primary); font-style:italic; margin-bottom:4px;">${pub.journal || ''}</div>
+                <div style="font-size:0.8rem; color:var(--text-body); margin-bottom:8px;">
+                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:auto;">
+                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.8rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Document &nearr;</a>` : '<span></span>'}
+                  <button onclick="window.handleDeletePublication(${pub.id})" style="background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 12px; font-size:0.78rem; font-weight:600; cursor:pointer;" title="Remove this publication">✕ Remove</button>
+                </div>
+              </div>
             </div>
-            <button onclick="window.handleDeletePublication(${pub.id})" style="flex-shrink:0; background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 12px; font-size:0.78rem; font-weight:600; cursor:pointer;" title="Remove this publication">✕ Remove</button>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     </div>
   `;
@@ -4190,6 +4256,8 @@ async function loadDynamicData() {
           l.pubs.push({
             id: pub.id,
             year: pub.year,
+            type: pub.type || 'Journal Article (Peer-Reviewed)',
+            image: pub.image || (pub.title && pub.title.toLowerCase().includes('wireless') ? 'assets/images/publications/wiley_ijcs_cover.png' : 'assets/images/research-lab.png'),
             title: pub.title,
             journal: pub.journal,
             authors: pub.authors,
