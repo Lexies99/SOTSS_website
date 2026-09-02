@@ -19,12 +19,12 @@ let faculty = [
         id: 101,
         year: '2025', 
         type: 'Journal Article (Peer-Reviewed)',
-        image: 'assets/images/ai-data-science.jpg',
-        title: 'Learning analytics for retention prediction in emerging universities', 
-        journal: 'Education and Information Technologies (Springer Nature)', 
-        authors: 'Engmann, F.; Budu, J.',
-        summary: 'Investigating predictive machine learning models to detect student drop-out signals early in semester cycles using LMS telemetry data.',
-        url: 'https://doi.org/10.1007/s10639-025-01234'
+        image: 'assets/images/publications/wiley_ijcs_cover.png',
+        title: 'Optimizing Packet Size for Enhanced Performance in Wireless Sensor Networks for Environmental Monitoring Applications', 
+        journal: 'International Journal of Communication Systems (Wiley Online Library, Vol. 38, Issue 15, e70253)', 
+        authors: 'Felicia Engmann; Kofi Sarpong Adu-Manu; Jamal-Deen Abdulai; Ferdinand Apietu Katsriku',
+        summary: 'Wireless sensor networks (WSNs) are widely used in environmental monitoring applications (EMAs) for water quality, air quality, and structural health monitoring. In this study, we investigate the impact of packet size on the performance of an IEEE 802.15.4 WSN, evaluating throughput, packet delivery ratio, and energy consumption across varying node densities.',
+        url: 'https://doi.org/10.1002/dac.70253'
       },
       { 
         id: 102,
@@ -1650,13 +1650,12 @@ function formatAuthorsWithHighlight(authorsStr, currentFacultyName) {
   return authorsList.map(author => {
     const authorLower = author.toLowerCase();
     const isCurrentFaculty = currentKey && authorLower.includes(currentKey);
-    const isAnyFaculty = facultyTokens.some(t => authorLower.includes(t.key));
 
     if (isCurrentFaculty) {
+      // Highlight ONLY the current faculty member
       return `<strong style="background: linear-gradient(135deg, #fef08a 0%, #fde047 100%); color: #713f12; padding: 2px 8px; border-radius: 4px; border: 1px solid #eab308; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">⭐ ${author} (Faculty Author)</strong>`;
-    } else if (isAnyFaculty) {
-      return `<strong style="background: #e0f2fe; color: #0369a1; padding: 2px 7px; border-radius: 4px; border: 1px solid #bae6fd; font-weight: 700;">${author}</strong>`;
     } else {
+      // All other authors remain plain / unhighlighted
       return `<span style="color: #475569;">${author}</span>`;
     }
   }).join('; ');

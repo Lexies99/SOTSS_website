@@ -4,9 +4,6 @@ from backend.database import DB_PATH, init_db
 from backend.auth import get_password_hash
 
 def seed_data():
-    # Delete database file to force schema updates
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
     # Ensure database file and schema exists
     init_db()
     
@@ -83,14 +80,14 @@ def seed_data():
         # Dr. Felicia Engmann (id: 1)
         (
             1,
-            "Learning analytics for retention prediction in emerging universities",
-            "Investigating predictive machine learning models to detect student drop-out signals early in semester cycles using LMS telemetry data.",
+            "Optimizing Packet Size for Enhanced Performance in Wireless Sensor Networks for Environmental Monitoring Applications",
+            "Wireless sensor networks (WSNs) are widely used in environmental monitoring applications (EMAs) for water quality, air quality, and structural health monitoring. In this study, we investigate the impact of packet size on the performance of an IEEE 802.15.4 WSN, evaluating throughput, packet delivery ratio, and energy consumption across varying node densities.",
             "2025",
-            "Education and Information Technologies (Springer Nature)",
-            "Engmann, F.; Budu, J.",
-            "https://doi.org/10.1007/s10639-025-01234",
+            "International Journal of Communication Systems (Wiley Online Library, Vol. 38, Issue 15, e70253)",
+            "Felicia Engmann; Kofi Sarpong Adu-Manu; Jamal-Deen Abdulai; Ferdinand Apietu Katsriku",
+            "https://doi.org/10.1002/dac.70253",
             "Journal Article (Peer-Reviewed)",
-            "assets/images/ai-data-science.jpg"
+            "assets/images/publications/wiley_ijcs_cover.png"
         ),
         (
             1,
