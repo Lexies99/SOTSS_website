@@ -1153,10 +1153,14 @@ function study() {
 
             return `
               <div class="programme-detail-card" data-level="${catGroup}">
-                <img src="${cardImg}" alt="${p.title}" class="prog-header-img">
+                <a href="#programme/${p.id}" style="display:block; overflow:hidden;">
+                  <img src="${cardImg}" alt="${p.title}" class="prog-header-img" style="transition:transform 0.3s ease;">
+                </a>
                 <div class="prog-card-body">
                   <span class="prog-level-badge ${badgeClass}">${p.level}</span>
-                  <h3 style="font-size:1.15rem; font-weight:700; color:var(--primary); margin-bottom:8px;">${p.title}</h3>
+                  <h3 style="font-size:1.15rem; font-weight:700; color:var(--primary); margin-bottom:8px;">
+                    <a href="#programme/${p.id}" style="color:var(--primary); text-decoration:none;">${p.title}</a>
+                  </h3>
                   <p style="font-size:0.88rem; color:var(--text-body); line-height:1.55; margin-bottom:14px; flex:1;">${p.shortDesc}</p>
                   
                   <div class="prog-meta-list">
@@ -1171,8 +1175,8 @@ function study() {
                   </div>
 
                   <div style="display:flex; gap:10px; margin-top:12px;">
-                    <a href="#programme/${p.id}" class="btn btn-outline" style="flex:1; padding:8px 12px; font-size:0.82rem; justify-content:center; text-align:center;">Curriculum Details</a>
-                    <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="padding:8px 14px; font-size:0.82rem; justify-content:center;">Apply Online</a>
+                    <a href="#programme/${p.id}" class="btn btn-outline" style="flex:1; padding:8px 10px; font-size:0.82rem; font-weight:700; justify-content:center; text-align:center;">Requirements &amp; Details →</a>
+                    <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="padding:8px 14px; font-size:0.82rem; font-weight:700; justify-content:center;">Apply Online</a>
                   </div>
                 </div>
               </div>
@@ -5121,6 +5125,212 @@ function projectDetail(projId) {
             </div>
           ` : ''}
         </article>
+      </div>
+    </section>
+  `;
+}
+
+function programmeDetail(progId) {
+  const p = programmesData.find(x => x.id === progId);
+  
+  if (!p) {
+    return `
+      <section class="section" style="min-height: 70vh; padding: 60px 0; background: #f8fafc;">
+        <div class="container" style="text-align: center; max-width: 600px;">
+          <h2 style="color: var(--primary); margin-bottom: 12px;">Programme Not Found</h2>
+          <p style="color: var(--text-body); margin-bottom: 24px;">The requested academic degree programme could not be found in our catalogue.</p>
+          <a href="#study" class="btn btn-primary">Explore All Programmes →</a>
+        </div>
+      </section>
+    `;
+  }
+
+  let catGroup = 'Master';
+  let badgeClass = 'badge-postgrad';
+  if (p.level === 'Undergraduate') { catGroup = 'Undergraduate'; badgeClass = 'badge-undergrad'; }
+  else if (p.level === 'Doctoral') { catGroup = 'Doctoral'; badgeClass = 'badge-phd'; }
+  else if (p.level === 'Postgraduate Diploma') { catGroup = 'Postgraduate Diploma'; badgeClass = 'badge-cert'; }
+
+  let heroImg = 'assets/images/students-hub.jpg';
+  if (p.id.includes('cyber')) heroImg = 'assets/images/cybersecurity-lab.jpg';
+  else if (p.id.includes('analytics') || p.id.includes('science')) heroImg = 'assets/images/ai-data-science.jpg';
+  else if (p.id.includes('phd') || p.id.includes('mphil')) heroImg = 'assets/images/campus-hero.png';
+  else if (p.id.includes('ict')) heroImg = 'assets/images/1000211024.png';
+
+  return `
+    <!-- Programme Detail Hero -->
+    <section class="hero-split-section" style="padding: 40px 0; background: linear-gradient(135deg, #001e36 0%, #002b49 60%, #083b66 100%); color: #ffffff;">
+      <div class="container">
+        <!-- Breadcrumbs -->
+        <div style="margin-bottom: 20px; font-size: 0.85rem; color: #94a3b8;">
+          <a href="#home" style="color: #cbd5e1; text-decoration:none;">Home</a> &nbsp;/&nbsp; 
+          <a href="#study" style="color: #cbd5e1; text-decoration:none;">Study With Us</a> &nbsp;/&nbsp; 
+          <span style="color: #38bdf8; font-weight: 600;">${p.title}</span>
+        </div>
+
+        <div class="hero-split-grid" style="align-items: center;">
+          <div class="hero-text-side fade-up">
+            <div style="display: flex; gap: 10px; margin-bottom: 14px; align-items: center;">
+              <span class="prog-level-badge ${badgeClass}" style="font-size: 0.78rem; padding: 5px 12px;">${p.level}</span>
+              <span style="color: #38bdf8; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em;">GIMPA SOTSS</span>
+            </div>
+            <h1 style="color: #ffffff; font-size: 2.3rem; line-height: 1.25; margin-bottom: 14px;">${p.title}</h1>
+            <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.65; margin-bottom: 24px;">
+              ${p.overview || p.shortDesc}
+            </p>
+            
+            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+              <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="background: #ffd700; color: #002b49; border-color: #ffd700; font-weight: 700; padding: 12px 26px; font-size: 0.95rem;">Apply for this Programme →</a>
+              <a href="#contact" class="btn btn-outline" style="color: #ffffff; border-color: rgba(255,255,255,0.4); padding: 12px 22px;">Inquire with Admissions</a>
+            </div>
+          </div>
+          
+          <div class="hero-slider-side fade-up fade-up-d1">
+            <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.3); border: 2px solid rgba(56, 189, 248, 0.3); aspect-ratio: 16/10;">
+              <img src="${heroImg}" alt="${p.title}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Programme Main Details Layout -->
+    <section class="section" style="background: #f8fafc; padding: 60px 0;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: flex-start;">
+          
+          <!-- Left Column: Detailed Sections -->
+          <div style="display: flex; flex-direction: column; gap: 36px;">
+            
+            <!-- Section 1: Admission Requirements (CRITICAL USER REQUEST) -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800;">📋</div>
+                <div>
+                  <h2 style="color: var(--primary); font-size: 1.4rem; font-weight: 800; margin: 0;">Admission Requirements</h2>
+                  <p style="color: var(--text-body); font-size: 0.84rem; margin: 0;">Criteria and qualifications needed to gain admission into this programme</p>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px;">
+                ${p.requirements ? p.requirements.map((req, idx) => `
+                  <div style="display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px; background: #f8fafc; border-left: 4px solid #0284c7; border-radius: 6px;">
+                    <div style="font-weight: 800; color: #0284c7; font-size: 0.95rem; line-height: 1.4;">${idx + 1}.</div>
+                    <div style="color: #1e293b; font-size: 0.94rem; line-height: 1.6; font-weight: 500;">${req}</div>
+                  </div>
+                `).join('') : `
+                  <div style="padding: 14px 18px; background: #f8fafc; border-radius: 6px; color: var(--text-body);">
+                    Standard GIMPA entry requirements apply. Please contact admissions office for customized qualification review.
+                  </div>
+                `}
+              </div>
+
+              <div style="margin-top: 24px; padding: 16px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; font-size: 0.88rem; color: #92400e; display: flex; gap: 10px; align-items: center;">
+                <span style="font-size: 1.2rem;">💡</span>
+                <span>International students and applicants with foreign certificates must submit evaluation letters from the <strong>Ghana Tertiary Education Commission (GTEC)</strong>.</span>
+              </div>
+            </div>
+
+            <!-- Section 2: Curriculum & Core Courses -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800;">📚</div>
+                <div>
+                  <h2 style="color: var(--primary); font-size: 1.4rem; font-weight: 800; margin: 0;">Curriculum &amp; Key Modules</h2>
+                  <p style="color: var(--text-body); font-size: 0.84rem; margin: 0;">Core subject areas and practical competencies covered across semesters</p>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 20px;">
+                ${p.curriculum ? p.curriculum.map(c => `
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <span style="color: #10b981; font-weight: 800;">✔</span>
+                    <span style="font-size: 0.9rem; font-weight: 600; color: #1e293b;">${c}</span>
+                  </div>
+                `).join('') : ''}
+              </div>
+            </div>
+
+            <!-- Section 3: Career Prospects -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #f3e8ff; color: #7e22ce; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800;">🚀</div>
+                <div>
+                  <h2 style="color: var(--primary); font-size: 1.4rem; font-weight: 800; margin: 0;">Career Prospects &amp; Roles</h2>
+                  <p style="color: var(--text-body); font-size: 0.84rem; margin: 0;">Industry job roles and leadership pathways available to graduates</p>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;">
+                ${p.careers ? p.careers.map(car => `
+                  <span style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; border-radius: 999px; font-size: 0.86rem; font-weight: 700;">
+                    ★ ${car}
+                  </span>
+                `).join('') : ''}
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Key Facts & Quick Application Sidebar -->
+          <div style="position: sticky; top: 90px; display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Quick Facts Card -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 18px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">Programme Summary</h3>
+              
+              <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
+                  <span style="color: var(--text-body);">Academic Level:</span>
+                  <strong style="color: var(--primary);">${p.level}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
+                  <span style="color: var(--text-body);">Duration:</span>
+                  <strong style="color: var(--primary);">${p.duration}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
+                  <span style="color: var(--text-body);">Study Mode:</span>
+                  <strong style="color: var(--primary);">${p.mode}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
+                  <span style="color: var(--text-body);">Campus:</span>
+                  <strong style="color: var(--primary);">Greenhill, Accra</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; padding-bottom: 4px;">
+                  <span style="color: var(--text-body);">Accreditation:</span>
+                  <strong style="color: #15803d;">100% GTEC Accredited</strong>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <a href="https://apply.gimpa.edu.gh/start" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-weight: 700; font-size: 0.95rem; background: #ffd700; color: #002b49; border-color: #ffd700;">Apply for Admission →</a>
+              </div>
+            </div>
+
+            <!-- Admissions Support Card -->
+            <div style="background: linear-gradient(135deg, #001e36 0%, #002b49 100%); color: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
+              <h4 style="color: #38bdf8; font-size: 1rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Need Admissions Advice?</h4>
+              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px;">
+                Our academic advisors are available to review your certificates and help you choose the best degree pathway.
+              </p>
+              <div style="font-size: 0.85rem; margin-bottom: 14px;">
+                <div style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">Email:</div>
+                <a href="mailto:csshead@gimpa.edu.gh" style="color: #38bdf8; font-weight: 700;">csshead@gimpa.edu.gh</a>
+              </div>
+              <div style="font-size: 0.85rem; margin-bottom: 18px;">
+                <div style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">Hotline:</div>
+                <strong style="color: #ffffff;">+233 (0) 501620138</strong>
+              </div>
+              <a href="#contact" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 0.82rem; padding: 8px; color: #fff; border-color: rgba(255,255,255,0.4);">Send Admissions Inquiry</a>
+            </div>
+
+          </div>
+
+        </div>
       </div>
     </section>
   `;
