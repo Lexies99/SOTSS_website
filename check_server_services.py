@@ -1,0 +1,37 @@
+import urllib.request
+import urllib.parse
+import http.cookiejar
+import ssl
+import re
+
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+cj = http.cookiejar.CookieJar()
+opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj), urllib.request.HTTPSHandler(context=ctx))
+
+# Login
+resp = opener.open('https://46.62.214.146:8083/login/')
+html = resp.read().decode('utf-8', errors='ignore')
+token = re.search(r'name=["\']token["\']\s+value=["\']([^"\']+)["\']', html).group(1)
+
+login_data = urllib.parse.urlencode({
+    'user': 'admin',
+    'password': 'PsasaqecmCFNgu43wfkRgxMKR',
+    'token': token
+}).encode('utf-8')
+opener.open(urllib.request.Request('https://46.62.214.146:8083/login/', data=login_data))
+
+# Open list/server
+req_srv = urllib.request.Request('https://46.62.214.146:8083/list/server/', headers={
+    'Referer': 'https://46.62.214.146:8083/list/web/',
+    'User-Agent': 'Mozilla/5.0'
+})
+resp_srv = opener.open(req_srv)
+html_srv = resp_srv.read().decode('utf-8', errors='ignore')
+
+print('Links on /list/server/:')
+for href in re.findall(r'href=["\'](/[^"\']+)["\']', html_srv):
+    if any(k in href for k in ['restart', 'service', 'cron', 'terminal', 'edit']):
+        print(' ', href.replace('&amp;', '&').replace('&equals;', '='))

@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 backend/database.db
+*.db
 .DS_Store
 assets/.DS_Store
 **/__pycache__/

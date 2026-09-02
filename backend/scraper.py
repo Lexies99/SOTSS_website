@@ -24,7 +24,7 @@ if os.path.exists(dotenv_path):
                     os.environ[key] = val
 
 def send_crawler_alert_email(recipient_email: str, title: str, year: str):
-    SMTP_SERVER = os.environ.get("SMTP_SERVER", "localhost")
+    SMTP_SERVER = os.environ.get("SMTP_SERVER", "127.0.0.1")
     SMTP_PORT = int(os.environ.get("SMTP_PORT", "1025"))
     SMTP_USER = os.environ.get("SMTP_USER", "")
     SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
@@ -40,7 +40,7 @@ Our automated academic database scanner has discovered a new publication that ma
 Please log in to the GIMPA CS&IS Lecturer Intranet Portal and navigate to the
 Verification Centre to confirm or reject this publication:
 
-  👉 https://libraryapp.manamatechnologies.com/#intranet
+  https://libraryapp.manamatechnologies.com/#intranet
 
 Once verified, the publication will automatically appear on your public
 profile on the department website.
@@ -61,7 +61,7 @@ Department of Computer Science & Information Systems
 
     # Always log to console for easy validation in development
     print("\n" + "="*50)
-    print(f"SMTP EMAIL SENDING MOCK / LOG (CRAWLER ALERT):")
+    print(f"SMTP EMAIL SENDING LOG (CRAWLER ALERT):")
     print(f"To: {recipient_email}")
     print(f"Subject: {subject}")
     try:
@@ -71,15 +71,17 @@ Department of Computer Science & Information Systems
     print("="*50 + "\n")
 
     try:
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=5)
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
         if SMTP_USER and SMTP_PASSWORD:
+            server.ehlo()
             server.starttls()
+            server.ehlo()
             server.login(SMTP_USER, SMTP_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print("SMTP crawler alert email sent successfully.")
+        print("[SMTP] Crawler alert email sent successfully.")
     except Exception as e:
-        print(f"SMTP Server not available. (Crawler alert email printed to stdout): {e}")
+        print(f"[SMTP] Server exception ({e}). Crawler alert email logged to stdout.")
 
 SEMANTIC_SCHOLAR_SEARCH_URL = "https://api.semanticscholar.org/graph/v1/author/search"
 SEMANTIC_SCHOLAR_PAPERS_URL = "https://api.semanticscholar.org/graph/v1/author/{author_id}/papers"

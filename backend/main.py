@@ -34,6 +34,14 @@ if os.path.exists(dotenv_path):
 from backend.database import get_db, DB_PATH
 from backend.auth import verify_password, create_access_token, decode_access_token, get_password_hash
 from backend.scraper import scan_all_lecturers
+from backend.smtp_server import start_smtp_server_background
+
+# Start local SMTP listener background service on port 1025 only if running local dev SMTP
+try:
+    if os.environ.get("SMTP_SERVER", "127.0.0.1") in ("127.0.0.1", "localhost"):
+        start_smtp_server_background('127.0.0.1', int(os.environ.get("SMTP_PORT", "1025")))
+except Exception as e:
+    print(f"SMTP listener startup notice: {e}")
 
 app = FastAPI(title="SOTSS Academic Portal & Intranet API")
 
@@ -80,13 +88,47 @@ def generate_temp_password(length=8):
     chars = string.ascii_letters + string.digits
     return "".join(random.choice(chars) for _ in range(length))
 
-# Helper for sending temporary passwords via SMTP
-def send_temporary_password_email(recipient_email: str, temp_password: str):
-    SMTP_SERVER = os.environ.get("SMTP_SERVER", "localhost")
+# Helper for sending general emails via SMTP
+def send_smtp_email(recipient_email: str, subject: str, body: str) -> bool:
+    SMTP_SERVER = os.environ.get("SMTP_SERVER", "127.0.0.1")
     SMTP_PORT = int(os.environ.get("SMTP_PORT", "1025"))
     SMTP_USER = os.environ.get("SMTP_USER", "")
     SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
     
+    msg = MIMEMultipart()
+    msg['From'] = SMTP_USER or "no-reply@gimpa.edu.gh"
+    msg['To'] = recipient_email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    print("\n" + "="*50)
+    print(f"SMTP EMAIL DISPATCH:")
+    print(f"Target: {SMTP_SERVER}:{SMTP_PORT}")
+    print(f"To: {recipient_email}")
+    print(f"Subject: {subject}")
+    try:
+        print(f"Body:\n{body}")
+    except UnicodeEncodeError:
+        print(f"Body:\n{body.encode('ascii', errors='replace').decode('ascii')}")
+    print("="*50 + "\n")
+
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
+        if SMTP_USER and SMTP_PASSWORD:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        print("[SMTP] Email sent successfully.")
+        return True
+    except Exception as e:
+        print(f"[SMTP] Server exception ({e}). Email logged to stdout.")
+        return False
+
+# Helper for sending temporary passwords via SMTP
+def send_temporary_password_email(recipient_email: str, temp_password: str):
     subject = "Your SOTSS Lecturer Portal Temporary Password"
     body = f"""Dear Lecturer,
 
@@ -103,31 +145,7 @@ For security, please change this password in your Intranet profile page to your 
 Best regards,
 SOTSS Administration
 GIMPA"""
-
-    msg = MIMEMultipart()
-    msg['From'] = SMTP_USER or "no-reply@gimpa.edu.gh"
-    msg['To'] = recipient_email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
-
-    # Always write to logs for easy retrieval in development/testing
-    print("\n" + "="*50)
-    print(f"SMTP EMAIL SENDING MOCK / LOG:")
-    print(f"To: {recipient_email}")
-    print(f"Subject: {subject}")
-    print(f"Body:\n{body}")
-    print("="*50 + "\n")
-
-    try:
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=5)
-        if SMTP_USER and SMTP_PASSWORD:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(msg)
-        server.quit()
-        print("SMTP email sent successfully.")
-    except Exception as e:
-        print(f"SMTP Server not available. (Email was printed to stdout instead): {e}")
+    return send_smtp_email(recipient_email, subject, body)
 
 @app.post("/api/login")
 def login(background_tasks: BackgroundTasks, username: str = Form(...), password: str = Form(...)):
@@ -330,6 +348,7 @@ def trigger_news_fetch():
 # --- ADMIN NEWS MODERATION ENDPOINTS ---
 
 @app.get("/api/admin/news")
+@app.get("/api/manage/news")
 def get_admin_news(current_user: dict = Depends(get_current_lecturer)):
     if not current_user.get("is_admin"):
         raise HTTPException(status_code=403, detail="Admin access required")
@@ -342,6 +361,7 @@ def get_admin_news(current_user: dict = Depends(get_current_lecturer)):
     return news_items
 
 @app.post("/api/admin/news/{news_id}/status")
+@app.post("/api/manage/news/{news_id}/status")
 def update_news_status(
     news_id: str,
     status_val: str = Form(...),
@@ -487,7 +507,7 @@ def reject_pub(pub_id: int, lecturer: dict = Depends(get_current_lecturer)):
     pub = cursor.fetchone()
     if not pub:
         conn.close()
-        raise HTTPException(status_code=44, detail="Publication not found or access denied")
+        raise HTTPException(status_code=404, detail="Publication not found or access denied")
     
     cursor.execute("UPDATE publications SET status = 'rejected' WHERE id = ?", (pub_id,))
     conn.commit()
@@ -593,6 +613,7 @@ def delete_my_project(proj_id: int, lecturer: dict = Depends(get_current_lecture
     return {"status": "success", "message": "Project deleted successfully."}
 
 @app.get("/api/admin/publications")
+@app.get("/api/manage/publications")
 def get_admin_publications(lecturer: dict = Depends(get_current_lecturer)):
     if not lecturer["is_admin"]:
         raise HTTPException(status_code=403, detail="Admin permissions required.")
@@ -758,27 +779,29 @@ assets_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
 if os.path.exists(assets_path):
     app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
 
+NO_CACHE_HEADERS = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+
 # Specific files serving
 @app.get("/app.js")
 def get_app_js():
     js_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "app.js")
-    return FileResponse(js_path)
+    return FileResponse(js_path, headers=NO_CACHE_HEADERS)
 
 @app.get("/style.css")
 def get_style_css():
     css_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "style.css")
-    return FileResponse(css_path)
+    return FileResponse(css_path, headers=NO_CACHE_HEADERS)
 
 @app.get("/styles.css")
 def get_styles_css():
     base_css = os.path.join(os.path.dirname(os.path.dirname(__file__)), "styles.css")
-    return FileResponse(base_css)
+    return FileResponse(base_css, headers=NO_CACHE_HEADERS)
 
 # Catch-all: Route all other web queries to the SPA's index.html
 @app.get("/{fallback:path}")
 def get_index():
     index_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "index.html")
-    return FileResponse(index_path)
+    return FileResponse(index_path, headers=NO_CACHE_HEADERS)
 
 
 if __name__ == "__main__":

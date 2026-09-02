@@ -2483,6 +2483,7 @@ window._crawledPage       = 0;
 const CRAWLED_PAGE_SIZE   = 5;
 
 function _renderCrawledAlertCard(pub) {
+  if (!pub) return '';
   return `
     <article class="pub-item" style="background:#fff; border:1px solid #e2e8f0; border-radius:var(--radius-sm); padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
@@ -2491,15 +2492,15 @@ function _renderCrawledAlertCard(pub) {
             <span style="color:#ea580c">Crawled Alert</span>
             <span style="color:var(--text-body)">${pub.year || 'N/A'}</span>
           </div>
-          <h3 style="font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title}</h3>
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:6px">${pub.title || 'Untitled Publication'}</h3>
           <div style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:4px">${pub.journal || 'Unknown Venue'}</div>
-          <div style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors}</div>
+          <div style="font-size:0.82rem; color:var(--text-body)"><strong>Authors:</strong> ${pub.authors || 'N/A'}</div>
           ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; padding:10px; border-radius:4px; margin-top:8px;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
-          ${pub.url ? `<div style="font-size:0.82rem; margin-top:8px;"><a href="${pub.url}" target="_blank" style="color:var(--accent); font-weight:600; text-decoration:underline;">Review Online →</a></div>` : ''}
+          ${pub.url ? `<div style="font-size:0.82rem; margin-top:8px;"><a href="${pub.url}" target="_blank" rel="noopener noreferrer" style="color:var(--accent); font-weight:600; text-decoration:underline;">Review Online →</a></div>` : ''}
         </div>
         <div style="display:flex; gap:8px; margin-top:10px; flex-shrink:0;">
-          <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a;">Confirm Work</button>
-          <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5;">Not Mine</button>
+          <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a; cursor:pointer;">Confirm Work</button>
+          <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:8px 16px; font-size:0.85rem; font-weight:600; border-radius:4px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5; cursor:pointer;">Not Mine</button>
         </div>
       </div>
     </article>
@@ -2507,22 +2508,35 @@ function _renderCrawledAlertCard(pub) {
 }
 
 window.renderCrawledAlertsPage = function() {
-  const list  = window._crawledUnverified;
-  const page  = window._crawledPage;
+  const list  = window._crawledUnverified || [];
   const total = list.length;
-  const pages = Math.ceil(total / CRAWLED_PAGE_SIZE) || 1;
+  const pages = Math.max(1, Math.ceil(total / CRAWLED_PAGE_SIZE));
+  if (window._crawledPage === undefined || window._crawledPage >= pages) {
+    window._crawledPage = Math.max(0, pages - 1);
+  }
+  const page  = window._crawledPage || 0;
   const start = page * CRAWLED_PAGE_SIZE;
   const slice = list.slice(start, start + CRAWLED_PAGE_SIZE);
   const end   = Math.min(start + CRAWLED_PAGE_SIZE, total);
 
   const container = document.getElementById('crawledAlertsList');
-  if (!container) return;
+  if (container) {
+    if (total === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:32px 20px; background:#f0fdf4; border:1px dashed #86efac; border-radius:var(--radius-sm);">
+          <div style="font-size:2rem; margin-bottom:8px;">✅</div>
+          <h3 style="font-size:1rem; font-weight:700; color:#15803d; margin-bottom:4px;">All caught up!</h3>
+          <p style="color:var(--text-body); font-size:0.85rem;">No new unverified publications found by the scanner.</p>
+        </div>
+      `;
+    } else {
+      container.innerHTML = slice.length > 0
+        ? slice.map(_renderCrawledAlertCard).join('')
+        : '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic;">No items on this page.</div>';
+    }
+  }
 
-  container.innerHTML = slice.length > 0
-    ? slice.map(_renderCrawledAlertCard).join('')
-    : '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic;">No items on this page.</div>';
-
-  const info = `Page ${page + 1} of ${pages} · showing ${start + 1}–${end} of ${total}`;
+  const info = total > 0 ? `Page ${page + 1} of ${pages} · showing ${start + 1}–${end} of ${total}` : '';
   ['crawledPageInfo', 'crawledPageInfo2'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = info;
@@ -2541,8 +2555,9 @@ window.renderCrawledAlertsPage = function() {
 };
 
 window.changeCrawledPage = function(delta) {
-  const pages = Math.ceil(window._crawledUnverified.length / CRAWLED_PAGE_SIZE) || 1;
-  const next  = window._crawledPage + delta;
+  const total = (window._crawledUnverified || []).length;
+  const pages = Math.max(1, Math.ceil(total / CRAWLED_PAGE_SIZE));
+  const next  = (window._crawledPage || 0) + delta;
   if (next < 0 || next >= pages) return;
   window._crawledPage = next;
   window.renderCrawledAlertsPage();
@@ -2551,13 +2566,23 @@ window.changeCrawledPage = function(delta) {
 };
 
 function renderIntranetVerification(publications) {
-  const unverified = publications.filter(p => p.status === 'unverified');
-  const verified   = publications.filter(p => p.status === 'verified');
+  if (!Array.isArray(publications)) publications = [];
+  const unverified = publications.filter(p => p && p.status === 'unverified');
+  const verified   = publications.filter(p => p && p.status === 'verified');
 
   window._crawledUnverified = unverified;
-  window._crawledPage       = 0;
+  const total = unverified.length;
+  const pages = Math.max(1, Math.ceil(total / CRAWLED_PAGE_SIZE));
+  if (window._crawledPage === undefined || window._crawledPage >= pages) {
+    window._crawledPage = Math.max(0, pages - 1);
+  }
+  const page  = window._crawledPage;
+  const start = page * CRAWLED_PAGE_SIZE;
+  const slice = unverified.slice(start, start + CRAWLED_PAGE_SIZE);
+  const end   = Math.min(start + CRAWLED_PAGE_SIZE, total);
 
-  const hasPending = unverified.length > 0;
+  const hasPending = total > 0;
+  const pageInfoText = hasPending ? `Page ${page + 1} of ${pages} · showing ${start + 1}–${end} of ${total}` : '';
 
   return `
     <div class="tab-header" style="margin-bottom:24px; border-bottom:1px solid #e2e8f0; padding-bottom:16px;">
@@ -2572,11 +2597,11 @@ function renderIntranetVerification(publications) {
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
         <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary); margin:0; display:flex; align-items:center; gap:8px;">
           🔍 Crawled Alerts
-          ${hasPending ? `<span style="background:#ea580c; color:#fff; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:12px;">${unverified.length} pending</span>` : ''}
+          ${hasPending ? `<span style="background:#ea580c; color:#fff; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:12px;">${total} pending</span>` : ''}
         </h3>
         ${hasPending ? `
         <div style="display:flex; align-items:center; gap:10px;">
-          <span id="crawledPageInfo" style="font-size:0.82rem; color:var(--text-body); font-weight:600;"></span>
+          <span id="crawledPageInfo" style="font-size:0.82rem; color:var(--text-body); font-weight:600;">${pageInfoText}</span>
           <button data-crawled-prev onclick="window.changeCrawledPage(-1)"
             style="padding:5px 14px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.82rem; font-weight:600; color:var(--primary); cursor:pointer;">
             ← Prev
@@ -2590,10 +2615,10 @@ function renderIntranetVerification(publications) {
 
       <div id="verifyStatusMessage" style="display:none;" class="status-message"></div>
 
-      <!-- Cards injected by renderCrawledAlertsPage() -->
+      <!-- Cards injected or pre-rendered -->
       <div id="crawledAlertsList" style="display:flex; flex-direction:column; gap:16px;">
         ${hasPending
-          ? '<div style="text-align:center; padding:20px; color:var(--text-body); font-style:italic; font-size:0.85rem;">Loading…</div>'
+          ? slice.map(_renderCrawledAlertCard).join('')
           : `<div style="text-align:center; padding:32px 20px; background:#f0fdf4; border:1px dashed #86efac; border-radius:var(--radius-sm);">
               <div style="font-size:2rem; margin-bottom:8px;">✅</div>
               <h3 style="font-size:1rem; font-weight:700; color:#15803d; margin-bottom:4px;">All caught up!</h3>
@@ -2608,7 +2633,7 @@ function renderIntranetVerification(publications) {
           style="padding:7px 20px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--primary); cursor:pointer;">
           ← Previous
         </button>
-        <span id="crawledPageInfo2" style="font-size:0.85rem; color:var(--text-body); font-weight:600;"></span>
+        <span id="crawledPageInfo2" style="font-size:0.85rem; color:var(--text-body); font-weight:600;">${pageInfoText}</span>
         <button data-crawled-next onclick="window.changeCrawledPage(1)"
           style="padding:7px 20px; border:1px solid #e2e8f0; background:#fff; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--primary); cursor:pointer;">
           Next →
@@ -2678,9 +2703,103 @@ function renderIntranetVerification(publications) {
 }
 
 
+const INTRANET_MESSAGES_PAGE_SIZE = 5;
+window._intranetMessages = [];
+window._intranetMessagesPage = 0;
+
+window.renderIntranetMessagesPage = function() {
+  const container = document.getElementById('intranetMessagesList');
+  const pageInfoTop = document.getElementById('messagesPageInfoTop');
+  const pageInfoBottom = document.getElementById('messagesPageInfoBottom');
+  const paginationTop = document.getElementById('messagesPaginationTop');
+  const paginationBottom = document.getElementById('messagesPaginationBottom');
+
+  if (!container) return;
+
+  const messages = window._intranetMessages || [];
+  const totalMessages = messages.length;
+
+  if (totalMessages === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--text-body); font-style: italic; background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm);">
+        No messages received yet.
+      </div>
+    `;
+    if (paginationTop) paginationTop.style.display = 'none';
+    if (paginationBottom) paginationBottom.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.ceil(totalMessages / INTRANET_MESSAGES_PAGE_SIZE) || 1;
+  if (window._intranetMessagesPage >= totalPages) {
+    window._intranetMessagesPage = totalPages - 1;
+  }
+  if (window._intranetMessagesPage < 0) {
+    window._intranetMessagesPage = 0;
+  }
+
+  const page = window._intranetMessagesPage;
+  const startIdx = page * INTRANET_MESSAGES_PAGE_SIZE;
+  const endIdx = Math.min(startIdx + INTRANET_MESSAGES_PAGE_SIZE, totalMessages);
+  const pageMessages = messages.slice(startIdx, endIdx);
+
+  const pageText = `Page ${page + 1} of ${totalPages} (${startIdx + 1}–${endIdx} of ${totalMessages})`;
+  if (pageInfoTop) pageInfoTop.textContent = pageText;
+  if (pageInfoBottom) pageInfoBottom.textContent = pageText;
+
+  if (paginationTop) paginationTop.style.display = 'flex';
+  if (paginationBottom) paginationBottom.style.display = 'flex';
+
+  document.querySelectorAll('[data-msg-prev]').forEach(btn => {
+    btn.disabled = page === 0;
+    btn.style.opacity = page === 0 ? '0.35' : '1';
+    btn.style.cursor = page === 0 ? 'default' : 'pointer';
+  });
+  document.querySelectorAll('[data-msg-next]').forEach(btn => {
+    btn.disabled = page >= totalPages - 1;
+    btn.style.opacity = page >= totalPages - 1 ? '0.35' : '1';
+    btn.style.cursor = page >= totalPages - 1 ? 'default' : 'pointer';
+  });
+
+  container.innerHTML = pageMessages.map(msg => {
+    const isAnnouncement = msg.recipient_id === null;
+    const msgDate = new Date(msg.timestamp).toLocaleString();
+
+    return `
+      <div style="background: ${isAnnouncement ? '#f0fdf4' : '#fff'}; border: 1px solid ${isAnnouncement ? '#bbf7d0' : '#e2e8f0'}; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm); border-left: 4px solid ${isAnnouncement ? '#22c55e' : 'var(--primary)'};">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <span class="badge" style="background: ${isAnnouncement ? '#dcfce7' : '#e2e8f0'}; color: ${isAnnouncement ? '#15803d' : 'var(--primary)'}; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+            ${isAnnouncement ? 'Global Announcement' : 'Direct Message'}
+          </span>
+          <span style="font-size: 0.75rem; color: var(--text-body);">${msgDate}</span>
+        </div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">${msg.title}</h3>
+        <div style="font-size: 0.88rem; color: var(--text-dark); margin-bottom: 10px; line-height: 1.5; white-space: pre-wrap;">${msg.content}</div>
+        <div style="font-size: 0.78rem; color: var(--text-body);"><strong>From:</strong> ${msg.sender_name}</div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.changeMessagesPage = function(delta) {
+  const messages = window._intranetMessages || [];
+  const totalPages = Math.ceil(messages.length / INTRANET_MESSAGES_PAGE_SIZE) || 1;
+  const next = window._intranetMessagesPage + delta;
+  if (next < 0 || next >= totalPages) return;
+  window._intranetMessagesPage = next;
+  window.renderIntranetMessagesPage();
+  const el = document.getElementById('intranetMessagesList');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 function renderIntranetMessages(messages, lecturers) {
+  if (!Array.isArray(messages)) messages = [];
+  if (!Array.isArray(lecturers)) lecturers = [];
   const user = JSON.parse(localStorage.getItem('sotssUser') || '{}');
-  const otherLecturers = lecturers.filter(l => l.id !== user.id && l.username !== user.username);
+  const otherLecturers = lecturers.filter(l => l && l.id !== user.id && l.username !== user.username);
+
+  window._intranetMessages = messages || [];
+  window._intranetMessagesPage = 0;
 
   return `
     <div class="tab-header" style="margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
@@ -2741,31 +2860,34 @@ function renderIntranetMessages(messages, lecturers) {
 
       <!-- Messages List -->
       <div style="display: flex; flex-direction: column; gap: 16px;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 4px;">
-          Message Inbox
-        </h3>
-        ${messages.length === 0 ? `
-          <div style="text-align: center; padding: 40px; color: var(--text-body); font-style: italic; background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm);">
-            No messages received yet.
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); margin: 0;">
+            Message Inbox
+          </h3>
+          <div id="messagesPaginationTop" style="display: none; align-items: center; gap: 8px;">
+            <span id="messagesPageInfoTop" style="font-size: 0.8rem; color: var(--text-body); font-weight: 600;"></span>
+            <button data-msg-prev onclick="window.changeMessagesPage(-1)" style="padding: 4px 12px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--primary); cursor: pointer;">
+              ← Prev
+            </button>
+            <button data-msg-next onclick="window.changeMessagesPage(1)" style="padding: 4px 12px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--primary); cursor: pointer;">
+              Next →
+            </button>
           </div>
-        ` : messages.map(msg => {
-          const isAnnouncement = msg.recipient_id === null;
-          const msgDate = new Date(msg.timestamp).toLocaleString();
-          
-          return `
-            <div style="background: ${isAnnouncement ? '#f0fdf4' : '#fff'}; border: 1px solid ${isAnnouncement ? '#bbf7d0' : '#e2e8f0'}; border-radius: var(--radius-sm); padding: 20px; box-shadow: var(--shadow-sm); border-left: 4px solid ${isAnnouncement ? '#22c55e' : 'var(--primary)'};">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-                <span class="badge" style="background: ${isAnnouncement ? '#dcfce7' : '#e2e8f0'}; color: ${isAnnouncement ? '#15803d' : 'var(--primary)'}; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
-                  ${isAnnouncement ? 'Global Announcement' : 'Direct Message'}
-                </span>
-                <span style="font-size: 0.75rem; color: var(--text-body);">${msgDate}</span>
-              </div>
-              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">${msg.title}</h3>
-              <div style="font-size: 0.88rem; color: var(--text-dark); margin-bottom: 10px; line-height: 1.5; white-space: pre-wrap;">${msg.content}</div>
-              <div style="font-size: 0.78rem; color: var(--text-body);"><strong>From:</strong> ${msg.sender_name}</div>
-            </div>
-          `;
-        }).join('')}
+        </div>
+
+        <div id="intranetMessagesList" style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="text-align: center; padding: 20px; color: var(--text-body); font-style: italic; font-size: 0.85rem;">Loading inbox…</div>
+        </div>
+
+        <div id="messagesPaginationBottom" style="display: none; justify-content: center; align-items: center; gap: 12px; margin-top: 8px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+          <button data-msg-prev onclick="window.changeMessagesPage(-1)" style="padding: 6px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--primary); cursor: pointer;">
+            ← Prev
+          </button>
+          <span id="messagesPageInfoBottom" style="font-size: 0.82rem; color: var(--text-body); font-weight: 600;"></span>
+          <button data-msg-next onclick="window.changeMessagesPage(1)" style="padding: 6px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--primary); cursor: pointer;">
+            Next →
+          </button>
+        </div>
       </div>
 
     </div>
@@ -2773,8 +2895,10 @@ function renderIntranetMessages(messages, lecturers) {
 }
 
 function renderIntranetAdmin(lecturers, publications) {
+  if (!Array.isArray(lecturers)) lecturers = [];
+  if (!Array.isArray(publications)) publications = [];
   const user = JSON.parse(localStorage.getItem('sotssUser') || '{}');
-  const isAdminUser = user.username === 'admin';
+  const isAdminUser = user.is_admin || user.username === 'admin' || user.username === 'admin@gimpa.edu.gh';
   
   // Calculate stats
   const totalArticles = publications.length;
@@ -2951,8 +3075,9 @@ function renderIntranetAdmin(lecturers, publications) {
 }
 
 function renderIntranetNewsAdmin(newsItems) {
-  const publishedCount = newsItems.filter(n => n.status === 'published').length;
-  const pendingCount = newsItems.filter(n => n.status === 'pending').length;
+  if (!Array.isArray(newsItems)) newsItems = [];
+  const publishedCount = newsItems.filter(n => n && n.status === 'published').length;
+  const pendingCount = newsItems.filter(n => n && n.status === 'pending').length;
 
   return `
     <div>
@@ -3048,22 +3173,45 @@ function getAuthHeaders() {
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 
+async function safeFetchJson(url, options = {}) {
+  try {
+    const res = await fetch(url, options);
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const txt = await res.text();
+      console.warn('API returned non-JSON (' + res.status + '):', url, txt.substring(0, 150));
+      return { ok: false, status: res.status, data: null, isHtml: true, text: txt };
+    }
+    const data = await res.json();
+    console.log('API response (' + res.status + '):', url, data);
+    return { ok: res.ok, status: res.status, data: data, isHtml: false };
+  } catch (err) {
+    console.error('Fetch error:', url, err);
+    return { ok: false, status: 0, data: null, isHtml: true, error: err };
+  }
+}
+
+function handleUnauthorized() {
+  localStorage.removeItem('sotssToken');
+  localStorage.removeItem('sotssUser');
+  alert('Your login session has expired or is invalid. Please log in again.');
+  location.hash = '#login';
+  if (typeof render === 'function') render();
+}
+
 async function loadDynamicData() {
   try {
-    const resLecturers = await fetch('/api/public/lecturers');
-    const resPubs = await fetch('/api/public/publications');
-    const resNews = await fetch('/api/public/news');
+    const resLecturers = await safeFetchJson('/api/public/lecturers');
+    const resPubs = await safeFetchJson('/api/public/publications');
+    const resNews = await safeFetchJson('/api/public/news');
 
-    if (resNews && resNews.ok) {
-      const fetchedNews = await resNews.json();
-      if (fetchedNews && fetchedNews.length > 0) {
-        window.dynamicNews = fetchedNews;
-      }
+    if (resNews.ok && Array.isArray(resNews.data) && resNews.data.length > 0) {
+      window.dynamicNews = resNews.data;
     }
     
-    if (resLecturers.ok) {
-      const dbLecturers = await resLecturers.json();
-      const dbPubs = resPubs.ok ? await resPubs.json() : [];
+    if (resLecturers.ok && Array.isArray(resLecturers.data)) {
+      const dbLecturers = resLecturers.data;
+      const dbPubs = (resPubs.ok && Array.isArray(resPubs.data)) ? resPubs.data : [];
       
       dbLecturers.forEach(dbL => {
         let localL = faculty.find(l => {
@@ -3192,10 +3340,13 @@ async function switchIntranetTab(tabName) {
     const headers = getAuthHeaders();
     
     // Always pre-load unverified publications count to update sidebar badge
-    const resCount = await fetch('/api/lecturer/publications', { headers });
-    if (resCount.ok) {
-      const pubs = await resCount.json();
-      const unverified = pubs.filter(p => p.status === 'unverified');
+    const resCount = await safeFetchJson('/api/lecturer/publications', { headers });
+    if (resCount.status === 401) {
+      handleUnauthorized();
+      return;
+    }
+    if (resCount.ok && Array.isArray(resCount.data)) {
+      const unverified = resCount.data.filter(p => p && p.status === 'unverified');
       const badge = document.getElementById('unverifiedCountBadge');
       if (badge) {
         if (unverified.length > 0) {
@@ -3208,49 +3359,78 @@ async function switchIntranetTab(tabName) {
     }
     
     if (tabName === 'profile') {
-      const res = await fetch('/api/lecturer/me', { headers });
-      if (res.ok) {
-        const lecturer = await res.json();
-        html = renderIntranetProfile(lecturer);
+      const res = await safeFetchJson('/api/lecturer/me', { headers });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      if (res.isHtml || res.status === 502) {
+        html = `<div style="color:#0369a1; font-weight:600; padding:30px; text-align:center;">⏳ Starting intranet backend service... please wait 3 seconds.<br><br><button onclick="window.switchIntranetTab('profile')" class="btn btn-primary" style="margin-top:10px; padding:8px 18px; border-radius:6px; font-weight:700;">🔄 Retry Now</button></div>`;
+      } else if (res.ok && res.data) {
+        html = renderIntranetProfile(res.data);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load profile details. Server returned ${res.status}.</div>`;
       }
     } else if (tabName === 'verification') {
-      const res = await fetch('/api/lecturer/publications', { headers });
-      if (res.ok) {
-        const publications = await res.json();
-        html = renderIntranetVerification(publications);
+      const res = await safeFetchJson('/api/lecturer/publications', { headers });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      if (res.isHtml || res.status === 502) {
+        html = `<div style="color:#0369a1; font-weight:600; padding:30px; text-align:center;">⏳ Starting intranet backend service... please wait 3 seconds.<br><br><button onclick="window.switchIntranetTab('verification')" class="btn btn-primary" style="margin-top:10px; padding:8px 18px; border-radius:6px; font-weight:700;">🔄 Retry Now</button></div>`;
+      } else if (res.ok && Array.isArray(res.data)) {
+        html = renderIntranetVerification(res.data);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load publications details. Server returned ${res.status}.</div>`;
       }
     } else if (tabName === 'messages') {
-      const res = await fetch('/api/messages', { headers });
-      const resLecturers = await fetch('/api/public/lecturers');
-      if (res.ok && resLecturers.ok) {
-        const messages = await res.json();
-        const lecturers = await resLecturers.json();
-        html = renderIntranetMessages(messages, lecturers);
+      const resMsg = await safeFetchJson('/api/messages', { headers });
+      if (resMsg.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      const resLecturers = await safeFetchJson('/api/public/lecturers');
+      if (resMsg.isHtml || resMsg.status === 502) {
+        html = `<div style="color:#0369a1; font-weight:600; padding:30px; text-align:center;">⏳ Starting intranet backend service... please wait 3 seconds.<br><br><button onclick="window.switchIntranetTab('messages')" class="btn btn-primary" style="margin-top:10px; padding:8px 18px; border-radius:6px; font-weight:700;">🔄 Retry Now</button></div>`;
+      } else if (resMsg.ok && resLecturers.ok) {
+        html = renderIntranetMessages(resMsg.data || [], resLecturers.data || []);
       } else {
-        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load intranet inbox. Server returned ${res.status}.</div>`;
+        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load intranet inbox. Server returned ${resMsg.status}.</div>`;
       }
     } else if (tabName === 'news-admin') {
-      const res = await fetch('/api/admin/news', { headers });
-      if (res.ok) {
-        const newsItems = await res.json();
-        html = renderIntranetNewsAdmin(newsItems);
+      const res = await safeFetchJson('/api/manage/news', { headers });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      if (res.status === 403) {
+        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">🔒 Admin permissions required. Your account does not have access to News Moderation.</div>`;
+      } else if (res.isHtml || res.status === 502) {
+        html = `<div style="color:#0369a1; font-weight:600; padding:30px; text-align:center;">⏳ Starting intranet backend service... please wait 3 seconds.<br><br><button onclick="window.switchIntranetTab('news-admin')" class="btn btn-primary" style="margin-top:10px; padding:8px 18px; border-radius:6px; font-weight:700;">🔄 Retry Now</button></div>`;
+      } else if (res.ok && Array.isArray(res.data)) {
+        html = renderIntranetNewsAdmin(res.data);
       } else {
         html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load news moderation panel. Server returned ${res.status}.</div>`;
       }
     } else if (tabName === 'admin') {
-      const res = await fetch('/api/public/lecturers');
-      const resPubs = await fetch('/api/admin/publications', { headers });
-      if (res.ok && resPubs.ok) {
-        const lecturers = await res.json();
-        const publications = await resPubs.json();
+      const resLec = await safeFetchJson('/api/public/lecturers');
+      const resPubs = await safeFetchJson('/api/manage/publications', { headers });
+      if (resPubs.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      if (resPubs.status === 403) {
+        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">🔒 Admin permissions required. Your account does not have access to the Intranet Administration Panel.</div>`;
+      } else if (resPubs.isHtml || resPubs.status === 502) {
+        html = `<div style="color:#0369a1; font-weight:600; padding:30px; text-align:center;">⏳ Starting intranet backend service... please wait 3 seconds.<br><br><button onclick="window.switchIntranetTab('admin')" class="btn btn-primary" style="margin-top:10px; padding:8px 18px; border-radius:6px; font-weight:700;">🔄 Retry Now</button></div>`;
+      } else if (resLec.ok && resPubs.ok && Array.isArray(resPubs.data)) {
+        const lecturers = Array.isArray(resLec.data) ? resLec.data : [];
+        const publications = resPubs.data;
         window.allAdminPubs = publications;
         html = renderIntranetAdmin(lecturers, publications);
       } else {
-        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load admin panel details. Server returned ${res.status}.</div>`;
+        html = `<div style="color:#b91c1c; font-weight:600; padding:20px; text-align:center;">Failed to load admin panel details. Server returned ${resPubs.status || resLec.status}.</div>`;
       }
     }
     
@@ -3266,6 +3446,9 @@ async function switchIntranetTab(tabName) {
       }
       if (tabName === 'verification') {
         window.renderCrawledAlertsPage();
+      }
+      if (tabName === 'messages') {
+        window.renderIntranetMessagesPage();
       }
     }
   } catch (err) {
@@ -3351,11 +3534,6 @@ window.downloadAdminPubsCSV = function() {
 };
 
 async function handleVerificationAction(id, action) {
-  const statusMsg = document.getElementById('verifyStatusMessage');
-  if (statusMsg) {
-    statusMsg.style.display = 'none';
-  }
-  
   try {
     const res = await fetch(`/api/publications/${id}/${action}`, {
       method: 'POST',
@@ -3366,14 +3544,6 @@ async function handleVerificationAction(id, action) {
     
     if (res.ok) {
       const data = await res.json();
-      if (statusMsg) {
-        statusMsg.className = 'status-message';
-        statusMsg.style.backgroundColor = '#dcfce7';
-        statusMsg.style.color = '#15803d';
-        statusMsg.style.border = '1px solid #bbf7d0';
-        statusMsg.textContent = data.message || `Publication successfully ${action === 'verify' ? 'verified' : 'rejected'}.`;
-        statusMsg.style.display = 'block';
-      }
       
       await loadDynamicData();
       
@@ -3383,28 +3553,44 @@ async function handleVerificationAction(id, action) {
         const tabContent = document.getElementById('intranetTabContent');
         if (tabContent) {
           tabContent.innerHTML = renderIntranetVerification(pubs);
+          window.renderCrawledAlertsPage();
         }
+        
+        // Update unverified badge
+        const unverified = pubs.filter(p => p && p.status === 'unverified');
+        const badge = document.getElementById('unverifiedCountBadge');
+        if (badge) {
+          if (unverified.length > 0) {
+            badge.textContent = unverified.length;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+      }
+
+      const statusMsg = document.getElementById('verifyStatusMessage');
+      if (statusMsg) {
+        statusMsg.className = 'status-message';
+        statusMsg.style.cssText = 'display:block; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600; margin-bottom:16px;';
+        statusMsg.textContent = data.message || `Publication successfully ${action === 'verify' ? 'verified' : 'rejected'}.`;
       }
     } else {
       const err = await res.json();
+      const statusMsg = document.getElementById('verifyStatusMessage');
       if (statusMsg) {
         statusMsg.className = 'status-message';
-        statusMsg.style.backgroundColor = '#fef2f2';
-        statusMsg.style.color = '#b91c1c';
-        statusMsg.style.border = '1px solid #fca5a5';
+        statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600; margin-bottom:16px;';
         statusMsg.textContent = err.detail || 'Action failed.';
-        statusMsg.style.display = 'block';
       }
     }
   } catch (err) {
     console.error(err);
+    const statusMsg = document.getElementById('verifyStatusMessage');
     if (statusMsg) {
       statusMsg.className = 'status-message';
-      statusMsg.style.backgroundColor = '#fef2f2';
-      statusMsg.style.color = '#b91c1c';
-      statusMsg.style.border = '1px solid #fca5a5';
+      statusMsg.style.cssText = 'display:block; background:#fef2f2; color:#b91c1c; border:1px solid #fca5a5; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:600; margin-bottom:16px;';
       statusMsg.textContent = 'Connection error.';
-      statusMsg.style.display = 'block';
     }
   }
 }
@@ -4111,7 +4297,20 @@ window.handleSubmitPublication = async function(event) {
         if (resPubs.ok) {
           const pubs = await resPubs.json();
           const tabContent = document.getElementById('intranetTabContent');
-          if (tabContent) tabContent.innerHTML = renderIntranetVerification(pubs);
+          if (tabContent) {
+            tabContent.innerHTML = renderIntranetVerification(pubs);
+            window.renderCrawledAlertsPage();
+          }
+          const unverified = pubs.filter(p => p && p.status === 'unverified');
+          const badge = document.getElementById('unverifiedCountBadge');
+          if (badge) {
+            if (unverified.length > 0) {
+              badge.textContent = unverified.length;
+              badge.style.display = 'inline-block';
+            } else {
+              badge.style.display = 'none';
+            }
+          }
         }
         await loadDynamicData();
       }, 800);
@@ -4137,7 +4336,20 @@ window.handleDeletePublication = async function(id) {
       if (resPubs.ok) {
         const pubs = await resPubs.json();
         const tabContent = document.getElementById('intranetTabContent');
-        if (tabContent) tabContent.innerHTML = renderIntranetVerification(pubs);
+        if (tabContent) {
+          tabContent.innerHTML = renderIntranetVerification(pubs);
+          window.renderCrawledAlertsPage();
+        }
+        const unverified = pubs.filter(p => p && p.status === 'unverified');
+        const badge = document.getElementById('unverifiedCountBadge');
+        if (badge) {
+          if (unverified.length > 0) {
+            badge.textContent = unverified.length;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
       }
       await loadDynamicData();
     } else {
