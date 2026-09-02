@@ -40,9 +40,9 @@ def seed_data():
             "Management Information Systems", None, None
         ),
         (
-            4, "eadabor", "gimpa123", "Prof. Emmanuel S. Adabor", "Dean",
+            4, "eadabor", "gimpa123", "Prof. Emmanuel S. Adabor", "Professor & Dean, SOTSS",
             "eadabor@gimpa.edu.gh", "Industrial Analytics, Optimization, Operations Research",
-            "SOT Annex, Room 3.06", "+233 (0) 302908076", None, None, 1,
+            "SOT Annex, Room 3.06", "+233 (0) 302908076", "Faculty Leadership", "Dean, School of Technology & Social Sciences", 1,
             "Computer Science & Information Systems", "School of Technology (SOT)", "Dean"
         ),
         (
@@ -58,9 +58,9 @@ def seed_data():
             "Management Information Systems", None, None
         ),
         (
-            7, "eadaku", "gimpa123", "Prof. Ebenezer Adaku", "Deputy Rector, GIMPA",
+            7, "eadaku", "gimpa123", "Prof. Ebenezer Adaku", "Professor & Deputy Rector, GIMPA",
             "eadaku@gimpa.edu.gh", "Operations & Project Management, Higher Education Leadership",
-            "Rectorate, GIMPA Main Campus", None, None, None, 0,
+            "Rectorate, GIMPA Main Campus", "+233 (0) 302 401681", "Institutional Leadership", "Deputy Rector, GIMPA", 0,
             "Management Information Systems", None, None
         ),
         (

@@ -61,12 +61,14 @@ let faculty = [
   {
     id: 'emmanuel-adabor',
     name: 'Prof. Emmanuel S. Adabor',
-    role: 'Professor',
+    role: 'Professor & Dean, SOTSS',
     email: 'csshead@gimpa.edu.gh',
     photo: 'assets/images/Prof.Adabor.jpg',
     spec: 'Industrial Analytics, Optimization, Operations Research',
-    office: 'SOT Annex, Room 3.06',
+    office: 'Dean\'s Office / SOT Annex, Room 3.06',
     phone: '+233 (0) 302908076',
+    extraLabel: 'Faculty Leadership',
+    extraValue: 'Dean, School of Technology & Social Sciences',
     projects: [
       'Smart Logistics Optimizer: Route and fleet optimization for urban service systems.',
       'Industrial Analytics Capacity Lab: Applied optimization for manufacturing SMEs.',
@@ -75,6 +77,27 @@ let faculty = [
     pubs: [
       { year: '2025', title: 'Optimization heuristics for resilient public sector logistics', journal: 'Journal of Applied Operations Analytics', authors: 'Adabor, E.; Wiredu, G.' },
       { year: '2023', title: 'Multi-criteria decision models for digital transformation investments', journal: 'African Journal of Management Analytics', authors: 'Adabor, E.; Engmann, F.' }
+    ]
+  },
+  {
+    id: 'ebenezer-adaku',
+    name: 'Prof. Ebenezer Adaku',
+    role: 'Professor & Deputy Rector, GIMPA',
+    email: 'eadaku@gimpa.edu.gh',
+    photo: '',
+    spec: 'Operations & Project Management, Higher Education Leadership',
+    office: 'Rectorate, GIMPA Main Campus',
+    phone: '+233 (0) 302 401681',
+    extraLabel: 'Institutional Leadership',
+    extraValue: 'Deputy Rector, GIMPA',
+    projects: [
+      'Strategic Higher Education Governance: Project management methodologies for university institutional transformation.',
+      'Operations Capacity in Tertiary Systems: Process modeling and resource optimization across faculties.',
+      'Public Sector Capital Projects: Frameworks for risk management and infrastructure delivery.'
+    ],
+    pubs: [
+      { year: '2025', title: 'Project Management Methodologies in Higher Education Institutions', journal: 'International Journal of Project Management', authors: 'Adaku, E.' },
+      { year: '2023', title: 'Governance and operations alignment in African higher education leadership', journal: 'African Journal of Management and Strategy', authors: 'Adaku, E.; Wiredu, G.' }
     ]
   },
   {
@@ -1594,8 +1617,25 @@ window.filterFacultyByRole = function(role) {
   const cards = document.querySelectorAll('.staff-card');
   let visibleCount = 0;
   cards.forEach(card => {
-    const cardRole = card.getAttribute('data-role') || '';
-    if (role === 'all' || cardRole.toLowerCase().includes(role.toLowerCase())) {
+    const cardRole = (card.getAttribute('data-role') || '').toLowerCase();
+    const cardSearch = (card.getAttribute('data-search') || '').toLowerCase();
+    
+    let isMatch = false;
+    if (role === 'all') {
+      isMatch = true;
+    } else if (role === 'Professor') {
+      isMatch = cardRole.includes('prof') || cardSearch.includes('prof.') || cardRole.includes('dean') || cardRole.includes('rector');
+    } else if (role === 'Head') {
+      isMatch = cardRole.includes('head') || cardRole.includes('hod');
+    } else if (role === 'Senior Lecturer') {
+      isMatch = cardRole.includes('senior');
+    } else if (role === 'Lecturer') {
+      isMatch = cardRole.includes('lecturer') && !cardRole.includes('senior');
+    } else {
+      isMatch = cardRole.includes(role.toLowerCase()) || cardSearch.includes(role.toLowerCase());
+    }
+
+    if (isMatch) {
       card.classList.remove('is-hidden');
       visibleCount++;
     } else {
@@ -1662,10 +1702,10 @@ function facultyPage() {
 
         <!-- Faculty Cards Grid -->
         <div class="staff-grid" id="facultyDirectoryGrid">
-          ${faculty.map(f => {
+          ${faculty.filter(f => f && f.name !== 'System Administrator' && !(f.role && f.role.toLowerCase().includes('administrator'))).map(f => {
             let roleClass = 'role-pill-lecturer';
             if (f.role.toLowerCase().includes('head')) roleClass = 'role-pill-hod';
-            else if (f.role.toLowerCase().includes('prof') || f.role.toLowerCase().includes('dean')) roleClass = 'role-pill-prof';
+            else if (f.role.toLowerCase().includes('prof') || f.role.toLowerCase().includes('dean') || f.role.toLowerCase().includes('rector')) roleClass = 'role-pill-prof';
             else if (f.role.toLowerCase().includes('senior')) roleClass = 'role-pill-snr';
 
             const initials = f.name.split(' ').filter(n => !n.includes('.')).slice(-2).map(n => n[0]).join('');
