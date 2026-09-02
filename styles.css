@@ -1850,29 +1850,327 @@ footer {
 }
 
 /* ==============================================================================
-   ALUMNI & FACULTY PAGES
+   EXECUTIVE HEAD OF DEPARTMENT SHOWCASE (ABOUT US PAGE)
    ============================================================================== */
-.alumni-spotlight-card {
+.hod-showcase-card {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 340px 1fr;
+  gap: 40px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: var(--radius);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 30, 60, 0.08);
   overflow: hidden;
-  box-shadow: var(--shadow);
-  margin-bottom: 32px;
+  align-items: stretch;
 }
-.alumni-spotlight-img {
+
+.hod-portrait-col {
+  background: linear-gradient(135deg, #001e36 0%, #002b49 50%, #083b66 100%);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+}
+
+.hod-portrait-frame {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(135deg, #38bdf8 0%, #ffd700 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.hod-portrait-frame img {
   width: 100%;
   height: 100%;
-  min-height: 240px;
+  border-radius: 50%;
   object-fit: cover;
+  object-position: center top;
+  border: 3px solid #001e36;
 }
-.alumni-spotlight-body {
-  padding: 32px;
+
+.hod-nameplate h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+  line-height: 1.25;
+}
+
+.hod-title-creds {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.hod-role-sub {
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.hod-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.hod-message-col {
+  padding: 40px 44px 40px 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.hod-message-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.hod-message-heading h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.hod-quote-icon {
+  font-size: 3.5rem;
+  font-family: Georgia, serif;
+  color: rgba(56, 189, 248, 0.25);
+  line-height: 0.8;
+}
+
+.hod-quote-body p.hod-lead-quote {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #0f172a;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.hod-quote-body p {
+  font-size: 0.95rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.hod-signature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.hod-signature-badge .sig-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.hod-signature-badge .sig-role {
+  font-size: 0.82rem;
+  color: var(--text-body);
+}
+
+/* ==============================================================================
+   ENHANCED FACULTY DIRECTORY CARDS (FACULTY PAGE)
+   ============================================================================== */
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.staff-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 30, 60, 0.05);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.staff-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 30, 60, 0.12);
+  border-color: #38bdf8;
+}
+
+.staff-card-banner {
+  height: 54px;
+  background: linear-gradient(135deg, #001e36 0%, #002b49 50%, #083b66 100%);
+  width: 100%;
+}
+
+.staff-card-body {
+  padding: 0 22px 24px;
+  margin-top: -38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.staff-photo-wrap {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  padding: 3px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.staff-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 2px solid #38bdf8;
+}
+
+.staff-avatar-badge {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #002b49 0%, #0284c7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  border: 2px solid #38bdf8;
+}
+
+.staff-role-wrap {
+  margin-bottom: 10px;
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faculty-role-pill {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.role-pill-hod {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.role-pill-prof {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.role-pill-snr {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.role-pill-lecturer {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.staff-name {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.staff-spec {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.45;
+  margin-bottom: 14px;
+  min-height: 38px;
+}
+
+.staff-email-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--primary);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.staff-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 9px 16px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: #eef6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.staff-view-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
 }
 
 @media (max-width: 992px) {
@@ -1881,6 +2179,8 @@ footer {
   .info-box-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .info-box-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .alumni-spotlight-card { grid-template-columns: 1fr; }
+  .hod-showcase-card { grid-template-columns: 1fr; }
+  .hod-message-col { padding: 30px; }
 }
 
 @media (max-width: 640px) {
@@ -1888,6 +2188,7 @@ footer {
   .hero-text-side h1 { font-size: 2.1rem; }
   .programme-filter-bar { width: 100%; border-radius: var(--radius-sm); }
   .prog-filter-btn { flex: 1; text-align: center; }
+  .staff-grid { grid-template-columns: 1fr; }
 }
 
 

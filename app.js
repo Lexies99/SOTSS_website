@@ -965,29 +965,50 @@ function about() {
       </div>
     </section>
 
-    <!-- Message from Head of Department -->
-    <section class="section section-alt">
+    <!-- Message from Head of Department (Executive Showcase Card) -->
+    <section class="section section-alt" style="padding: 60px 0;">
       <div class="container">
-        <div class="two-col" style="align-items: center; gap: 48px;">
-          <div style="text-align: center;">
-            <div class="staff-card" style="max-width: 320px; margin: 0 auto; box-shadow: var(--shadow-lg);">
-              <div class="staff-photo">
-                <img class="photo" src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia Engmann" style="width: 120px; height: 120px; border-radius: 50%; margin: auto; object-fit: cover; border: 4px solid #38bdf8;">
+        <div class="hod-showcase-card">
+          <div class="hod-portrait-col">
+            <div class="hod-portrait-frame">
+              <img src="assets/images/Dr.Felicia.jpeg" alt="Dr. Felicia N. A. Engmann">
+            </div>
+            <div class="hod-nameplate">
+              <h3>Dr. Felicia N. A. Engmann</h3>
+              <div class="hod-title-creds">Head of Department</div>
+              <div class="hod-role-sub">Department of Computer Science &amp; Information Systems</div>
+              <div class="hod-contact-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>fapboadu@gimpa.edu.gh</span>
               </div>
-              <h3 style="font-size: 1.25rem; margin-top: 10px;">Dr. Felicia Engmann</h3>
-              <div class="role" style="font-size: 0.88rem; color: var(--accent); font-weight: 700; margin-bottom: 6px;">Head of Department</div>
-              <div style="font-size: 0.8rem; color: var(--text-body);">Department of Computer Science &amp; IS</div>
             </div>
           </div>
-          <div class="two-col-text">
+          
+          <div class="hod-message-col">
             <div class="accent-line"></div>
-            <h2>Message from the Head of Department</h2>
-            <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-dark);">
-              "A warm welcome to the Department of Computer Science &amp; Information Systems at GIMPA. Our department is committed to delivering transformative computing education, pioneering applied research, and fostering an inspiring community of innovators."
-            </p>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-body);">
-              "Driven by the needs of Ghana and the West African sub-region, we employ our core values of excellence, quality, and connectedness to prepare graduates who not only master technical tools but also understand how to leverage technology to solve real-world problems. Whether you are an aspiring student, continuing researcher, or industry partner, we invite you to join us in shaping the digital future."
-            </p>
+            <div class="hod-message-heading">
+              <h2>Message from the Head of Department</h2>
+              <span class="hod-quote-icon">“</span>
+            </div>
+            <div class="hod-quote-body">
+              <p class="hod-lead-quote">
+                "A warm welcome to the Department of Computer Science &amp; Information Systems at GIMPA. Our department is committed to delivering transformative computing education, pioneering applied research, and fostering an inspiring community of innovators."
+              </p>
+              <p>
+                "Driven by the developmental needs of Ghana and the African sub-region, we employ our core values of excellence, quality, and connectedness to prepare graduates who not only master modern software and cybersecurity tools, but also understand how to leverage artificial intelligence and digital transformation to solve real-world challenges."
+              </p>
+              <p>
+                "Whether you are an aspiring student, continuing researcher, or industry partner, we warmly invite you to join us in shaping the digital future."
+              </p>
+            </div>
+            
+            <div class="hod-signature-row">
+              <div class="hod-signature-badge">
+                <div class="sig-name">Dr. Felicia N. A. Engmann</div>
+                <div class="sig-role">Head of Department · SOTSS GIMPA</div>
+              </div>
+              <a href="#profile/felicia-engmann" class="btn btn-outline" style="font-size:0.84rem; padding:8px 18px; font-weight:700;">View Full Profile &amp; Research →</a>
+            </div>
           </div>
         </div>
       </div>
@@ -1621,21 +1642,40 @@ function facultyPage() {
 
         <!-- Faculty Cards Grid -->
         <div class="staff-grid" id="facultyDirectoryGrid">
-          ${faculty.map(f => `
-            <div class="staff-card" data-role="${f.role}" data-search="${f.name} ${f.role} ${f.spec} ${f.email} ${f.office}">
-              <a class="staff-card-link" href="#profile/${f.id}">
-                ${f.photo ? 
-                  `<div class="staff-photo"><img class="photo" src="${f.photo}" alt="${f.name}" style="width:100px; height:100px; border-radius:50%; margin:auto; object-fit:cover; border:3px solid #38bdf8"></div>` :
-                  `<div class="staff-avatar" style="width:100px; height:100px; font-size:1.8rem;">${f.name.split(' ').filter(n => !n.includes('.')).slice(-2).map(n => n[0]).join('')}</div>`
-                }
-                <h3 style="font-size:1.15rem; margin-top:12px;">${f.name}</h3>
-                <div class="role" style="font-size:0.84rem; color:var(--accent); font-weight:700; margin-bottom:6px;">${f.role}</div>
-                <div style="font-size:0.8rem; color:var(--text-body); margin-bottom:8px; line-height:1.4;">${f.spec}</div>
-                <div class="email" style="font-size:0.8rem; color:var(--primary); font-weight:600;">${f.email}</div>
-                <div style="margin-top:14px; font-size:0.82rem; color:var(--accent); font-weight:700;">View Profile &amp; Research →</div>
-              </a>
-            </div>
-          `).join('')}
+          ${faculty.map(f => {
+            let roleClass = 'role-pill-lecturer';
+            if (f.role.toLowerCase().includes('head')) roleClass = 'role-pill-hod';
+            else if (f.role.toLowerCase().includes('prof') || f.role.toLowerCase().includes('dean')) roleClass = 'role-pill-prof';
+            else if (f.role.toLowerCase().includes('senior')) roleClass = 'role-pill-snr';
+
+            const initials = f.name.split(' ').filter(n => !n.includes('.')).slice(-2).map(n => n[0]).join('');
+
+            return `
+              <div class="staff-card" data-role="${f.role}" data-search="${f.name} ${f.role} ${f.spec} ${f.email} ${f.office}">
+                <div class="staff-card-banner"></div>
+                <div class="staff-card-body">
+                  <div class="staff-photo-wrap">
+                    ${f.photo ? 
+                      `<img class="photo" src="${f.photo}" alt="${f.name}">` :
+                      `<div class="staff-avatar-badge">${initials}</div>`
+                    }
+                  </div>
+                  
+                  <div class="staff-role-wrap">
+                    <span class="faculty-role-pill ${roleClass}">${f.role}</span>
+                  </div>
+
+                  <h3 class="staff-name">${f.name}</h3>
+                  <div class="staff-spec">${f.spec}</div>
+                  <div class="staff-email-row">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>${f.email}</span>
+                  </div>
+                  <a class="staff-view-btn" href="#profile/${f.id}">View Profile &amp; Research →</a>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
 
       </div>
