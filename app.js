@@ -122,7 +122,7 @@ let faculty = [
     id: 'emmanuel-adabor',
     name: 'Prof. Emmanuel S. Adabor',
     role: 'Professor & Dean, SOTSS',
-    email: 'csshead@gimpa.edu.gh',
+    email: 'emmanuelsadabor@gimpa.edu.gh',
     photo: 'assets/images/Prof.Adabor.jpg',
     spec: 'Industrial Analytics, Optimization, Operations Research',
     office: 'Dean\'s Office / SOT Annex, Room 3.06',
@@ -204,7 +204,7 @@ let faculty = [
     id: 'nana-assyne',
     name: 'Dr. Nana Assyne',
     role: 'Lecturer',
-    email: 'csshead@gimpa.edu.gh',
+    email: 'nassyne@gimpa.edu.gh',
     photo: 'assets/images/DR.Nana_Assyne.jpeg',
     spec: 'Software Engineering, HCI, Web Systems',
     office: 'SOT Block C, Room 1.15',
@@ -243,7 +243,7 @@ let faculty = [
     id: 'emmanuel-antwi-boasiako',
     name: 'Dr. Emmanuel Antwi-Boasiako',
     role: 'Lecturer',
-    email: 'csshead@gimpa.edu.gh',
+    email: 'abeantwi@gimpa.edu.gh',
     photo: 'assets/images/Dr.Antwi-Boasiako.jpg',
     spec: 'Cyber Policy, Digital Identity, Security Governance',
     office: 'SOT Block C, Room 2.03',
@@ -691,11 +691,7 @@ function header(active) {
       <div class="container">
         <div class="header-main">
           <a href="#home" class="logo">
-            <div class="logo-icon">CS</div>
-            <div class="logo-text">
-              <h1>Computer Science &amp; IS</h1>
-              <span>GIMPA · School of Technology &amp; Social Sciences</span>
-            </div>
+            <img src="assets/images/sotss-logo.png" alt="SOTSS Logo" style="height:54px; width:auto; display:block; object-fit:contain;">
           </a>
           
           <nav>
@@ -731,12 +727,8 @@ function footer() {
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="logo" style="margin-bottom:8px">
-              <div class="logo-icon">CS</div>
-              <div class="logo-text">
-                <h1 style="font-size:1.05rem">Computer Science &amp; IS</h1>
-                <span>GIMPA · School of Technology</span>
-              </div>
+            <div style="margin-bottom:12px;">
+              <img src="assets/images/sotss-logo.png" alt="SOTSS Logo" style="height:50px; width:auto; display:block; object-fit:contain; background:#fff; border-radius:8px; padding:4px 10px;">
             </div>
             <p>Department of Computer Science and Information Systems, School of Technology and Social Sciences, Ghana Institute of Management and Public Administration (GIMPA).</p>
             <div style="margin-top:14px; font-size:0.85rem; color:#cbd5e1;">Greenhill Campus, Achimota, Accra, Ghana</div>
@@ -1889,25 +1881,20 @@ function research() {
         <div style="display:flex; flex-direction:column; gap:20px;">
           ${faculty.filter(f => f && f.name !== 'System Administrator').flatMap(f => f.pubs.map(p => ({ ...p, authorName: f.name, lecturerId: f.id }))).slice(0, 10).map(pub => `
             <article class="pub-card-flex">
-              <div class="pub-thumb-wrap">
-                <img src="${getPublicationCoverImage(pub)}" alt="${pub.title}">
+              <div class="pub-meta-row">
+                ${getPublicationTypeBadge(pub.type)}
+                <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
               </div>
-              <div class="pub-content-col">
-                <div class="pub-meta-row">
-                  ${getPublicationTypeBadge(pub.type)}
-                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
-                </div>
-                <h3 style="margin:0 0 6px 0;">
-                  <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
-                </h3>
-                <div class="pub-venue">${pub.journal || 'Academic Journal / Venue'}</div>
-                <div class="pub-authors-row">
-                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, pub.authorName)}
-                </div>
-                <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
-                  <a href="#profile/${pub.lecturerId}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Author Profile →</a>
-                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Publication &nearr;</a>` : ''}
-                </div>
+              <h3 style="margin:0 0 6px 0;">
+                <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
+              </h3>
+              <div class="pub-venue">${pub.journal || 'Academic Journal / Venue'}</div>
+              <div class="pub-authors-row">
+                <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, pub.authorName)}
+              </div>
+              <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
+                <a href="#profile/${pub.lecturerId}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Author Profile →</a>
+                ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Publication &nearr;</a>` : ''}
               </div>
             </article>
           `).join('')}
@@ -2874,26 +2861,21 @@ function profile(id) {
             <div style="color: var(--text-body); font-style: italic; background:#fff; padding:24px; border-radius:8px; text-align:center;">No verified publications registered.</div>
           ` : f.pubs.map(pub => `
             <article class="pub-card-flex">
-              <div class="pub-thumb-wrap">
-                <img src="${getPublicationCoverImage(pub)}" alt="${pub.title}">
+              <div class="pub-meta-row">
+                ${getPublicationTypeBadge(pub.type)}
+                <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
               </div>
-              <div class="pub-content-col">
-                <div class="pub-meta-row">
-                  ${getPublicationTypeBadge(pub.type)}
-                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
-                </div>
-                <h3 style="margin:0 0 6px 0;">
-                  <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
-                </h3>
-                <div class="pub-venue">${pub.journal || 'Academic Journal / Publisher'}</div>
-                <div class="pub-authors-row">
-                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, f.name)}
-                </div>
-                ${pub.summary ? `<div style="font-size:0.84rem; color:var(--text-body); line-height:1.55; margin-bottom:12px;">${pub.summary}</div>` : ''}
-                <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
-                  <a href="#publication/${pub.id}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Publication Details →</a>
-                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Original Document &nearr;</a>` : ''}
-                </div>
+              <h3 style="margin:0 0 6px 0;">
+                <a href="#publication/${pub.id}" class="pub-title-link">${pub.title}</a>
+              </h3>
+              <div class="pub-venue">${pub.journal || 'Academic Journal / Publisher'}</div>
+              <div class="pub-authors-row">
+                <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, f.name)}
+              </div>
+              ${pub.summary ? `<div style="font-size:0.84rem; color:var(--text-body); line-height:1.55; margin-bottom:12px; background:#f8fafc; padding:10px 14px; border-radius:6px; border:1px solid #f1f5f9;">${pub.summary}</div>` : ''}
+              <div style="display:flex; gap:16px; align-items:center; margin-top:auto;">
+                <a href="#publication/${pub.id}" style="font-size:0.84rem; color:var(--primary); font-weight:700; text-decoration:none;">View Publication Details →</a>
+                ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.84rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Original Document &nearr;</a>` : ''}
               </div>
             </article>
           `).join('')}
@@ -3512,35 +3494,28 @@ function _renderCrawledAlertCard(pub) {
   const userStr = localStorage.getItem('sotssUser');
   const user = userStr ? JSON.parse(userStr) : null;
   const currentLecturerName = user ? user.name : '';
-
-  const coverImg = getPublicationCoverImage(pub);
   const pubType = pub.type || (pub.journal && pub.journal.toLowerCase().includes('conference') ? 'Conference Paper' : 'Journal Article (Peer-Reviewed)');
 
   return `
-    <article class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
-      <div class="pub-thumb-wrap" style="width:130px; min-width:130px; height:110px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f1f5f9;">
-        <img src="${coverImg}" alt="${pub.title || 'Publication cover'}" style="width:100%; height:100%; object-fit:cover;">
+    <article class="pub-card-flex">
+      <div class="pub-meta-row">
+        <span style="display:inline-flex; align-items:center; gap:5px; background:#ffedd5; color:#c2410c; border:1px solid #fed7aa; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">🔍 Crawled Alert</span>
+        ${getPublicationTypeBadge(pubType)}
+        <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || '2025'}</span>
       </div>
-      <div class="pub-content-col" style="flex:1;">
-        <div class="pub-meta-row" style="display:flex; gap:10px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="display:inline-flex; align-items:center; gap:5px; background:#ffedd5; color:#c2410c; border:1px solid #fed7aa; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">🔍 Crawled Alert</span>
-          ${getPublicationTypeBadge(pubType)}
-          <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || '2025'}</span>
+      <h3 style="font-size:1.08rem; font-weight:700; color:var(--ink); margin:0 0 6px 0; line-height:1.4;">${pub.title || 'Untitled Publication'}</h3>
+      <div class="pub-venue">${pub.journal || 'Academic Journal / Venue'}</div>
+      <div class="pub-authors-row">
+        <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
+      </div>
+      ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; border:1px solid #f1f5f9; padding:10px 14px; border-radius:6px; margin-bottom:12px; line-height:1.55;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:8px;">
+        <div>
+          ${pub.url ? `<a href="${pub.url}" target="_blank" rel="noopener noreferrer" style="font-size:0.82rem; color:var(--accent); font-weight:700; text-decoration:underline;">Review Online &nearr;</a>` : ''}
         </div>
-        <h3 style="font-size:1.08rem; font-weight:700; color:var(--ink); margin:0 0 6px 0; line-height:1.4;">${pub.title || 'Untitled Publication'}</h3>
-        <div class="pub-venue" style="font-size:0.88rem; font-style:italic; color:var(--primary); margin-bottom:6px;">${pub.journal || 'Academic Journal / Venue'}</div>
-        <div class="pub-authors-row" style="font-size:0.84rem; color:var(--text-body); margin-bottom:8px;">
-          <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
-        </div>
-        ${pub.summary ? `<div style="font-size:0.82rem; color:var(--text-body); background:#f8fafc; border:1px solid #f1f5f9; padding:10px 14px; border-radius:6px; margin-bottom:12px; line-height:1.55;"><strong>Abstract:</strong> ${pub.summary}</div>` : ''}
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:auto;">
-          <div>
-            ${pub.url ? `<a href="${pub.url}" target="_blank" rel="noopener noreferrer" style="font-size:0.82rem; color:var(--accent); font-weight:700; text-decoration:underline;">Review Online &nearr;</a>` : ''}
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a; cursor:pointer;">Confirm Work</button>
-            <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5; cursor:pointer;">Not Mine</button>
-          </div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="window.handleVerificationAction(${pub.id}, 'verify')" class="btn btn-primary" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; background:#16a34a; border-color:#16a34a; cursor:pointer;">Confirm Work</button>
+          <button onclick="window.handleVerificationAction(${pub.id}, 'reject')" class="btn btn-outline" style="padding:7px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; height:36px; justify-content:center; color:#dc2626; border-color:#fca5a5; cursor:pointer;">Not Mine</button>
         </div>
       </div>
     </article>
@@ -3729,27 +3704,21 @@ function renderIntranetVerification(publications) {
           const userStr = localStorage.getItem('sotssUser');
           const user = userStr ? JSON.parse(userStr) : null;
           const currentLecturerName = user ? user.name : '';
-          const coverImg = getPublicationCoverImage(pub);
           return `
-            <div class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
-              <div class="pub-thumb-wrap" style="width:110px; min-width:110px; height:90px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f1f5f9;">
-                <img src="${coverImg}" alt="${pub.title}" style="width:100%; height:100%; object-fit:cover;">
+            <div class="pub-card-flex" style="background:#fff; border:1px solid #e2e8f0; border-left:4px solid #16a34a; border-radius:10px; padding:18px 22px; box-shadow:0 2px 8px rgba(0,30,60,0.04);">
+              <div class="pub-meta-row" style="display:flex; gap:8px; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
+                <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:#16a34a; background:#dcfce7; border:1px solid #bbf7d0; padding:2px 8px; border-radius:999px;">✔ Verified</span>
+                ${getPublicationTypeBadge(pub.type || 'Journal Article (Peer-Reviewed)')}
+                <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
               </div>
-              <div class="pub-content-col" style="flex:1;">
-                <div class="pub-meta-row" style="display:flex; gap:8px; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
-                  <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:#16a34a; background:#dcfce7; border:1px solid #bbf7d0; padding:2px 8px; border-radius:999px;">✔ Verified</span>
-                  ${getPublicationTypeBadge(pub.type || 'Journal Article (Peer-Reviewed)')}
-                  <span style="font-size:0.78rem; font-weight:700; color:var(--text-body);">${pub.year || 'Recent'}</span>
-                </div>
-                <h4 style="font-size:1rem; font-weight:700; color:var(--ink); margin:0 0 4px 0; line-height:1.35;">${pub.title}</h4>
-                <div style="font-size:0.84rem; color:var(--primary); font-style:italic; margin-bottom:4px;">${pub.journal || ''}</div>
-                <div style="font-size:0.8rem; color:var(--text-body); margin-bottom:8px;">
-                  <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:auto;">
-                  ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.8rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Document &nearr;</a>` : '<span></span>'}
-                  <button onclick="window.handleDeletePublication(${pub.id})" style="background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 12px; font-size:0.78rem; font-weight:600; cursor:pointer;" title="Remove this publication">✕ Remove</button>
-                </div>
+              <h4 style="font-size:1.02rem; font-weight:700; color:var(--ink); margin:0 0 4px 0; line-height:1.35;">${pub.title}</h4>
+              <div style="font-size:0.86rem; color:#0369a1; font-style:italic; font-weight:600; margin-bottom:4px;">${pub.journal || ''}</div>
+              <div style="font-size:0.82rem; color:var(--text-body); margin-bottom:8px;">
+                <strong>Authors:</strong> ${formatAuthorsWithHighlight(pub.authors, currentLecturerName)}
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px;">
+                ${pub.url ? `<a href="${pub.url}" target="_blank" style="font-size:0.8rem; color:var(--accent); font-weight:700; text-decoration:underline;">View Document &nearr;</a>` : '<span></span>'}
+                <button onclick="window.handleDeletePublication(${pub.id})" style="background:none; border:1px solid #fca5a5; color:#dc2626; border-radius:4px; padding:5px 12px; font-size:0.78rem; font-weight:600; cursor:pointer;" title="Remove this publication">✕ Remove</button>
               </div>
             </div>
           `;
@@ -5454,23 +5423,18 @@ function publicationDetail(pubId) {
           </a>
         </div>
         
-        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
+        <article style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid var(--accent); border-radius: 14px; padding: 40px; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
           
           <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 20px;">
             ${getPublicationTypeBadge(foundPub.type)}
             <span style="color: var(--text-body); font-size: 0.85rem; font-weight: 700;">Year: ${foundPub.year || 'Recent'}</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: 180px 1fr; gap: 28px; margin-bottom: 28px; align-items: flex-start;">
-            <div style="border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); aspect-ratio: 3/4; max-height: 240px;">
-              <img src="${getPublicationCoverImage(foundPub)}" alt="${foundPub.title}" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <div>
-              <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; line-height: 1.35;">${foundPub.title}</h1>
-              <div style="font-size: 0.95rem; color: var(--text-dark); margin-bottom: 8px;">
-                <div style="margin-bottom: 6px;"><strong>Authors:</strong> ${formatAuthorsWithHighlight(foundPub.authors, foundLecturer.name)}</div>
-                <div style="font-style: italic; color: var(--primary);"><strong>Published in:</strong> ${foundPub.journal || 'Academic Journal'}</div>
-              </div>
+          <div style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.7rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; line-height: 1.35;">${foundPub.title}</h1>
+            <div style="font-size: 0.95rem; color: var(--text-dark); margin-bottom: 8px;">
+              <div style="margin-bottom: 8px; font-size: 0.92rem;"><strong>Authors:</strong> ${formatAuthorsWithHighlight(foundPub.authors, foundLecturer.name)}</div>
+              <div style="font-style: italic; color: #0369a1; font-weight: 600; font-size: 0.95rem;"><strong>Published in:</strong> ${foundPub.journal || 'Academic Journal'}</div>
             </div>
           </div>
           
